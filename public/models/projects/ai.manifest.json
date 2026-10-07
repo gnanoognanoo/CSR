@@ -1,0 +1,76 @@
+{
+  "id": "ai",
+  "division": "AI & Intelligent Systems",
+  "sourceBytes": 50315376,
+  "sourceTriangles": 590432,
+  "sourceSha256": "bbbb8740271ac9f3b66adaf1ef7f585811b7d6d50cf060871e209383074f0f29",
+  "attribution": {
+    "title": "User-supplied AI model",
+    "author": null,
+    "license": null,
+    "source": null
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/ai.glb",
+      "bytes": 3319052,
+      "triangles": 72718,
+      "primitives": 1,
+      "dimensions": [
+        1.3405827835357291,
+        1.8893283099922002,
+        1.6628418361790167
+      ],
+      "bounds": {
+        "min": [
+          -0.654271391786938,
+          -0.957306130040216,
+          -0.8083244055921319
+        ],
+        "max": [
+          0.6863113917487911,
+          0.9320221799519842,
+          0.8545174305868848
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 70000,
+        "ratio": 0.11855725976911821,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "c59ccdee9584c61d54a45965c333a999f3421f7b4ed0bd486030286f04782d13"
+    },
+    "mobile": {
+      "url": "/models/projects/ai-mobile.glb",
+      "bytes": 1293504,
+      "triangles": 49125,
+      "primitives": 1,
+      "dimensions": [
+        1.3416183283670482,
+        1.8865683169623964,
+        1.6643278146735048
+      ],
+      "bounds": {
+        "min": [
+          -0.6552501763276128,
+          -0.9559261034092411,
+          -0.8083233817935627
+        ],
+        "max": [
+          0.6863681520394354,
+          0.9306422135531552,
+          0.8560044328799422
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 24000,
+        "ratio": 0.04064820334941196,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "987bafd6f0319d55ce8d7f386dadd29a9d878519ca30fce6e84147308b0377b2"
+    }
+  }
+}

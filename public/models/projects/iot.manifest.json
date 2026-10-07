@@ -1,0 +1,76 @@
+{
+  "id": "iot",
+  "division": "IoT & Smart Systems",
+  "sourceBytes": 523788,
+  "sourceTriangles": 13632,
+  "sourceSha256": "49413d80274990bf6ec40e66dca02f1ea2ca66841ef901e0c98358a3b4dc12dc",
+  "attribution": {
+    "author": "MidaZ_3D (https://sketchfab.com/MidaZ_3D)",
+    "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+    "source": "https://sketchfab.com/3d-models/smart-thermostat-wall-mounted-concept-d4df578a903c42bca31d722109279a2f",
+    "title": "Smart Thermostat – Wall Mounted Concept"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/iot.glb",
+      "bytes": 82128,
+      "triangles": 13632,
+      "primitives": 4,
+      "dimensions": [
+        0.1006489172577858,
+        0.1006489172577858,
+        0.022103077879610807
+      ],
+      "bounds": {
+        "min": [
+          -0.0503244586288929,
+          -0.0503244586288929,
+          -0.01237592519245083
+        ],
+        "max": [
+          0.0503244586288929,
+          0.0503244586288929,
+          0.009727152687159976
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 13632,
+        "ratio": 1,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "8b70a5cb32f15b908bf851344268b60c0173e220016a859e7278535ce46c04dd"
+    },
+    "mobile": {
+      "url": "/models/projects/iot-mobile.glb",
+      "bytes": 50196,
+      "triangles": 6998,
+      "primitives": 4,
+      "dimensions": [
+        0.10063508152961731,
+        0.10063508152961728,
+        0.022103077879610807
+      ],
+      "bounds": {
+        "min": [
+          -0.050317540764808655,
+          -0.05031754076480864,
+          -0.01237592519245083
+        ],
+        "max": [
+          0.050317540764808655,
+          0.05031754076480864,
+          0.009727152687159976
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 7000,
+        "ratio": 0.5134976525821596,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "6bb29b1e681e99198510a1430d368213f33c1cdc3f0c5804bac7c9afbf226af3"
+    }
+  }
+}

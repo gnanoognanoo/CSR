@@ -1,0 +1,76 @@
+{
+  "id": "robotics",
+  "division": "Robotics & Autonomous Systems",
+  "sourceBytes": 61072676,
+  "sourceTriangles": 1525628,
+  "sourceSha256": "0c6a33dce52d491b5497a3d5f0ec30ee2db48919be8c43a2500c4cd9d7fd2a64",
+  "attribution": {
+    "author": "Interbotix (https://sketchfab.com/Interbotix)",
+    "license": "CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)",
+    "source": "https://sketchfab.com/3d-models/phantomx-hexapod-mkiii-59c19fa10e764e2d84cae552ab90f6c9",
+    "title": "PhantomX Hexapod MKIII"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/robotics.glb",
+      "bytes": 690904,
+      "triangles": 102278,
+      "primitives": 1,
+      "dimensions": [
+        538.266975402832,
+        164.9445692318442,
+        506.0698480555146
+      ],
+      "bounds": {
+        "min": [
+          -90.21537017822266,
+          7.2100231042622624,
+          -435.64285707219085
+        ],
+        "max": [
+          448.0516052246094,
+          172.15459233610648,
+          70.42699098332375
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 100000,
+        "ratio": 0.0655467781136686,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "c53182c335a667f04f23e690d6cddb0255d9875b79ed07f9dc37ad0139251735"
+    },
+    "mobile": {
+      "url": "/models/projects/robotics-mobile.glb",
+      "bytes": 525356,
+      "triangles": 74182,
+      "primitives": 1,
+      "dimensions": [
+        538.266975402832,
+        164.9445692318442,
+        506.0698480555146
+      ],
+      "bounds": {
+        "min": [
+          -90.21537017822266,
+          7.2100231042622624,
+          -435.64285707219085
+        ],
+        "max": [
+          448.0516052246094,
+          172.15459233610648,
+          70.42699098332375
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 35000,
+        "ratio": 0.02294137233978401,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "ccde6084ca703cf7dde2f416d2480fd69cf07b28ec18733e988d146b7aa73012"
+    }
+  }
+}

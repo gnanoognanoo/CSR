@@ -1,0 +1,76 @@
+{
+  "id": "software",
+  "division": "Software Engineering",
+  "sourceBytes": 21974508,
+  "sourceTriangles": 120330,
+  "sourceSha256": "7e509a26d8db49f4f607ef729b8049a33aff7bc91a23817f5b99dff93a78195a",
+  "attribution": {
+    "author": "Blue Lantern (https://sketchfab.com/genoris2)",
+    "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+    "source": "https://sketchfab.com/3d-models/gaming-laptop-4e72a2078b3c4a75a821ab09830693fe",
+    "title": "Gaming Laptop"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/software.glb",
+      "bytes": 2052292,
+      "triangles": 89044,
+      "primitives": 12,
+      "dimensions": [
+        3.0924809848891655,
+        2.7412615918299417,
+        4.00378155708313
+      ],
+      "bounds": {
+        "min": [
+          -1.7511329993385842,
+          -0.1305738411928279,
+          -2.0011701583862305
+        ],
+        "max": [
+          1.3413479855505812,
+          2.610687750637114,
+          2.0026113986968994
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 45000,
+        "ratio": 0.3739715781600598,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "f9e7ab365b3fa3166d089faab85652adee13f2ccb11369c04efe2cc5b683aa47"
+    },
+    "mobile": {
+      "url": "/models/projects/software-mobile.glb",
+      "bytes": 1599960,
+      "triangles": 78750,
+      "primitives": 12,
+      "dimensions": [
+        3.0855591489634873,
+        2.7412619393944544,
+        4.00378155708313
+      ],
+      "bounds": {
+        "min": [
+          -1.7452506169130406,
+          -0.1306085191423456,
+          -2.0011701583862305
+        ],
+        "max": [
+          1.3403085320504466,
+          2.610653420252109,
+          2.0026113986968994
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 18000,
+        "ratio": 0.14958863126402394,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "127f2a8ecf492cd0d359fb03243b662f2abc500619417b16e6c611e484a6ac56"
+    }
+  }
+}

@@ -1,0 +1,227 @@
+@import './home-chapter-typography.css';
+
+/* useHomeFonts registers the self-hosted faces only while Home is mounted. */
+body:has(.home-page) {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --home-display: var(--font-display);
+  --home-body: var(--font-body);
+  --home-mono: var(--font-mono);
+  --home-text: #E6EDF3;
+  --home-body-text: rgba(218, 229, 237, .78);
+  --home-secondary: rgba(185, 202, 214, .65);
+  --home-annotation: #9FC4DD;
+  --home-blue: #1685C5;
+  --home-gradient: linear-gradient(110deg, #FFFFFF 0%, #F6FAFD 40%, #DCEFFB 74%, #9CCCEB 100%);
+}
+.home-page { --mono: var(--home-mono); font-family: var(--home-body); color: var(--home-text); }
+
+/* The shared header is scoped through the mounted Home route. Its geometry is unchanged. */
+body:has(.home-page) .site-header .brand,
+.home-page .footer .brand {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  color: #FFFFFF;
+}
+body:has(.home-page) .site-header .community-wordmark .brand-divider,
+.home-page .footer .community-wordmark .brand-divider { color: var(--home-blue); }
+body:has(.home-page) .site-header .brand small,
+.home-page .footer .brand small {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--home-secondary);
+}
+body:has(.home-page) .site-header nav a {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: .045em;
+  color: rgba(220, 230, 238, .68);
+}
+body:has(.home-page) .site-header nav a:hover,
+body:has(.home-page) .site-header nav a:focus-visible { color: #C6E4F5; }
+body:has(.home-page) .site-header nav a.active { color: #FFFFFF; }
+body:has(.home-page) .site-header nav a.active:after { background-color: var(--home-blue); }
+body:has(.home-page) .header-note,
+body:has(.home-page) .menu-toggle {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--home-annotation);
+}
+body:has(.home-page) .skip-link {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.home-page .hero-title {
+  font-family: var(--home-display);
+  font-weight: 500;
+  /* The requested text tracking takes priority over GSAP's old inline tracking.
+     The existing opacity, frame, scroll, and parallax animations remain intact. */
+  letter-spacing: -.065em !important;
+  line-height: .86;
+  min-block-size: 1em;
+  color: #FFFFFF;
+  text-shadow: 0 8px 30px rgba(0, 15, 30, .14);
+}
+.home-page :is(.hero-title-ink, .closing-title-ink) { font: inherit; letter-spacing: inherit; }
+.home-page .hero-title-ink { margin: 0; }
+.home-page .hero-title .hero-title-dash {
+  font-weight: 500;
+  letter-spacing: -.065em;
+  margin: 0 8px 0 1px;
+  color: var(--home-blue);
+  -webkit-text-fill-color: var(--home-blue);
+}
+.home-page .hero-fullname,
+.home-page .hero-fullname strong {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+  color: #FFFFFF;
+}
+.home-page .hero-community { font-size: .83em; color: var(--home-text); }
+.home-page .hero-intelligence { color: #FFFFFF; }
+.home-page .hero-robotics { color: #DCEFFB; }
+.home-page .hero-tagline {
+  font-family: var(--home-body);
+  font-weight: 400;
+  letter-spacing: -.012em;
+  line-height: 1.6;
+  color: var(--home-body-text);
+}
+.home-page .hero .eyebrow,
+.home-page .institution-label,
+.home-page .institution-label > span,
+.home-page .hero-annotation,
+.home-page .hero-bottom,
+.home-page .chapter-nav a,
+.home-page .chapter-number,
+.home-page .chapter-name {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--home-annotation);
+}
+.home-page .institution-label > span,
+.home-page .annotation-muted,
+.home-page .hero-bottom,
+.home-page .chapter-nav a { color: var(--home-secondary); }
+.home-page .chapter-nav a.current,
+.home-page .chapter-nav a.current .chapter-number,
+.home-page .chapter-nav a.current .chapter-name,
+.home-page .chapter-nav a:hover,
+.home-page .chapter-nav a:focus-visible,
+.home-page .chapter-nav a:hover :is(.chapter-number, .chapter-name),
+.home-page .chapter-nav a:focus-visible :is(.chapter-number, .chapter-name) { color: #FFFFFF; }
+.home-page .explore {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: var(--home-text);
+}
+.home-page .explore:hover { color: #D7EAF6; }
+
+/* The closing identity echoes the hero; links and metadata stay solid. */
+.home-page .closing-title {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.065em;
+  line-height: .86;
+  min-block-size: 1.08em;
+  color: #FFFFFF;
+  text-shadow: 0 8px 30px rgba(0, 15, 30, .14);
+}
+.home-page .closing-title .accent {
+  color: var(--home-blue);
+  -webkit-text-fill-color: var(--home-blue);
+}
+.home-page .closing-fullname,
+.home-page .closing-bottom p.closing-invitation {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  color: var(--home-text);
+}
+.home-page .closing-links a {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: #FFFFFF;
+}
+.home-page .closing-links a:hover { color: #D7EAF6; }
+.home-page .closing-links a span,
+.home-page .closing-institution,
+.home-page .closing-section .eyebrow,
+.home-page .footer > .mono,
+.home-page .experience-loader .mono {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--home-annotation);
+}
+.home-page .footer > .mono,
+.home-page .closing-links a span { color: var(--home-secondary); }
+.home-page .footer > a:hover { color: #D7EAF6; }
+.home-page .experience-loader strong {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  color: #FFFFFF;
+}
+.home-page .frame-notice { font-family: var(--home-body); font-weight: 400; color: var(--home-text); }
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .home-page .hero-title-ink {
+    background-image: linear-gradient(105deg, #FFFFFF 0%, #FFFFFF 35%, #E4F3FC 62%, #A8D4EF 82%, #5AA8D8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .home-page .hero-robotics {
+    background-image: linear-gradient(100deg, #FFFFFF, #DCEFFB);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .home-page .closing-title-ink {
+    background-image: linear-gradient(105deg, #FFFFFF 0%, #FFFFFF 35%, #E4F3FC 62%, #A8D4EF 82%, #5AA8D8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .home-page .closing-invitation {
+    background-image: linear-gradient(110deg, #FFFFFF, #E6F4FC 64%, #8BC5E7);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+@media (forced-colors: active) {
+  .home-page :is(.hero-title, .hero-title-ink, .hero-robotics, .closing-title, .closing-title-ink, .closing-invitation, .experience h2 .accent, .stat-value, .team-line strong, .year-key b) {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+    text-shadow: none;
+  }
+}
+
+/* Keep the five technical stage labels legible within the existing mobile grid. */
+@media (max-width: 760px) {
+  .home-page .experience .process-scale > span {
+    font-size: clamp(8px, 2.3vw, 10px);
+    letter-spacing: .08em;
+  }
+}
+@media (max-width: 360px) {
+  .home-page .hero-title { font-size: 58px; }
+}

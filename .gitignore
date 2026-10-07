@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.sites-runtime/
+.env*
+*.tsbuildinfo
+artifacts/
+tmp/
+*.log
+*.tar.gz

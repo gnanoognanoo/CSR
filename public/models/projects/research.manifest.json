@@ -1,0 +1,76 @@
+{
+  "id": "research",
+  "division": "Research & Publications",
+  "sourceBytes": 1397016,
+  "sourceTriangles": 13876,
+  "sourceSha256": "ccc19e4ede7feffb18bbf9e49d06243b376581f47774e78cb63b9dbbd0a0d20d",
+  "attribution": {
+    "author": "PremModel (https://sketchfab.com/PremModel)",
+    "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+    "source": "https://sketchfab.com/3d-models/book-folded-and-unfolded-7c4f0b00dc1b4852b1c1f6b6f3d37f7f",
+    "title": "book folded and unfolded"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/research.glb",
+      "bytes": 328752,
+      "triangles": 13876,
+      "primitives": 3,
+      "dimensions": [
+        0.23605861671370143,
+        0.07328864789251047,
+        0.46031738678299927
+      ],
+      "bounds": {
+        "min": [
+          -0.11802934307809612,
+          -0.023462670449158077,
+          -0.083196505930097
+        ],
+        "max": [
+          0.1180292736356053,
+          0.04982597744335238,
+          0.37712088085290224
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 13876,
+        "ratio": 1,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "b8c3b68f977411d74385cd39d46b2aa49236a88f10aba3491fd7179b28da76ac"
+    },
+    "mobile": {
+      "url": "/models/projects/research-mobile.glb",
+      "bytes": 120716,
+      "triangles": 6997,
+      "primitives": 3,
+      "dimensions": [
+        0.23605861416521606,
+        0.07328864773852553,
+        0.460317343997017
+      ],
+      "bounds": {
+        "min": [
+          -0.1180293418038547,
+          -0.023462670295173148,
+          -0.08319646314411527
+        ],
+        "max": [
+          0.11802927236136136,
+          0.04982597744335238,
+          0.37712088085290174
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 7000,
+        "ratio": 0.5044681464398962,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "a257cb1b5cde1ab52406f0aab5960ee0673cadceda0d18e40f4545418940640a"
+    }
+  }
+}

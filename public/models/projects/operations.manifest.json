@@ -1,0 +1,76 @@
+{
+  "id": "operations",
+  "division": "Operations & Management",
+  "sourceBytes": 4991152,
+  "sourceTriangles": 149008,
+  "sourceSha256": "476c6fc022429b4f30bb33af787cacc4588d80f5a44426b8c6c84ec20e677157",
+  "attribution": {
+    "author": "melaamory (https://sketchfab.com/melaamory)",
+    "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+    "source": "https://sketchfab.com/3d-models/gears-1fa1e31142714a11a2a77606c416aa05",
+    "title": "Gears"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/operations.glb",
+      "bytes": 228236,
+      "triangles": 45000,
+      "primitives": 1,
+      "dimensions": [
+        759.2567291259766,
+        22.429899404704287,
+        612.9989553217479
+      ],
+      "bounds": {
+        "min": [
+          -383.23663330078125,
+          -7.519087885945893,
+          -157.77051953099112
+        ],
+        "max": [
+          376.0200958251953,
+          14.910811518758393,
+          455.22843579075675
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 45000,
+        "ratio": 0.3019972082035864,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "a01d4ca5014c06f197ddbeac8249e3e1cae67bab96dfa825ca74cf0f17dd26b8"
+    },
+    "mobile": {
+      "url": "/models/projects/operations-mobile.glb",
+      "bytes": 107436,
+      "triangles": 18000,
+      "primitives": 1,
+      "dimensions": [
+        759.2567291259766,
+        22.429899404704287,
+        612.9989553217479
+      ],
+      "bounds": {
+        "min": [
+          -383.23663330078125,
+          -7.519087885945893,
+          -157.77051953099112
+        ],
+        "max": [
+          376.0200958251953,
+          14.910811518758393,
+          455.22843579075675
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 18000,
+        "ratio": 0.12079888328143455,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "c0c9576a3f00242be909482f359d2792dbbf42d25d69befa2a0f8ece5177581e"
+    }
+  }
+}

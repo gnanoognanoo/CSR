@@ -1,0 +1,131 @@
+.projects-page.orbital-experience{
+  --sans:'Manrope Variable',Arial,sans-serif;--project-ink:#101820;--project-body:#626a73;--project-blue:#146eb4;--project-deep:#0b3558;--project-line:rgba(16,24,32,.12);--orbit-muted:#657686;
+  position:fixed;inset:104px 0 0;height:calc(100dvh - 104px);overflow:clip;isolation:isolate;background:#f3f1ec;color:var(--project-ink);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:44px minmax(0,1fr) 92px 18px;padding:0 3.5%
+}
+.orbital-experience button{font:inherit;color:inherit;cursor:pointer}
+.orbital-experience button:focus-visible,.orbit-division-picker select:focus-visible{outline:2px solid var(--project-blue);outline-offset:4px}
+.orbital-experience button:disabled{cursor:default;opacity:.4}
+.orbital-topline{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--project-line);font:9px var(--mono);letter-spacing:.09em;color:var(--orbit-muted);z-index:5}
+.orbital-topline p{display:flex;align-items:center;gap:11px;margin:0;color:var(--project-deep);white-space:nowrap}
+.orbital-topline p>span{width:20px;height:1px;background:var(--project-blue)}
+.orbital-topline>button{border:1px solid var(--project-line);border-radius:5px;background:#fff;font:8px var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:8px 13px;color:var(--project-ink);box-shadow:0 2px 3px rgba(16,24,32,.025);transition:background .2s,border-color .2s}
+.orbital-topline>button>span{color:var(--project-blue);margin-left:18px}
+.orbital-topline>button:hover{background:#e8f2fa;border-color:rgba(20,110,180,.24)}
+.orbit-demo-badge{font:6px var(--mono);letter-spacing:.1em;padding:3px 5px;border:1px solid rgba(20,110,180,.24);border-radius:3px;color:var(--project-blue)}
+.orbit-division-picker{display:flex;align-items:center;gap:10px;color:var(--orbit-muted);min-width:0}
+.orbit-division-picker>span{font:7px var(--mono);letter-spacing:.08em}
+.orbit-division-picker select{appearance:auto;max-width:290px;color:var(--project-deep);background:transparent;border:0;border-bottom:1px solid rgba(16,24,32,.22);padding:7px 20px 7px 8px;font:9px var(--mono);border-radius:0;transition:border-color .2s}
+.orbit-division-picker select:hover,.orbit-division-picker select:focus{border-bottom-color:var(--project-blue)}
+.orbit-division-picker option{background:#fff;color:var(--project-ink)}
+.orbital-stage-wrap{position:relative;min-height:0;min-width:0;transition:opacity .35s,filter .35s}
+.orbital-stage{height:100%;width:100%;position:relative;user-select:none;touch-action:none;outline:0;cursor:grab;container-type:size}
+.orbital-stage:focus-visible{outline:2px solid rgba(20,110,180,.55);outline-offset:-3px;border-radius:12px}
+.is-dragging .orbital-stage,.is-dragging .orbital-stage button{cursor:grabbing}
+.orbital-canvas{position:absolute;inset:0;pointer-events:none}
+.orbital-canvas>div,.orbital-canvas canvas{height:100%;width:100%}
+.orbital-canvas canvas{pointer-events:auto}
+.orbit-sun{--hub-diameter:clamp(86px,24cqh,130px);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateY(calc(-1 * var(--hub-lift,0px)));z-index:5;width:var(--hub-diameter);height:var(--hub-diameter);background:none;border:0;border-radius:50%;padding:0;perspective:700px}
+.orbit-disc-fallback{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(var(--hub-spin-y,0rad));pointer-events:none}
+.orbit-hub-face{position:absolute;inset:0;border:3px solid #8fa3b8;border-radius:50%;padding:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;background:radial-gradient(circle at 35% 22%,#fff,#fffefc 70%,#e8e9e7);box-shadow:0 5px 0 #7690a2,0 8px 2px #9babb6,0 17px 25px rgba(18,32,46,.16),inset 0 2px 2px #fff;transform:translateZ(4px);backface-visibility:hidden}
+.orbit-hub-face::after{content:'';position:absolute;inset:4px;border:1px solid #d0dce5;border-radius:50%;pointer-events:none}
+.orbit-hub-back{transform:rotateY(180deg) translateZ(4px)}
+.orbit-sun img{display:block;width:43%;height:auto;border-radius:50%;transition:transform .25s;pointer-events:none;-webkit-user-drag:none}
+.orbit-sun strong{font-size:clamp(11px,2.9cqh,16px);line-height:1.15;letter-spacing:-.045em;font-weight:650;white-space:nowrap}
+.orbit-hub-face>span{font:5px/1.4 var(--mono);letter-spacing:.12em;color:var(--project-body)}
+.orbit-sun:hover .orbit-hub-face{border-color:var(--project-blue)}
+.orbit-sun:hover img{transform:scale(1.035)}
+.has-webgl .orbit-sun{background:transparent;border:0;padding:0;box-shadow:none;transform:translate(-50%,-50%) translateY(calc(-1 * var(--hub-lift,0px)))}
+.has-webgl .orbit-sun::after{display:none}
+.has-webgl .orbit-sun>*{opacity:0}
+.orbital-model-targets{position:absolute;inset:0;pointer-events:none}
+.orbital-experience .orbit-model-target{position:absolute;left:50%;top:50%;pointer-events:auto;transform:translate(-50%,-50%);will-change:transform;width:68px;height:62px;background:transparent;border:1px solid transparent;border-radius:12px;cursor:grab;touch-action:none;transition:border-color .2s,background .2s}
+.orbit-model-target:hover{border-color:rgba(20,110,180,.22)}
+.orbital-experience .orbit-model-target.is-dragged{cursor:grabbing;border-color:rgba(20,110,180,.4);background:rgba(255,255,255,.09)}
+.orbit-model-target.is-active:after{content:'';position:absolute;left:calc(50% - 8px);bottom:1px;width:16px;height:1px;background:var(--project-blue);opacity:.7}
+.model-name{position:absolute;left:50%;top:calc(100% + 5px);transform:translateX(-50%);width:155px;pointer-events:none;padding:7px 10px;background:rgba(255,255,255,.94);border:1px solid var(--project-line);border-radius:7px;box-shadow:0 8px 20px rgba(18,32,46,.08);font:10px/1.5 var(--sans);color:var(--project-ink);opacity:0;transition:opacity .2s;text-align:center;z-index:10;backdrop-filter:blur(8px)}
+.model-name small{display:block;margin-top:4px;font:6px/1.5 var(--mono);letter-spacing:.07em;color:var(--project-blue)}
+.orbit-model-target[data-hemisphere=lower] .model-name{top:auto;bottom:calc(100% + 5px)}
+.orbit-model-target:hover .model-name,.orbit-model-target:focus-visible .model-name,.orbit-model-target.is-dragged .model-name{opacity:1}
+.model-fallback-icon{display:none}
+.is-scene-fallback .model-fallback-icon{display:block;padding:14px}
+.model-fallback-icon svg{width:100%;height:100%;color:var(--project-blue)}
+.project-ring-items{position:absolute;inset:0;pointer-events:none;z-index:4}
+.ring-project{position:absolute;left:50%;top:50%;width:var(--preview-width,56px);height:var(--preview-height,42px);padding:0;border:0;background:none;color:var(--project-ink);pointer-events:auto;transform:translate(-50%,-50%);will-change:transform;touch-action:none}
+.ring-project-preview{--module-trim:#1689cc;display:block;position:relative;width:100%;height:100%;padding:calc(var(--preview-height,42px) * .073) calc(var(--preview-width,56px) * .027) calc(var(--preview-height,42px) * .133);border:0;background:linear-gradient(150deg,#303a43,#121417 35%,#1d2328);border-radius:0;clip-path:polygon(0 8%,4% 0,96% 0,100% 8%,100% 92%,96% 100%,4% 100%,0 92%);box-shadow:inset 0 1px 0 #687b8c,inset 0 -3px 0 #080b0e;transition:box-shadow .25s;overflow:hidden}
+.ring-project-preview::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(var(--module-trim),var(--module-trim)) left top/30% 4% no-repeat,linear-gradient(var(--module-trim),var(--module-trim)) right top/30% 4% no-repeat,linear-gradient(#68c6f2,#1689cc) left center/1.2% 55% no-repeat,linear-gradient(#68c6f2,#1689cc) right center/1.2% 55% no-repeat,linear-gradient(var(--module-trim),var(--module-trim)) center 91%/86% 3% no-repeat}
+.ring-project-preview img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;border:1px solid #72838f;border-radius:0;animation:project-media-enter .24s ease-out}
+.ring-project-preview>span{position:absolute;left:4%;bottom:2.5%;padding:0;font:5px var(--mono);color:#68c6f2}
+.ring-project-preview::after{content:'';position:absolute;right:4%;bottom:3%;width:7px;height:5px;border:1px solid #68c6f2;border-radius:50% 50% 0 0;opacity:.8}
+.ring-project.is-active{z-index:3}
+.ring-project.is-active .ring-project-preview{--module-trim:#1d9fe8;box-shadow:inset 0 1px 0 #9bbbd0,inset 0 -3px 0 #080b0e}
+.is-scene-fallback .ring-project{filter:drop-shadow(0 5px 6px rgba(7,27,51,.2))}
+.ring-project:hover .ring-project-preview,.ring-project:focus-visible .ring-project-preview{opacity:1;--module-trim:#1d9fe8}
+.ring-project>strong{position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);width:165px;font:11px/1.4 var(--sans);font-weight:600;color:var(--project-ink);opacity:0;pointer-events:none;transition:opacity .2s;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-align:center}
+.ring-project[data-hemisphere=upper]>strong{top:auto;bottom:calc(100% + 7px)}
+.ring-project.is-active[data-resting=true]>strong,.ring-project:hover>strong,.ring-project:focus-visible>strong{opacity:1}
+.ring-project.is-active>strong{top:calc(100% + 7px);bottom:auto}
+.has-webgl .ring-project{width:var(--preview-width);height:var(--preview-height);min-width:32px;min-height:26px;border-radius:3px}
+.has-webgl .ring-project-preview{visibility:hidden;width:100%;height:100%}
+.has-webgl .ring-project:hover{outline:1px solid rgba(20,110,180,.5);outline-offset:3px}
+.ring-project.is-placeholder .ring-project-preview{border-style:dashed;opacity:.76}
+.ring-project.is-placeholder.is-active .ring-project-preview{opacity:1}
+.orbital-focus{position:relative;display:grid;grid-template-columns:34px minmax(0,650px) 34px;align-items:start;justify-content:center;gap:36px;z-index:6;transition:opacity .35s,filter .35s;padding-top:4px}
+.orbital-focus-copy{text-align:center;align-self:start;min-width:0}
+.orbital-selection-index{font:8px/1.5 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--project-deep);margin:0 0 4px}
+.orbital-focus h1{font-size:clamp(25px,2.5vw,36px);font-weight:550;letter-spacing:-.045em;line-height:1.15;margin:0 auto 4px;max-width:680px;text-wrap:balance}
+.orbital-project-summary{font-size:11px;line-height:1.4;color:var(--project-body);margin:0 auto 2px;max-width:570px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orbital-primary{background:none;border:0;min-height:22px;padding:3px 0;font:8px var(--mono)!important;text-transform:uppercase;letter-spacing:.05em;color:var(--project-deep)!important;display:inline-flex;align-items:center;justify-content:center;gap:14px}
+.orbital-primary>span{font-size:11px;transition:transform .2s}
+.orbital-primary:hover{color:var(--project-blue)!important}
+.orbital-primary:hover>span{transform:translate(2px,-2px)}
+.orbit-step{border:1px solid var(--project-line);border-radius:50%;width:34px;height:34px;display:grid;place-items:center;padding:0;margin-top:22px;background:rgba(255,255,255,.8);color:var(--project-body)!important;font-size:15px!important;transition:border-color .2s,color .2s}
+.orbit-step:not(:disabled):hover{color:var(--project-deep)!important;border-color:var(--project-blue)}
+.orbital-pending-slot{margin:7px 0 0;font:7px var(--mono);letter-spacing:.1em;color:var(--project-blue)}
+.orbital-instructions{display:flex;align-items:center;justify-content:center;gap:25px;font:6px/1.8 var(--mono);letter-spacing:.06em;color:var(--orbit-muted);border-top:1px solid var(--project-line);margin:0;z-index:5}
+.orbital-instructions.has-notice{color:var(--project-deep)}
+.has-overlay .orbital-stage-wrap,.has-overlay .orbital-focus{opacity:.30;filter:blur(3px)}
+body:has(.projects-page.orbital-experience){background:#f3f1ec}
+body:has(.projects-page.orbital-experience) .site-header{background:rgba(246,245,242,.96);border-bottom-color:rgba(16,24,32,.10);color:#101820;box-shadow:0 2px 14px rgba(18,32,46,.025)}
+body:has(.projects-page.orbital-experience) .site-header .brand,body:has(.projects-page.orbital-experience) .site-header .community-wordmark .brand-divider{color:#101820}
+body:has(.projects-page.orbital-experience) .site-header .community-wordmark{border-left-color:rgba(16,24,32,.13)}
+body:has(.projects-page.orbital-experience) .site-header .community-wordmark small,body:has(.projects-page.orbital-experience) .site-header .header-note{color:#657686}
+body:has(.projects-page.orbital-experience) .site-header nav a{color:#626a73}
+body:has(.projects-page.orbital-experience) .site-header nav a.active{color:#101820}
+body:has(.projects-page.orbital-experience) .site-header nav a:hover,body:has(.projects-page.orbital-experience) .site-header nav a:focus-visible{color:#146eb4}
+body:has(.projects-page.orbital-experience) .site-header nav a.active:after{background:#146eb4}
+body:has(.projects-page.orbital-experience) .site-header .menu-toggle{color:#101820}
+body:has(.projects-page.orbital-experience) .site-header .menu-toggle span{color:#146eb4}
+.projects-page ::selection{background:#e8f2fa;color:#101820}
+@keyframes project-media-enter{from{opacity:0}to{opacity:1}}
+@media(min-width:1500px){
+  .projects-page.orbital-experience{grid-template-rows:52px minmax(0,1fr) 108px 24px}
+  .orbital-topline{font-size:10px}.orbital-topline>button{font-size:9px;padding:10px 16px}
+  .orbital-focus h1{font-size:38px}.orbital-project-summary{font-size:13px}.orbital-selection-index{font-size:9px}
+}
+@media(max-width:1000px){
+  .orbit-division-picker select{max-width:215px;font-size:8px}.orbit-division-picker>span{display:none}.orbital-topline{font-size:8px}
+}
+@media(max-width:760px){
+  .projects-page.orbital-experience{inset:78px 0 0;height:calc(100dvh - 78px);padding:0 5%;grid-template-rows:64px minmax(0,1fr) 156px 18px}
+  .orbital-topline{font-size:7px;letter-spacing:.035em;gap:10px;flex-wrap:wrap;align-content:center;row-gap:5px;position:relative;padding-bottom:6px}
+  .orbital-topline p{font-size:6px;gap:7px}.orbital-topline p>span{width:12px}.orbital-topline>button{position:absolute;right:0;top:6px;font-size:6px;letter-spacing:0;padding:7px 9px}.orbital-topline>button>span{margin-left:8px}
+  .orbit-demo-badge{font-size:5px;padding:2px 3px}
+  .orbit-division-picker{width:100%;order:3}.orbit-division-picker select{font-size:8px;padding:5px 8px;max-width:none;width:100%;min-height:28px}
+  .orbital-stage-wrap{margin:0 -3%}.orbital-stage{cursor:auto}
+  .orbit-sun{--hub-diameter:94px}.orbit-hub-face{padding:12px}.orbit-sun img{width:43%}.orbit-sun strong{font-size:13px}.orbit-hub-face>span{font-size:4px;letter-spacing:.08em}
+  .orbit-model-target{width:46px;height:46px;border-radius:9px}.model-name{width:120px;font-size:8px;padding:6px 8px}
+  .ring-project-preview{padding:2px 2px 6px}.ring-project-preview>span{font-size:4px;left:3px;bottom:1px}.ring-project-preview::after{left:12px;right:5px;bottom:3px}
+  .ring-project>strong{font-size:7px;width:90px;top:calc(100% + 5px)}.ring-project[data-hemisphere=upper]>strong{bottom:calc(100% + 5px)}.ring-project.is-active>strong{top:calc(100% + 5px);bottom:auto}
+  .orbital-focus{gap:10px;grid-template-columns:26px minmax(0,1fr) 26px;padding-top:5px}
+  .orbital-focus h1{font-size:23px;line-height:1.18;margin-bottom:7px;max-width:290px}.orbital-selection-index{font-size:7px;margin-bottom:6px;letter-spacing:.04em}
+  .orbital-project-summary{font-size:10px;line-height:1.5;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:30px;margin-bottom:6px}
+  .orbital-primary{font-size:7px!important;min-height:24px;padding:3px 0}.orbit-step{width:26px;height:28px;font-size:13px!important;margin-top:25px}
+  .orbital-instructions{font-size:5px;letter-spacing:.025em}.orbital-instructions>span:last-child{display:block}
+  body:has(.projects-page.orbital-experience) .site-header nav{background:rgba(246,245,242,.99);border-bottom-color:rgba(16,24,32,.12)}
+}
+@media(max-height:680px) and (min-width:761px){
+  .projects-page.orbital-experience{grid-template-rows:40px minmax(0,1fr) 88px 16px}
+  .orbital-focus h1{font-size:25px}.orbital-project-summary{font-size:10px}
+}
+@media(max-width:360px){.projects-page.orbital-experience{grid-template-rows:64px minmax(0,1fr) 164px 18px}.orbital-focus h1{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.orbital-experience *{animation:none!important;transition:none!important}}

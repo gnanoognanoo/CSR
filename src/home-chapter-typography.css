@@ -1,0 +1,233 @@
+/* Home story typography. Existing sizes, composition, and motion stay in the cinematic stylesheets. */
+.home-page .experience h2 {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.05em;
+  line-height: 1.02;
+  color: var(--home-text);
+  text-shadow: 0 8px 30px rgba(0, 15, 30, .14);
+}
+
+.home-page .experience :is(.display-heading, .statement, .belief-words) {
+  letter-spacing: -.06em;
+  line-height: 1.02;
+}
+
+.home-page .experience h2 .accent {
+  color: #9CCCEB;
+}
+
+.home-page .experience :is(.process-item h3, .opportunity-list h3, .digital-panel h3) {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  color: var(--home-text);
+}
+
+.home-page .experience .digital-panel h3 {
+  line-height: 1.02;
+}
+
+.home-page .experience :is(.prose p, .body-copy, .chapter-intro, .process-item p, .philosophy-row p, .stat-big p, .division-detail p),
+.home-page .experience .year-distribution p:not(.eyebrow) {
+  font-family: var(--home-body);
+  font-weight: 400;
+  letter-spacing: -.012em;
+  line-height: 1.6;
+  color: var(--home-body-text);
+}
+
+.home-page .experience :is(.prose .lead, .chapter-intro, .stat-big p, .division-detail p) {
+  color: var(--home-text);
+}
+
+.home-page .experience .prose .lead {
+  letter-spacing: -.012em;
+  line-height: 1.6;
+}
+
+.home-page .experience .prose em {
+  color: var(--home-text);
+}
+
+.home-page .experience .prose .domain-intro {
+  color: var(--home-secondary);
+  line-height: 1.6;
+}
+
+/* Technical annotations stay solid and distinct from explanatory paragraphs. */
+.home-page .experience :is(.story-beat:not(.hero), .community-numbers) .eyebrow,
+.home-page .experience :is(.campus-caption.mono, .technical-rule, .system-origin.mono, .engineering-system li .mono, .process-node.mono, .scene-note.mono, .scene-caption.mono, .philosophy-row > .mono, .opportunity-list .mono, .stat-big .mono, .team-line span, .year-key, .directory-heading > .mono, .division-index.mono, .division-count.mono, .division-detail > .mono, .digital-panel > .mono, .digital-areas span) {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1.7;
+  color: var(--home-annotation);
+}
+
+.home-page .experience :is(.story-beat:not(.hero), .community-numbers) .eyebrow .accent,
+.home-page .experience :is(.stat-big .mono.accent, .digital-panel > .mono.accent) {
+  color: var(--home-annotation);
+  -webkit-text-fill-color: currentColor;
+}
+
+.home-page .experience :is(.campus-caption.mono, .scene-note.mono, .scene-caption.mono, .directory-heading > .mono) {
+  line-height: 1.8;
+}
+
+.home-page .experience :is(.engineering-system li .mono, .team-line span, .year-key, .division-count.mono, .division-detail-note.mono, .directory-heading .subtle) {
+  color: var(--home-secondary);
+}
+
+.home-page .experience .engineering-system li {
+  font-family: var(--home-body);
+  font-weight: 400;
+  letter-spacing: -.012em;
+  line-height: 1.6;
+  color: var(--home-text);
+}
+
+.home-page .experience .technical-rule i:before,
+.home-page .experience .technical-rule i:after {
+  color: var(--home-annotation);
+}
+
+/* Scroll-driven stage selection keeps its existing classes and indicators. */
+.home-page .experience .process-scale > span,
+.home-page .experience .process-scale small {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1.7;
+  color: rgba(185, 202, 214, .65);
+}
+
+.home-page .experience .process-scale > span.is-active,
+.home-page .experience .process-scale > span.is-active small {
+  color: #fff;
+}
+
+.home-page .experience .process-scale > span.is-active:before {
+  background-color: #2791D2;
+}
+
+/* Deliberate solid progressions give each principle its own emphasis. */
+.home-page .experience .philosophy-row h2 {
+  letter-spacing: -.05em;
+  line-height: 1.02;
+  -webkit-text-fill-color: currentColor;
+}
+
+.home-page .experience .philosophy-row:nth-child(1) h2 { color: #fff; }
+.home-page .experience .philosophy-row:nth-child(2) h2 { color: #EAF5FC; }
+.home-page .experience .philosophy-row:nth-child(3) h2 { color: #C5E3F6; }
+.home-page .experience .philosophy-row:nth-child(4) h2 { color: #81BFE8; }
+
+.home-page .experience :is(.stat-value, .team-line strong, .year-key b) {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.07em;
+  line-height: .9;
+  font-variant-numeric: tabular-nums;
+  color: var(--home-text);
+}
+
+/* Directory names use the interface role; indices and counts remain technical. */
+.home-page .experience .division button {
+  font-family: var(--home-body);
+  font-weight: 500;
+  color: var(--home-text);
+}
+
+.home-page .experience .division-name {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  color: rgba(185, 202, 214, .65);
+}
+
+.home-page .experience .division button:hover .division-name,
+.home-page .experience .division button:focus-visible .division-name,
+.home-page .experience .division.is-selected .division-name {
+  color: #fff;
+}
+
+.home-page .experience .division-toggle {
+  font-family: var(--home-body);
+  font-weight: 500;
+  color: var(--home-annotation);
+}
+
+.home-page .experience .division.is-selected .division-detail-note {
+  color: var(--home-annotation);
+}
+
+/* Software words keep their current strip composition and responsive sizes. */
+.home-page .experience .digital-keywords {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1.02;
+}
+
+.home-page .experience .digital-keywords > span:nth-child(1) { color: #fff; }
+.home-page .experience .digital-keywords > span:nth-child(2) { color: #EDF7FD; }
+.home-page .experience .digital-keywords > span:nth-child(3) { color: #B9DDF3; }
+.home-page .experience .digital-keywords > span:nth-child(4) { color: #72B7E4; }
+
+.home-page .experience .digital-tabs button {
+  font-family: var(--home-body);
+  font-weight: 500;
+  letter-spacing: .02em;
+  line-height: 1.55;
+  color: #89B7D4;
+}
+
+.home-page .experience .digital-tabs .mono {
+  font-family: var(--home-mono);
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--home-secondary);
+}
+
+.home-page .experience .digital-tabs button:hover,
+.home-page .experience .digital-tabs button:focus-visible {
+  color: var(--home-text);
+}
+
+.home-page .experience .digital-tabs button[aria-selected=true] {
+  color: #1685C6;
+}
+
+.home-page .experience .digital-tabs button[aria-selected=true] .mono {
+  color: var(--home-annotation);
+}
+
+.home-page .experience .digital-areas span {
+  color: #89B7D4;
+}
+
+.home-page .experience .digital-code {
+  font-family: var(--home-display);
+  font-weight: 500;
+  letter-spacing: -.06em;
+  color: rgba(159, 196, 221, .085);
+}
+
+/* Gradients are confined to major heading accents and large community numbers. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .home-page .experience h2 .accent,
+  .home-page .experience :is(.stat-value, .team-line strong, .year-key b) {
+    background-image: var(--home-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .home-page .experience .belief-words .accent {
+    background-image: linear-gradient(105deg, #FFFFFF 0%, #E6F4FC 58%, #8BC5E7 100%);
+  }
+}
+

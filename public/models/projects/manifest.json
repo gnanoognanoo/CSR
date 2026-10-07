@@ -1,0 +1,538 @@
+{
+  "generator": "CSR-RIT model preparation pipeline",
+  "compression": "EXT_meshopt_compression + EXT_texture_webp",
+  "models": [
+    {
+      "id": "ai",
+      "division": "AI & Intelligent Systems",
+      "sourceBytes": 50315376,
+      "sourceTriangles": 590432,
+      "sourceSha256": "bbbb8740271ac9f3b66adaf1ef7f585811b7d6d50cf060871e209383074f0f29",
+      "attribution": {
+        "title": "User-supplied AI model",
+        "author": null,
+        "license": null,
+        "source": null
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/ai.glb",
+          "bytes": 3319052,
+          "triangles": 72718,
+          "primitives": 1,
+          "dimensions": [
+            1.3405827835357291,
+            1.8893283099922002,
+            1.6628418361790167
+          ],
+          "bounds": {
+            "min": [
+              -0.654271391786938,
+              -0.957306130040216,
+              -0.8083244055921319
+            ],
+            "max": [
+              0.6863113917487911,
+              0.9320221799519842,
+              0.8545174305868848
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 70000,
+            "ratio": 0.11855725976911821,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "c59ccdee9584c61d54a45965c333a999f3421f7b4ed0bd486030286f04782d13"
+        },
+        "mobile": {
+          "url": "/models/projects/ai-mobile.glb",
+          "bytes": 1293504,
+          "triangles": 49125,
+          "primitives": 1,
+          "dimensions": [
+            1.3416183283670482,
+            1.8865683169623964,
+            1.6643278146735048
+          ],
+          "bounds": {
+            "min": [
+              -0.6552501763276128,
+              -0.9559261034092411,
+              -0.8083233817935627
+            ],
+            "max": [
+              0.6863681520394354,
+              0.9306422135531552,
+              0.8560044328799422
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 24000,
+            "ratio": 0.04064820334941196,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "987bafd6f0319d55ce8d7f386dadd29a9d878519ca30fce6e84147308b0377b2"
+        }
+      }
+    },
+    {
+      "id": "embedded",
+      "division": "Embedded & Electronics",
+      "sourceBytes": 196123304,
+      "sourceTriangles": 5860546,
+      "sourceSha256": "d5dd2ce7ada086cde99768c16d05b13eb93ca14569b2f946752471d2a507b5bd",
+      "attribution": {
+        "author": "damongraphics (https://sketchfab.com/damongraphics)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/pcb-nvidia-rtx-4090-graphic-card-0eeef36c440f44f586501532dd61bba0",
+        "title": "PCB NVIDIA RTX 4090 Graphic Card"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/embedded.glb",
+          "bytes": 995816,
+          "triangles": 148470,
+          "primitives": 22,
+          "dimensions": [
+            15.423871442309157,
+            1.765061634345396,
+            6.688272724863608
+          ],
+          "bounds": {
+            "min": [
+              -7.8282663884401344,
+              0.1637907231608956,
+              -3.314271666761556
+            ],
+            "max": [
+              7.595605053869023,
+              1.9288523575062917,
+              3.374001058102052
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 140000,
+            "ratio": 0.023888559188853735,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "fd18b5974d0944d16f3e3b627278f6f27497d799764ecca00e5be583e7fb76ed"
+        },
+        "mobile": {
+          "url": "/models/projects/embedded-mobile.glb",
+          "bytes": 450300,
+          "triangles": 61370,
+          "primitives": 22,
+          "dimensions": [
+            15.423901039959809,
+            1.765061634345396,
+            6.687369387795613
+          ],
+          "bounds": {
+            "min": [
+              -7.8282663884401344,
+              0.1637907231608956,
+              -3.3143580372288715
+            ],
+            "max": [
+              7.595634651519673,
+              1.9288523575062917,
+              3.3730113505667414
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 48000,
+            "ratio": 0.008190363150464137,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "cbdbdae4c772c5be47cadb2c7cb7726e9b18b65b361cd1bbce6d5107136738d2"
+        }
+      }
+    },
+    {
+      "id": "robotics",
+      "division": "Robotics & Autonomous Systems",
+      "sourceBytes": 61072676,
+      "sourceTriangles": 1525628,
+      "sourceSha256": "0c6a33dce52d491b5497a3d5f0ec30ee2db48919be8c43a2500c4cd9d7fd2a64",
+      "attribution": {
+        "author": "Interbotix (https://sketchfab.com/Interbotix)",
+        "license": "CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)",
+        "source": "https://sketchfab.com/3d-models/phantomx-hexapod-mkiii-59c19fa10e764e2d84cae552ab90f6c9",
+        "title": "PhantomX Hexapod MKIII"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/robotics.glb",
+          "bytes": 690904,
+          "triangles": 102278,
+          "primitives": 1,
+          "dimensions": [
+            538.266975402832,
+            164.9445692318442,
+            506.0698480555146
+          ],
+          "bounds": {
+            "min": [
+              -90.21537017822266,
+              7.2100231042622624,
+              -435.64285707219085
+            ],
+            "max": [
+              448.0516052246094,
+              172.15459233610648,
+              70.42699098332375
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 100000,
+            "ratio": 0.0655467781136686,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "c53182c335a667f04f23e690d6cddb0255d9875b79ed07f9dc37ad0139251735"
+        },
+        "mobile": {
+          "url": "/models/projects/robotics-mobile.glb",
+          "bytes": 525356,
+          "triangles": 74182,
+          "primitives": 1,
+          "dimensions": [
+            538.266975402832,
+            164.9445692318442,
+            506.0698480555146
+          ],
+          "bounds": {
+            "min": [
+              -90.21537017822266,
+              7.2100231042622624,
+              -435.64285707219085
+            ],
+            "max": [
+              448.0516052246094,
+              172.15459233610648,
+              70.42699098332375
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 35000,
+            "ratio": 0.02294137233978401,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "ccde6084ca703cf7dde2f416d2480fd69cf07b28ec18733e988d146b7aa73012"
+        }
+      }
+    },
+    {
+      "id": "software",
+      "division": "Software Engineering",
+      "sourceBytes": 21974508,
+      "sourceTriangles": 120330,
+      "sourceSha256": "7e509a26d8db49f4f607ef729b8049a33aff7bc91a23817f5b99dff93a78195a",
+      "attribution": {
+        "author": "Blue Lantern (https://sketchfab.com/genoris2)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/gaming-laptop-4e72a2078b3c4a75a821ab09830693fe",
+        "title": "Gaming Laptop"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/software.glb",
+          "bytes": 2052292,
+          "triangles": 89044,
+          "primitives": 12,
+          "dimensions": [
+            3.0924809848891655,
+            2.7412615918299417,
+            4.00378155708313
+          ],
+          "bounds": {
+            "min": [
+              -1.7511329993385842,
+              -0.1305738411928279,
+              -2.0011701583862305
+            ],
+            "max": [
+              1.3413479855505812,
+              2.610687750637114,
+              2.0026113986968994
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 45000,
+            "ratio": 0.3739715781600598,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "f9e7ab365b3fa3166d089faab85652adee13f2ccb11369c04efe2cc5b683aa47"
+        },
+        "mobile": {
+          "url": "/models/projects/software-mobile.glb",
+          "bytes": 1599960,
+          "triangles": 78750,
+          "primitives": 12,
+          "dimensions": [
+            3.0855591489634873,
+            2.7412619393944544,
+            4.00378155708313
+          ],
+          "bounds": {
+            "min": [
+              -1.7452506169130406,
+              -0.1306085191423456,
+              -2.0011701583862305
+            ],
+            "max": [
+              1.3403085320504466,
+              2.610653420252109,
+              2.0026113986968994
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 18000,
+            "ratio": 0.14958863126402394,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "127f2a8ecf492cd0d359fb03243b662f2abc500619417b16e6c611e484a6ac56"
+        }
+      }
+    },
+    {
+      "id": "iot",
+      "division": "IoT & Smart Systems",
+      "sourceBytes": 523788,
+      "sourceTriangles": 13632,
+      "sourceSha256": "49413d80274990bf6ec40e66dca02f1ea2ca66841ef901e0c98358a3b4dc12dc",
+      "attribution": {
+        "author": "MidaZ_3D (https://sketchfab.com/MidaZ_3D)",
+        "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+        "source": "https://sketchfab.com/3d-models/smart-thermostat-wall-mounted-concept-d4df578a903c42bca31d722109279a2f",
+        "title": "Smart Thermostat – Wall Mounted Concept"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/iot.glb",
+          "bytes": 82128,
+          "triangles": 13632,
+          "primitives": 4,
+          "dimensions": [
+            0.1006489172577858,
+            0.1006489172577858,
+            0.022103077879610807
+          ],
+          "bounds": {
+            "min": [
+              -0.0503244586288929,
+              -0.0503244586288929,
+              -0.01237592519245083
+            ],
+            "max": [
+              0.0503244586288929,
+              0.0503244586288929,
+              0.009727152687159976
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 13632,
+            "ratio": 1,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "8b70a5cb32f15b908bf851344268b60c0173e220016a859e7278535ce46c04dd"
+        },
+        "mobile": {
+          "url": "/models/projects/iot-mobile.glb",
+          "bytes": 50196,
+          "triangles": 6998,
+          "primitives": 4,
+          "dimensions": [
+            0.10063508152961731,
+            0.10063508152961728,
+            0.022103077879610807
+          ],
+          "bounds": {
+            "min": [
+              -0.050317540764808655,
+              -0.05031754076480864,
+              -0.01237592519245083
+            ],
+            "max": [
+              0.050317540764808655,
+              0.05031754076480864,
+              0.009727152687159976
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 7000,
+            "ratio": 0.5134976525821596,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "6bb29b1e681e99198510a1430d368213f33c1cdc3f0c5804bac7c9afbf226af3"
+        }
+      }
+    },
+    {
+      "id": "research",
+      "division": "Research & Publications",
+      "sourceBytes": 1397016,
+      "sourceTriangles": 13876,
+      "sourceSha256": "ccc19e4ede7feffb18bbf9e49d06243b376581f47774e78cb63b9dbbd0a0d20d",
+      "attribution": {
+        "author": "PremModel (https://sketchfab.com/PremModel)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/book-folded-and-unfolded-7c4f0b00dc1b4852b1c1f6b6f3d37f7f",
+        "title": "book folded and unfolded"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/research.glb",
+          "bytes": 328752,
+          "triangles": 13876,
+          "primitives": 3,
+          "dimensions": [
+            0.23605861671370143,
+            0.07328864789251047,
+            0.46031738678299927
+          ],
+          "bounds": {
+            "min": [
+              -0.11802934307809612,
+              -0.023462670449158077,
+              -0.083196505930097
+            ],
+            "max": [
+              0.1180292736356053,
+              0.04982597744335238,
+              0.37712088085290224
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 13876,
+            "ratio": 1,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "b8c3b68f977411d74385cd39d46b2aa49236a88f10aba3491fd7179b28da76ac"
+        },
+        "mobile": {
+          "url": "/models/projects/research-mobile.glb",
+          "bytes": 120716,
+          "triangles": 6997,
+          "primitives": 3,
+          "dimensions": [
+            0.23605861416521606,
+            0.07328864773852553,
+            0.460317343997017
+          ],
+          "bounds": {
+            "min": [
+              -0.1180293418038547,
+              -0.023462670295173148,
+              -0.08319646314411527
+            ],
+            "max": [
+              0.11802927236136136,
+              0.04982597744335238,
+              0.37712088085290174
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 7000,
+            "ratio": 0.5044681464398962,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "a257cb1b5cde1ab52406f0aab5960ee0673cadceda0d18e40f4545418940640a"
+        }
+      }
+    },
+    {
+      "id": "operations",
+      "division": "Operations & Management",
+      "sourceBytes": 4991152,
+      "sourceTriangles": 149008,
+      "sourceSha256": "476c6fc022429b4f30bb33af787cacc4588d80f5a44426b8c6c84ec20e677157",
+      "attribution": {
+        "author": "melaamory (https://sketchfab.com/melaamory)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/gears-1fa1e31142714a11a2a77606c416aa05",
+        "title": "Gears"
+      },
+      "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+      "variants": {
+        "desktop": {
+          "url": "/models/projects/operations.glb",
+          "bytes": 228236,
+          "triangles": 45000,
+          "primitives": 1,
+          "dimensions": [
+            759.2567291259766,
+            22.429899404704287,
+            612.9989553217479
+          ],
+          "bounds": {
+            "min": [
+              -383.23663330078125,
+              -7.519087885945893,
+              -157.77051953099112
+            ],
+            "max": [
+              376.0200958251953,
+              14.910811518758393,
+              455.22843579075675
+            ]
+          },
+          "maxTextureSize": 1024,
+          "simplification": {
+            "requestedTriangles": 45000,
+            "ratio": 0.3019972082035864,
+            "maxRelativeError": 0.0015
+          },
+          "sha256": "a01d4ca5014c06f197ddbeac8249e3e1cae67bab96dfa825ca74cf0f17dd26b8"
+        },
+        "mobile": {
+          "url": "/models/projects/operations-mobile.glb",
+          "bytes": 107436,
+          "triangles": 18000,
+          "primitives": 1,
+          "dimensions": [
+            759.2567291259766,
+            22.429899404704287,
+            612.9989553217479
+          ],
+          "bounds": {
+            "min": [
+              -383.23663330078125,
+              -7.519087885945893,
+              -157.77051953099112
+            ],
+            "max": [
+              376.0200958251953,
+              14.910811518758393,
+              455.22843579075675
+            ]
+          },
+          "maxTextureSize": 512,
+          "simplification": {
+            "requestedTriangles": 18000,
+            "ratio": 0.12079888328143455,
+            "maxRelativeError": 0.004
+          },
+          "sha256": "c0c9576a3f00242be909482f359d2792dbbf42d25d69befa2a0f8ece5177581e"
+        }
+      }
+    }
+  ]
+}

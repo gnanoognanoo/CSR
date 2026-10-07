@@ -1,0 +1,76 @@
+{
+  "id": "embedded",
+  "division": "Embedded & Electronics",
+  "sourceBytes": 196123304,
+  "sourceTriangles": 5860546,
+  "sourceSha256": "d5dd2ce7ada086cde99768c16d05b13eb93ca14569b2f946752471d2a507b5bd",
+  "attribution": {
+    "author": "damongraphics (https://sketchfab.com/damongraphics)",
+    "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+    "source": "https://sketchfab.com/3d-models/pcb-nvidia-rtx-4090-graphic-card-0eeef36c440f44f586501532dd61bba0",
+    "title": "PCB NVIDIA RTX 4090 Graphic Card"
+  },
+  "changes": "Scene graph flattened, compatible static meshes joined, duplicate vertices welded, geometry simplified within stated error bounds, textures resized and compressed to WebP, Meshopt geometry compression. Original materials and model identity retained.",
+  "variants": {
+    "desktop": {
+      "url": "/models/projects/embedded.glb",
+      "bytes": 995816,
+      "triangles": 148470,
+      "primitives": 22,
+      "dimensions": [
+        15.423871442309157,
+        1.765061634345396,
+        6.688272724863608
+      ],
+      "bounds": {
+        "min": [
+          -7.8282663884401344,
+          0.1637907231608956,
+          -3.314271666761556
+        ],
+        "max": [
+          7.595605053869023,
+          1.9288523575062917,
+          3.374001058102052
+        ]
+      },
+      "maxTextureSize": 1024,
+      "simplification": {
+        "requestedTriangles": 140000,
+        "ratio": 0.023888559188853735,
+        "maxRelativeError": 0.0015
+      },
+      "sha256": "fd18b5974d0944d16f3e3b627278f6f27497d799764ecca00e5be583e7fb76ed"
+    },
+    "mobile": {
+      "url": "/models/projects/embedded-mobile.glb",
+      "bytes": 450300,
+      "triangles": 61370,
+      "primitives": 22,
+      "dimensions": [
+        15.423901039959809,
+        1.765061634345396,
+        6.687369387795613
+      ],
+      "bounds": {
+        "min": [
+          -7.8282663884401344,
+          0.1637907231608956,
+          -3.3143580372288715
+        ],
+        "max": [
+          7.595634651519673,
+          1.9288523575062917,
+          3.3730113505667414
+        ]
+      },
+      "maxTextureSize": 512,
+      "simplification": {
+        "requestedTriangles": 48000,
+        "ratio": 0.008190363150464137,
+        "maxRelativeError": 0.004
+      },
+      "sha256": "cbdbdae4c772c5be47cadb2c7cb7726e9b18b65b361cd1bbce6d5107136738d2"
+    }
+  }
+}
