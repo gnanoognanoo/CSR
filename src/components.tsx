@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { navigation, divisions, digital } from './content';
+import { useAuth } from './context/AuthContext';
 export function Brand(){return <Link className="brand" to="/" aria-label="CSR-RIT home — Rajalakshmi Institute of Technology"><img className="rit-logo" src="/brand/rit-official.jpg" alt="Rajalakshmi Institute of Technology"/><span className="community-wordmark">CSR<span className="brand-divider">—</span>RIT<small>STUDENT ENGINEERING<br/>COMMUNITY</small></span></Link>}
 export function Header(){
   const [scrolled,setScrolled]=useState(false),[open,setOpen]=useState(false);
   const location=useLocation(); const menuButton=useRef<HTMLButtonElement>(null);
+  const { user, profile, isAdmin } = useAuth();
   useEffect(()=>{const fn=()=>setScrolled(window.scrollY>70);fn();window.addEventListener('scroll',fn,{passive:true});return()=>window.removeEventListener('scroll',fn);},[]);
   useEffect(()=>setOpen(false),[location]);
   useEffect(()=>{if(!open)return;const close=(e:globalThis.KeyboardEvent)=>{if(e.key==='Escape'){setOpen(false);menuButton.current?.focus();}};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[open]);
-  return <header className={`site-header ${scrolled||open||location.pathname!=='/'?'is-scrolled':''}`}><Brand/><nav id="main-nav" className={open?'is-open':''} aria-label="Main navigation">{navigation.map(([path,label])=><NavLink key={path} to={path} end={path==='/'}>{label}</NavLink>)}</nav><span className="header-note">A STUDENT ENGINEERING COMMUNITY</span><button ref={menuButton} className="menu-toggle" aria-controls="main-nav" aria-expanded={open} onClick={()=>setOpen(!open)}>{open?'Close':'Menu'}<span aria-hidden="true">{open?'−':'+'}</span></button></header>;
+  return <header className={`site-header ${scrolled||open||location.pathname!=='/'?'is-scrolled':''}`}><Brand/><nav id="main-nav" className={open?'is-open':''} aria-label="Main navigation">{navigation.map(([path,label])=><NavLink key={path} to={path} end={path==='/'} className={({isActive})=>path==='/join'?`join-nav-pill ${isActive?'active':''}`:undefined}>{label}</NavLink>)}{user&&<NavLink to="/portal">Portal</NavLink>}{isAdmin&&<NavLink to="/admin">Admin</NavLink>}{!user?<NavLink to="/login" className="auth-nav-pill">Sign In</NavLink>:<NavLink to={isAdmin?'/admin':'/portal'} className="auth-nav-pill">{profile?.role||'Account'}</NavLink>}</nav><span className="header-note">A STUDENT ENGINEERING COMMUNITY</span><button ref={menuButton} className="menu-toggle" aria-controls="main-nav" aria-expanded={open} onClick={()=>setOpen(!open)}>{open?'Close':'Menu'}<span aria-hidden="true">{open?'−':'+'}</span></button></header>;
 }
 export function Label({number,children}:{number?:string;children:ReactNode}){return <p className="eyebrow"><span className="accent-line"/>{number&&<span className="accent">{number} /</span>}{children}</p>}
 export function Divisions(){

@@ -1,4 +1,4 @@
-export const navigation = [['/', 'Home'], ['/announcements', 'Announcements'], ['/projects', 'Projects'], ['/members', 'Member portfolio']];
+export const navigation = [['/', 'Home'], ['/announcements', 'Announcements'], ['/projects', 'Projects'], ['/members', 'Member portfolio'], ['/join', 'Join Community']];
 export const divisions = [
   ['AI & Intelligent Systems', 17, 'Anto Jenishia A'],
   ['Embedded & Electronics', 17, 'Abhishek S'],

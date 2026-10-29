@@ -1,5 +1,6 @@
 import { Component, lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { members, memberDivisions, memberStats, searchMembers, getMemberInitials, type Member } from './data';
+import { getMembers } from '../services/members';
 import { useOrbitPhysics } from '../projects/useOrbitPhysics';
 import { createHubMotionController } from '../projects/hub-motion';
 import { getHubScreenPulse } from '../projects/hub-geometry';
@@ -31,7 +32,22 @@ export default function MemberOrbitPage() {
   const reducedMotion = useMedia('(prefers-reduced-motion: reduce)');
   const [capacity, setCapacity] = useState(compact ? 6 : 12);
   const [scope, setScope] = useState('all');
+  const [allMembers, setAllMembers] = useState<readonly Member[]>(members);
   const [orbitMembers, setOrbitMembers] = useState<readonly Member[]>(members);
+
+  useEffect(() => {
+    getMembers().then(res => {
+      if (res.members && res.members.length > 0) {
+        setAllMembers(res.members);
+        if (scope === 'all') {
+          setOrbitMembers(res.members);
+        } else {
+          setOrbitMembers(res.members.filter(m => m.divisionId === scope));
+        }
+      }
+    });
+  }, [scope]);
+
   const [focusStep, setFocusStep] = useState(0);
   const [transition, setTransition] = useState(1);
   const [query, setQuery] = useState('');
@@ -51,7 +67,7 @@ export default function MemberOrbitPage() {
   const focused = orbitMembers[wrapMemberIndex(focusStep, orbitMembers.length)];
   const focusedPosition = wrapMemberIndex(focusStep, count);
   const division = memberDivisions.find(candidate => candidate.id === scope);
-  const matches = useMemo(() => query.trim() ? searchMembers(members, query) : [], [query]);
+  const matches = useMemo(() => query.trim() ? searchMembers(allMembers, query) : [], [query, allMembers]);
   const overlayOpen = directoryOpen || Boolean(profile) || Boolean(launch);
   const stage = useRef<HTMLDivElement>(null);
   const hub = useRef<HTMLButtonElement>(null);
@@ -138,7 +154,7 @@ export default function MemberOrbitPage() {
     setQuery('');
     if (id === scope && !transitionPending.current) return;
     setScope(id);
-    changeDataset(id === 'all' ? members : members.filter(member => member.divisionId === id), capacity);
+    changeDataset(id === 'all' ? allMembers : allMembers.filter(member => member.divisionId === id), capacity);
   };
   const focusMember = useCallback((member: Member) => {
     setQuery('');
@@ -150,9 +166,9 @@ export default function MemberOrbitPage() {
       else changeDataset(state.orbitMembers, state.capacity, index, true);
     } else {
       setScope('all');
-      changeDataset(members, state.capacity, members.findIndex(candidate => candidate.id === member.id), true);
+      changeDataset(allMembers, state.capacity, allMembers.findIndex(candidate => candidate.id === member.id), true);
     }
-  }, [physics, changeDataset, reducedMotion]);
+  }, [physics, changeDataset, reducedMotion, allMembers]);
 
   useEffect(() => {
     if (matches.length !== 1 || query.trim().length < 2) return;
@@ -271,9 +287,9 @@ export default function MemberOrbitPage() {
       {focused && <div className={`member-focus-copy ${focused.name.length > 27 ? 'has-long-name' : ''}`} key={focused.id} aria-live="polite" aria-atomic="true"><p>{focused.division}{focused.role === 'Division Lead' && <span>DIVISION LEAD</span>}</p><h2>{focused.name}</h2><div className="member-focus-meta">{focused.year && <span>{focused.year}</span>}{focused.department && <span>{focused.department}</span>}</div><button className="member-profile-link" onClick={() => openProfile(focused)}>View portfolio <span aria-hidden="true">↗</span></button></div>}
       <button className="member-step" aria-label="Next member" onClick={() => physics.step(1)}>→</button>
     </section>
-    <footer className="member-instructions"><span>{compact ? 'SWIPE TO EXPLORE · TAP A BADGE' : 'SCROLL OR DRAG TO EXPLORE · SELECT A BADGE TO MEET A MEMBER'}</span><span>{members.length} named profiles from the member roster</span></footer>
+    <footer className="member-instructions"><span>{compact ? 'SWIPE TO EXPLORE · TAP A BADGE' : 'SCROLL OR DRAG TO EXPLORE · SELECT A BADGE TO MEET A MEMBER'}</span><span>{allMembers.length} named profiles from the member roster</span></footer>
     {launch && <div className="member-launch-card" aria-hidden="true" style={{ left: launch.origin.x, top: launch.origin.y, width: launch.origin.width, height: launch.origin.height }}><span>CSR / MEMBER</span><b>{getMemberInitials(launch.member.name)}</b><strong>{launch.member.name}</strong><small>{launch.member.division}</small></div>}
     <MemberProfile member={profile} origin={profileOrigin} onClose={() => { setProfile(null); setProfileOrigin(null); }} />
-    <MemberDirectory open={directoryOpen} members={members} divisions={memberDivisions} onClose={() => setDirectoryOpen(false)} onSelect={focusMember} />
+    <MemberDirectory open={directoryOpen} members={allMembers} divisions={memberDivisions} onClose={() => setDirectoryOpen(false)} onSelect={focusMember} />
   </main>;
 }
