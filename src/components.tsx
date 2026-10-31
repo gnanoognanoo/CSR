@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { navigation, divisions, digital } from './content';
+import { navigation, digital } from './content';
+import { memberDivisions } from './members/data';
 import { useAuth } from './context/AuthContext';
 export function Brand(){return <Link className="brand" to="/" aria-label="CSR-RIT home — Rajalakshmi Institute of Technology"><img className="rit-logo" src="/brand/rit-official.jpg" alt="Rajalakshmi Institute of Technology"/><span className="community-wordmark">CSR<span className="brand-divider">—</span>RIT<small>STUDENT ENGINEERING<br/>COMMUNITY</small></span></Link>}
 export function Header(){
@@ -13,9 +14,9 @@ export function Header(){
   return <header className={`site-header ${scrolled||open||location.pathname!=='/'?'is-scrolled':''}`}><Brand/><nav id="main-nav" className={open?'is-open':''} aria-label="Main navigation">{navigation.map(([path,label])=><NavLink key={path} to={path} end={path==='/'} className={({isActive})=>path==='/join'?`join-nav-pill ${isActive?'active':''}`:undefined}>{label}</NavLink>)}{user&&<NavLink to="/portal">Portal</NavLink>}{isAdmin&&<NavLink to="/admin">Admin</NavLink>}{!user?<NavLink to="/login" className="auth-nav-pill">Sign In</NavLink>:<NavLink to={isAdmin?'/admin':'/portal'} className="auth-nav-pill">{profile?.role||'Account'}</NavLink>}</nav><span className="header-note">A STUDENT ENGINEERING COMMUNITY</span><button ref={menuButton} className="menu-toggle" aria-controls="main-nav" aria-expanded={open} onClick={()=>setOpen(!open)}>{open?'Close':'Menu'}<span aria-hidden="true">{open?'−':'+'}</span></button></header>;
 }
 export function Label({number,children}:{number?:string;children:ReactNode}){return <p className="eyebrow"><span className="accent-line"/>{number&&<span className="accent">{number} /</span>}{children}</p>}
-export function Divisions(){
+export function Divisions({ counts = {} }: { counts?: Readonly<Record<string, number>> }){
   const [selected,setSelected]=useState<number|null>(0);
-  return <div className="division-directory">{divisions.map(([name,members,lead],i)=><div className={`division ${selected===i?'is-selected':''}`} key={name}><h3><button aria-expanded={selected===i} aria-controls={`division-${i}`} onClick={()=>setSelected(selected===i?null:i)}><span className="division-index mono">0{i+1}</span><span className="division-name">{name}</span><span className="division-count mono">{members}<span> members</span></span><span className="division-toggle" aria-hidden="true">{selected===i?'−':'+'}</span></button></h3><div id={`division-${i}`} className="division-detail" hidden={selected!==i}><span className="mono">DIVISION LEAD</span><p>{lead}</p><span className="division-detail-note mono">CSR-RIT / TECHNICAL DIVISION 0{i+1}</span></div></div>)}</div>;
+  return <div className="division-directory">{memberDivisions.map((division,i)=><div className={`division ${selected===i?'is-selected':''}`} key={division.id}><h3><button aria-expanded={selected===i} aria-controls={`division-${i}`} onClick={()=>setSelected(selected===i?null:i)}><span className="division-index mono">0{i+1}</span><span className="division-name">{division.name}</span><span className="division-count mono">{counts[division.id] ?? '—'}<span> members</span></span><span className="division-toggle" aria-hidden="true">{selected===i?'−':'+'}</span></button></h3><div id={`division-${i}`} className="division-detail" hidden={selected!==i}><span className="mono">DIVISION LEAD</span><p>{division.lead}</p><span className="division-detail-note mono">CSR-RIT / TECHNICAL DIVISION 0{i+1}</span></div></div>)}</div>;
 }
 export function DigitalExplorer(){
   const [active,setActive]=useState(0); const current=digital[active];

@@ -25,7 +25,8 @@ export function mapDbMemberToMember(row: CsrMember): Member {
 
 /**
  * Fetch all members.
- * Tries Supabase first; if not configured or table is empty/error, returns static members.
+ * Tries Supabase first. The local roster is used only when Supabase is not configured;
+ * configured database errors and empty tables are returned as-is, without stale fallback data.
  */
 export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[]; fromSupabase: boolean; error?: string }> {
   if (!isSupabaseConfigured) {
@@ -45,41 +46,20 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
   }
 
   try {
-    const { data, error } = await supabase
-      .from('csr_members')
-      .select('*')
-      .order('id', { ascending: true });
-
-    if (error) {
-      console.warn('Supabase getMembers error, falling back to static roster:', error.message);
-      return {
-        members: [...staticMembers],
-        raw: [],
-        fromSupabase: false,
-        error: error.message,
-      };
+    const pageSize = 1000;
+    const raw: CsrMember[] = [];
+    for (let offset = 0; ; offset += pageSize) {
+      const { data, error } = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
+      if (error) return { members: [], raw: [], fromSupabase: false, error: error.message };
+      const page = (data ?? []) as CsrMember[];
+      raw.push(...page);
+      if (page.length < pageSize) break;
     }
-
-    if (!data || data.length === 0) {
-      return {
-        members: [...staticMembers],
-        raw: [],
-        fromSupabase: false,
-        error: 'Database table csr_members is currently empty. Run the seed script or use the admin sync button.',
-      };
-    }
-
-    const raw = data as CsrMember[];
     const mapped = raw.map(mapDbMemberToMember);
     return { members: mapped, raw, fromSupabase: true };
   } catch (err: any) {
     console.error('Unexpected error fetching members:', err);
-    return {
-      members: [...staticMembers],
-      raw: [],
-      fromSupabase: false,
-      error: err.message,
-    };
+    return { members: [], raw: [], fromSupabase: false, error: err.message };
   }
 }
 

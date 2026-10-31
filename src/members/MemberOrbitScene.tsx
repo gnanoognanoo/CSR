@@ -41,17 +41,17 @@ function badgeTexture(ordinal = 1, focused = false): CanvasTexture {
   const printScale = canvas.width / 1024
   context.scale(printScale, printScale)
   const gradient = context.createLinearGradient(0, 0, 1024, 896)
-  gradient.addColorStop(0, '#FFFFFF'); gradient.addColorStop(.62, '#FFFFFF'); gradient.addColorStop(1, '#E8F2FA')
+  gradient.addColorStop(0, '#FFFFFF'); gradient.addColorStop(.62, '#FFFFFF'); gradient.addColorStop(1, '#FFFFFF')
   context.fillStyle = gradient; context.fillRect(0, 0, 1024, canvas.height / printScale)
-  context.strokeStyle = '#CADBE8'; context.lineWidth = 3
+  context.strokeStyle = '#91AAB9'; context.lineWidth = 3
   context.beginPath(); context.moveTo(180, 156); context.lineTo(844, 156)
   context.moveTo(210, 736); context.lineTo(814, 736); context.stroke()
-  context.textAlign = 'center'; context.fillStyle = '#476980'; context.font = '500 31px "IBM Plex Mono", monospace'
+  context.textAlign = 'center'; context.fillStyle = '#53616C'; context.font = '500 31px "IBM Plex Mono", monospace'
   context.fillText(`CSR / ${String(ordinal).padStart(3, '0')}`, 512, 105)
-  context.fillStyle = focused ? '#1677C8' : '#7EB8E8'
+  context.fillStyle = focused ? '#118AC6' : '#116EA8'
   context.fillRect(450, 421, 124, focused ? 7 : 4)
   context.fillRect(294, 780, 30, 5); context.fillRect(339, 780, 30, 5)
-  context.fillStyle = '#92B1C9'; context.fillRect(690, 780, 40, 5)
+  context.fillStyle = '#91AAB9'; context.fillRect(690, 780, 40, 5)
   const texture = new CanvasTexture(canvas)
   texture.colorSpace = SRGBColorSpace; texture.anisotropy = 4
   return texture
@@ -86,17 +86,17 @@ function MemberBadge({ slot, scene, visibility, shadowTexture, geometry }: { slo
   const textureBlend = useRef(1)
   const interaction = useRef(0)
   const materials = useMemo(() => [
-    new MeshStandardMaterial({ color: '#FFFFFF', roughness: .26, metalness: .22, transparent: true }),
-    new MeshStandardMaterial({ color: '#52758D', roughness: .23, metalness: .64, transparent: true }),
+    new MeshStandardMaterial({ color: '#D8E1E7', roughness: .29, metalness: .28, transparent: true }),
+    new MeshStandardMaterial({ color: '#91AAB9', roughness: .23, metalness: .64, transparent: true }),
   ], [])
-  const edgeColors = useMemo(() => ({ neutral: new Color('#52758D'), active: new Color('#0B4F8A') }), [])
-  const bodyColors = useMemo(() => ({ neutral: new Color('#F4F7FA'), active: new Color('#FFFFFF') }), [])
-  const backing = useMemo(() => new MeshBasicMaterial({ color: '#F7FBFD', transparent: true, toneMapped: false }), [])
-  const armor = useMemo(() => new MeshStandardMaterial({ color: '#D9EAF5', metalness: .5, roughness: .25, transparent: true }), [])
-  const outerTrace = useMemo(() => new MeshBasicMaterial({ color: '#129EC8', transparent: true, depthWrite: false, toneMapped: false }), [])
-  const innerTrace = useMemo(() => new MeshBasicMaterial({ color: '#1677C8', transparent: true, depthWrite: false, toneMapped: false }), [])
-  const tracks = useMemo(() => new LineBasicMaterial({ color: '#1677C8', transparent: true, depthWrite: false, toneMapped: false }), [])
-  const nodes = useMemo(() => new MeshBasicMaterial({ color: '#1677C8', transparent: true, depthWrite: false, toneMapped: false }), [])
+  const edgeColors = useMemo(() => ({ neutral: new Color('#91AAB9'), active: new Color('#118AC6') }), [])
+  const bodyColors = useMemo(() => ({ neutral: new Color('#D8E1E7'), active: new Color('#FFFFFF') }), [])
+  const backing = useMemo(() => new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, toneMapped: false }), [])
+  const armor = useMemo(() => new MeshStandardMaterial({ color: '#D8E1E7', metalness: .5, roughness: .25, transparent: true }), [])
+  const outerTrace = useMemo(() => new MeshBasicMaterial({ color: '#118AC6', transparent: true, depthWrite: false, toneMapped: false }), [])
+  const innerTrace = useMemo(() => new MeshBasicMaterial({ color: '#91AAB9', transparent: true, depthWrite: false, toneMapped: false }), [])
+  const tracks = useMemo(() => new LineBasicMaterial({ color: '#118AC6', transparent: true, depthWrite: false, toneMapped: false }), [])
+  const nodes = useMemo(() => new MeshBasicMaterial({ color: '#4AC3E8', transparent: true, depthWrite: false, toneMapped: false }), [])
   const shadow = useMemo(() => new MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false, toneMapped: false, opacity: .6 }), [shadowTexture])
   // Printed labels keep their intended contrast; the bevelled badge remains lit.
   const face = useMemo(() => new MeshBasicMaterial({ transparent: true, depthWrite: false, toneMapped: false }), [])
@@ -224,9 +224,9 @@ export default function MemberOrbitScene(scene: MemberOrbitSceneProps) {
     <Canvas camera={{ position: [0, 0, MEMBER_CAMERA_Z], fov: 31, near: .1, far: 80 }} dpr={scene.compact ? [1, 1.35] : [1, 1.6]} gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}>
       <ambientLight intensity={.38} />
       <hemisphereLight args={['#FFFFFF', '#8FA3B8', .55]} />
-      <directionalLight position={[-8, 10, 14]} color="#FFFDFC" intensity={2.1} />
-      <directionalLight position={[12, -4, 8]} color="#ECEAE5" intensity={.65} />
-      <directionalLight position={[-12, 4, -6]} color="#7EB8E8" intensity={1.3} />
+      <directionalLight position={[-8, 10, 14]} color="#FFFFFF" intensity={2.1} />
+      <directionalLight position={[12, -4, 8]} color="#E8F1F7" intensity={.65} />
+      <directionalLight position={[-12, 4, -6]} color="#4AC3E8" intensity={1.3} />
       <Suspense fallback={null}>
         <Environment resolution={scene.compact ? 64 : 128} frames={1} environmentIntensity={.5}>
           <Lightformer form="rect" intensity={2} color="#FFFFFF" position={[-6, 7, 8]} scale={[10, 5, 1]} />

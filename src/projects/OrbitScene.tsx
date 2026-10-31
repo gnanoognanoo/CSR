@@ -165,10 +165,10 @@ function PreviewTexture({ src, width, height, reducedMotion, selected }: { src: 
   })
   return <>
     <mesh ref={previousFace} geometry={geometry} renderOrder={23} dispose={null}>
-      <meshBasicMaterial ref={previousMaterial} map={texture} color={selected ? '#ffffff' : '#e5ebef'} transparent opacity={0} toneMapped={false} depthTest={false} depthWrite={false} />
+      <meshBasicMaterial ref={previousMaterial} map={texture} color={selected ? '#ffffff' : '#f4f7fa'} transparent opacity={0} toneMapped={false} depthTest={false} depthWrite={false} />
     </mesh>
     <mesh ref={currentFace} geometry={geometry} position={[0, 0, .002]} renderOrder={24} dispose={null}>
-      <meshBasicMaterial ref={currentMaterial} map={texture} color={selected ? '#ffffff' : '#e5ebef'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
+      <meshBasicMaterial ref={currentMaterial} map={texture} color={selected ? '#ffffff' : '#f4f7fa'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
     </mesh>
   </>
 }
@@ -186,15 +186,15 @@ function ComingSoonPlate({ index, selected, width, height }: { index: number; se
     canvas.height = 384
     const context = canvas.getContext('2d')
     if (context) {
-      context.fillStyle = '#F6F5F2'
+      context.fillStyle = '#EEF3F7'
       context.fillRect(0, 0, canvas.width, canvas.height)
-      context.strokeStyle = '#BCC5CB'
+      context.strokeStyle = '#A9C5D7'
       context.lineWidth = 2
       context.strokeRect(18, 18, 604, 348)
-      context.fillStyle = '#657686'
-      context.font = '32px monospace'
+      context.fillStyle = '#526878'
+      context.font = '500 32px "IBM Plex Mono", monospace'
       context.fillText(String(index + 1).padStart(2, '0'), 43, 64)
-      context.strokeStyle = '#146EB4'
+      context.strokeStyle = '#1677C8'
       context.lineWidth = 3
       context.beginPath()
       context.moveTo(280, 125)
@@ -207,10 +207,10 @@ function ComingSoonPlate({ index, selected, width, height }: { index: number; se
       context.lineTo(309, 168)
       context.stroke()
       context.textAlign = 'center'
-      context.fillStyle = '#101820'
-      context.font = '34px monospace'
+      context.fillStyle = '#102A41'
+      context.font = '500 34px "IBM Plex Mono", monospace'
       context.fillText('COMING SOON', 320, 236)
-      context.fillStyle = '#146EB4'
+      context.fillStyle = '#1677C8'
       context.fillRect(265, 278, 110, 2)
     }
     const result = new CanvasTexture(canvas)
@@ -221,7 +221,7 @@ function ComingSoonPlate({ index, selected, width, height }: { index: number; se
   useEffect(() => () => texture.dispose(), [texture])
   return <mesh renderOrder={23}>
     <planeGeometry args={[width, height]} />
-    <meshBasicMaterial map={texture} color={selected ? '#ffffff' : '#f3f1ec'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
+    <meshBasicMaterial map={texture} color={selected ? '#ffffff' : '#f4f7fa'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
   </mesh>
 }
 
@@ -320,7 +320,7 @@ function PreviewModule({ slot, selected, height, reducedMotion }: { slot: Projec
     const canvas = document.createElement('canvas')
     canvas.width = 1024; canvas.height = 64
     const context = canvas.getContext('2d')!
-    const ink = selected ? '#68C6F2' : '#1689CC'
+    const ink = selected ? '#64C9F2' : '#38A7E0'
     context.strokeStyle = ink; context.fillStyle = ink; context.lineWidth = 2
     context.beginPath(); context.arc(36, 32, 19, 0, Math.PI * 2); context.stroke()
     context.textAlign = 'center'; context.textBaseline = 'middle'
@@ -354,17 +354,17 @@ function PreviewModule({ slot, selected, height, reducedMotion }: { slot: Projec
       <meshBasicMaterial map={shadow} transparent opacity={selected ? .82 : .50} depthTest={false} depthWrite={false} toneMapped={false} />
     </mesh>
     <mesh geometry={body} renderOrder={20} dispose={null}>
-      <meshStandardMaterial attach="material-0" color="#121417" metalness={.24} roughness={.4} transparent depthTest={false} depthWrite={false} />
-      <meshStandardMaterial attach="material-1" color="#26333D" metalness={.55} roughness={.28} transparent depthTest={false} depthWrite={false} />
+      <meshStandardMaterial attach="material-0" color="#10151A" metalness={.24} roughness={.4} transparent depthTest={false} depthWrite={false} />
+      <meshStandardMaterial attach="material-1" color="#1B252D" metalness={.55} roughness={.28} transparent depthTest={false} depthWrite={false} />
     </mesh>
     <mesh geometry={facets.top} position={[0, 0, surfaceZ + .001]} renderOrder={21} dispose={null}>
-      <meshStandardMaterial color="#1D2328" metalness={.3} roughness={.36} transparent depthTest={false} depthWrite={false} />
+      <meshStandardMaterial color="#1B252D" metalness={.3} roughness={.36} transparent depthTest={false} depthWrite={false} />
     </mesh>
     <mesh geometry={facets.bottom} position={[0, 0, surfaceZ + .001]} renderOrder={21} dispose={null}>
-      <meshStandardMaterial color="#1D2328" metalness={.3} roughness={.36} transparent depthTest={false} depthWrite={false} />
+      <meshStandardMaterial color="#1B252D" metalness={.3} roughness={.36} transparent depthTest={false} depthWrite={false} />
     </mesh>
     <lineSegments geometry={highlights} position={[0, 0, surfaceZ + .005]} renderOrder={22}>
-      <lineBasicMaterial color="#8FA3B8" transparent opacity={selected ? .40 : .26} depthTest={false} depthWrite={false} />
+      <lineBasicMaterial color="#BCD8E8" transparent opacity={selected ? .55 : .35} depthTest={false} depthWrite={false} />
     </lineSegments>
     <mesh geometry={rim} position={[0, layout.imageY, surfaceZ + .002]} renderOrder={22} dispose={null}>
       <meshStandardMaterial color="#93A0AA" metalness={.62} roughness={.25} transparent depthTest={false} depthWrite={false} />
@@ -376,7 +376,7 @@ function PreviewModule({ slot, selected, height, reducedMotion }: { slot: Projec
       </PreviewBoundary>
     </group>
     <mesh geometry={trim} position={[0, 0, surfaceZ + .009]} renderOrder={25} dispose={null}>
-      <meshBasicMaterial color={selected ? '#1D9FE8' : '#1689CC'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
+      <meshBasicMaterial color={selected ? '#64C9F2' : '#1489C9'} transparent toneMapped={false} depthTest={false} depthWrite={false} />
     </mesh>
     <mesh position={[0, layout.footerY - .035, surfaceZ + .01]} renderOrder={26}>
       <planeGeometry args={[layout.width - .35, .24]} />
@@ -398,11 +398,11 @@ function ProjectSector({ slot, selected, geometry, outline, reducedMotion, onPro
   }
   return <group rotation={[0, 0, index / PROJECT_SLOT_COUNT * Math.PI * 2]} name={`project-slot-${slot.id}`} onClick={open}>
     <mesh geometry={geometry} castShadow receiveShadow>
-      <meshStandardMaterial attach="material-0" color={selected ? (project ? '#E8F2FA' : '#ECEAE5') : (project ? '#FFFFFF' : '#F3F1EC')} metalness={.16} roughness={project ? .42 : .55} />
-      <meshStandardMaterial attach="material-1" color={selected ? '#7796AA' : (project ? '#B7B8B3' : '#C5C2BB')} metalness={.46} roughness={.35} />
+      <meshStandardMaterial attach="material-0" color={selected ? (project ? '#DBEAF3' : '#E2ECF2') : (project ? '#EEF2F5' : '#E7EDF1')} metalness={.25} roughness={project ? .42 : .55} />
+      <meshStandardMaterial attach="material-1" color={selected ? '#8FB5CE' : (project ? '#BAC7D2' : '#AFBFCC')} metalness={.55} roughness={.35} />
     </mesh>
     <lineSegments geometry={outline}>
-      <lineBasicMaterial color={selected ? '#146EB4' : '#91A0AA'} transparent opacity={selected ? .76 : (project ? .42 : .28)} />
+      <lineBasicMaterial color={selected ? '#0B4F8A' : '#70A8C8'} transparent opacity={selected ? .85 : (project ? .50 : .35)} />
     </lineSegments>
     <Billboard position={[0, -ORBIT_RING_RADIUS, ORBIT_DEPTH / 2 + .051]}>
       <PreviewModule slot={slot} selected={selected} height={previewHeight} reducedMotion={reducedMotion} />
@@ -430,7 +430,7 @@ function ProjectRing({ projectPhysics, projects = [], projectSlots, selectedDivi
   useEffect(() => () => bearing.dispose(), [bearing])
   useFrame(() => { if (rotation.current) rotation.current.rotation.z = -projectPhysics.rotation * Math.PI / 180 })
   return <group rotation={[getOrbitTilt(size.width, size.height), 0, 0]} name="mechanical-project-selector">
-    <mesh geometry={bearing} receiveShadow><meshStandardMaterial color="#C4C0B8" metalness={.42} roughness={.4} /></mesh>
+    <mesh geometry={bearing} receiveShadow><meshStandardMaterial color="#AEBCC8" metalness={.55} roughness={.4} /></mesh>
     <group ref={rotation}>
       {slots.map(slot => <ProjectSector key={slot.id} slot={slot} selected={selectedProject === slot.index} geometry={geometry} outline={outline} reducedMotion={reducedMotion} onProjectClick={onProjectClick} onPlaceholderClick={onPlaceholderClick} />)}
     </group>
@@ -456,16 +456,16 @@ export default function OrbitScene(props: OrbitSceneProps) {
         gl={{ alpha: true, antialias: !props.compact, powerPreference: 'low-power' }} fallback={null}>
         <CameraPerspective />
         <MotionFrame {...sceneProps} />
-        <ambientLight intensity={.28} />
-        <hemisphereLight args={['#FFFEFC', '#9C958A', .4]} />
-        <directionalLight position={[-5, 7, 9]} intensity={2.2} color="#FFFDF8" castShadow={!props.compact} shadow-mapSize={[1024, 1024]} shadow-camera-left={-9} shadow-camera-right={9} shadow-camera-top={9} shadow-camera-bottom={-9} shadow-bias={-.0004} shadow-radius={3} />
-        <directionalLight position={[5, -3, 3]} intensity={.65} color="#F1F2EF" />
-        <directionalLight position={[3, 5, -3]} intensity={1.5} color="#E8F2FA" />
-        <directionalLight position={[-6, -2, -4]} intensity={.6} color="#E4E0D8" />
-        <Environment resolution={props.compact ? 64 : 128} frames={1} environmentIntensity={.5}>
+        <ambientLight intensity={.42} />
+        <hemisphereLight args={['#F4F9FF', '#315C7C', .6]} />
+        <directionalLight position={[-5, 7, 9]} intensity={2.5} color="#F5FAFF" castShadow={!props.compact} shadow-mapSize={[1024, 1024]} shadow-camera-left={-9} shadow-camera-right={9} shadow-camera-top={9} shadow-camera-bottom={-9} shadow-bias={-.0004} shadow-radius={3} />
+        <directionalLight position={[5, -3, 3]} intensity={.95} color="#D7E8F3" />
+        <directionalLight position={[3, 5, -3]} intensity={1.85} color="#8AD4F6" />
+        <directionalLight position={[-6, -2, -4]} intensity={.9} color="#E3F3FF" />
+        <Environment resolution={props.compact ? 64 : 128} frames={1} environmentIntensity={.7}>
           <Lightformer form="rect" position={[-4, 5, 6]} scale={[5, 6, 1]} target={[0, 0, 0]} intensity={3} color="#ffffff" />
-          <Lightformer form="rect" position={[6, 1, 4]} scale={[4, 7, 1]} target={[0, 0, 0]} intensity={2} color="#F4F3EE" />
-          <Lightformer form="rect" position={[-4, -1, -6]} scale={[3, 5, 1]} target={[0, 0, 0]} intensity={.8} color="#E8F2FA" />
+          <Lightformer form="rect" position={[6, 1, 4]} scale={[4, 7, 1]} target={[0, 0, 0]} intensity={2} color="#EAF4FA" />
+          <Lightformer form="rect" position={[-4, -1, -6]} scale={[3, 5, 1]} target={[0, 0, 0]} intensity={1.25} color="#65C7F3" />
         </Environment>
         <ProjectRing {...props} />
         <Suspense fallback={null}><ProjectHub motion={props.hubMotion} /></Suspense>

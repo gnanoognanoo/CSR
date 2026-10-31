@@ -1,9 +1,11 @@
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { sequences } from './sequences';
 import { useExperience } from './useExperience';
 import { useHomeFonts } from './useHomeFonts';
 import { Label, Divisions, DigitalExplorer, Footer } from './components';
+import { memberDivisions, getMemberStats, type Member } from './members/data';
+import { getMembers } from './services/members';
 
 const engineeringDomains = ['Mechanical design', 'Electronics', 'Embedded control', 'Software', 'Artificial intelligence', 'Data', 'Connectivity', 'Testing', 'Research'];
 const philosophy = [
@@ -15,6 +17,18 @@ const philosophy = [
 const opportunities = ['Learn technologies', 'Build projects', 'Work across divisions', 'Participate in technical workshops', 'Collaborate for hackathons', 'Explore research', 'Develop a technical portfolio', 'Turn ideas into working systems'];
 
 export default function Home() {
+  const [members, setMembers] = useState<readonly Member[]>([]);
+  const [memberStatsAvailable, setMemberStatsAvailable] = useState(false);
+  useEffect(() => {
+    let active = true;
+    getMembers().then(result => {
+      if (!active) return;
+      if (result.fromSupabase || !result.error) setMembers(result.members);
+      setMemberStatsAvailable(!result.error);
+    }).catch(() => { if (active) setMemberStatsAvailable(false); });
+    return () => { active = false; };
+  }, []);
+  const memberStats = useMemo(() => getMemberStats(members), [members]);
   const root = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null);
   const { chapter, ready, failed, reduced } = useExperience(root, canvas);
   const fonts = useHomeFonts();
@@ -121,16 +135,16 @@ export default function Home() {
       </section>
 
       <section id="community" className="chapter chapter-community" data-chapter="3" aria-label="Our community and divisions">
-        <div className="story-beat community-intro"><div className="section-wrap"><Label number="05">THE COMMUNITY / RIT CHENNAI</Label><p className="chapter-intro" data-reveal>Built by students. Connected by engineering.</p><h2 className="display-heading" data-reveal>One campus.<br/>Seven divisions.<br/><span className="accent">128 minds.</span></h2></div></div>
+        <div className="story-beat community-intro"><div className="section-wrap"><Label number="05">THE COMMUNITY / RIT CHENNAI</Label><p className="chapter-intro" data-reveal>Built by students. Connected by engineering.</p><h2 className="display-heading" data-reveal>One campus.<br/>{memberStats.divisions} divisions.<br/><span className="accent">{memberStatsAvailable ? memberStats.total : '—'} minds.</span></h2></div></div>
         <div className="community-numbers section-wrap">
           <Label>THE PEOPLE BEHIND CSR-RIT</Label>
-          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">128</span><div><span className="mono accent">TOTAL COMMUNITY</span><p>Different perspectives.<br/>A shared drive to build.</p></div></div>
-          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">115</span><div><span className="mono accent">MEMBERS PLACED INTO DIVISIONS</span><p>Finding their strengths.<br/>Connecting their ideas.</p></div></div>
-          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">7</span><div><span className="mono accent">TECHNICAL DIVISIONS</span><p>One connected<br/>engineering community.</p></div></div>
-          <div className="team-line" data-reveal><div><strong>7</strong><span>DIVISION LEADS</span></div><div><strong>13</strong><span>CORE TEAM POSITIONS</span></div><div><strong>8</strong><span>OPERATIONS COMMITTEE ROLES</span></div></div>
-          <div className="year-distribution" data-reveal><div><Label>LEARNING ACROSS YEARS</Label><p>115 division members.<br/>Knowledge that moves between cohorts.</p></div><div className="year-chart"><div className="year-key"><span><b>73</b> II YEAR</span><span><b>42</b> III YEAR</span></div><div className="year-dots" role="img" aria-label="73 second-year and 42 third-year division members">{Array.from({ length: 115 }, (_, i) => <i className={i < 73 ? 'year-two' : 'year-three'} key={i}/>)}</div></div></div>
+          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">{memberStatsAvailable ? memberStats.total : '—'}</span><div><span className="mono accent">TOTAL MEMBERS</span><p>Different perspectives.<br/>A shared drive to build.</p></div></div>
+          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">{memberStatsAvailable ? memberStats.divisionMembers : '—'}</span><div><span className="mono accent">MEMBERS PLACED INTO DIVISIONS</span><p>Finding their strengths.<br/>Connecting their ideas.</p></div></div>
+          <div className="stat-big story-beat" data-reveal><span className="stat-value" data-parallax="80">{memberStats.divisions}</span><div><span className="mono accent">TECHNICAL DIVISIONS</span><p>One connected<br/>engineering community.</p></div></div>
+          <div className="team-line" data-reveal><div><strong>{memberStatsAvailable ? memberDivisions.filter(division => members.some(member => member.role === 'Division Lead' && member.divisionId === division.id)).length : '—'}</strong><span>DIVISION LEADS</span></div></div>
+          <div className="year-distribution" data-reveal><div><Label>LEARNING ACROSS YEARS</Label><p>{memberStatsAvailable ? memberStats.divisionMembers : '—'} division members.<br/>Knowledge that moves between cohorts.</p></div><div className="year-chart"><div className="year-key">{memberStatsAvailable ? Object.entries(memberStats.byYear).map(([year, total]) => <span key={year}><b>{total}</b> {year.toUpperCase()}</span>) : <span><b>—</b> YEAR DISTRIBUTION</span>}</div><div className="year-dots" role="img" aria-label={memberStatsAvailable ? Object.entries(memberStats.byYear).map(([year, total]) => `${total} ${year}`).join(', ') : 'Member year distribution unavailable'}>{memberStatsAvailable && members.map(member => <i className={member.year === 'II Year' ? 'year-two' : 'year-three'} key={member.id}/>)}</div></div></div>
         </div>
-        <div id="divisions" className="story-beat divisions-beat"><div className="section-wrap"><Label number="06">THE SEVEN DIVISIONS</Label><div className="directory-heading"><h2>Find your discipline.<br/><span className="accent">Expand your perspective.</span></h2><p className="mono">CSR-RIT / DIVISION DIRECTORY<br/><span className="subtle">SELECT A DIVISION TO MEET ITS LEAD</span></p></div><Divisions/></div></div>
+        <div id="divisions" className="story-beat divisions-beat"><div className="section-wrap"><Label number="06">THE SEVEN DIVISIONS</Label><div className="directory-heading"><h2>Find your discipline.<br/><span className="accent">Expand your perspective.</span></h2><p className="mono">CSR-RIT / DIVISION DIRECTORY<br/><span className="subtle">SELECT A DIVISION TO MEET ITS LEAD</span></p></div><Divisions counts={memberStatsAvailable ? memberStats.byDivision : {}}/></div></div>
       </section>
 
       <section id="intelligence" className="chapter chapter-intelligence" data-chapter="4" aria-label="Member opportunities, software and intelligence">

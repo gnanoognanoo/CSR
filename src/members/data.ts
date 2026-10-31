@@ -20,7 +20,6 @@ export type MemberDivision = {
   readonly name: string
   readonly shortName: string
   readonly lead?: string
-  readonly count: number
 }
 
 export const memberDivisions: readonly MemberDivision[] = [
@@ -29,49 +28,42 @@ export const memberDivisions: readonly MemberDivision[] = [
     "name": "AI & Intelligent Systems",
     "shortName": "AI",
     "lead": "Anto Jenishia A",
-    "count": 17
   },
   {
     "id": "embedded",
     "name": "Embedded & Electronics",
     "shortName": "Embedded",
     "lead": "Abhishek S",
-    "count": 17
   },
   {
     "id": "robotics",
     "name": "Robotics & Autonomous Systems",
     "shortName": "Robotics",
     "lead": "Guru prakash Muthusamy",
-    "count": 16
   },
   {
     "id": "software",
     "name": "Software Engineering",
     "shortName": "Software",
     "lead": "Sumetha V",
-    "count": 18
   },
   {
     "id": "iot",
     "name": "IoT & Smart Systems",
     "shortName": "IoT",
     "lead": "DILLI BABU S",
-    "count": 16
   },
   {
     "id": "research",
     "name": "Research & Publications",
     "shortName": "Research",
     "lead": "Rakesh K",
-    "count": 15
   },
   {
     "id": "operations",
     "name": "Operations & Management",
     "shortName": "Operations",
     "lead": "ASWIN R",
-    "count": 16
   }
 ]
 
@@ -1113,13 +1105,23 @@ export const members: readonly Member[] = [
   }
 ]
 
-export const memberStats = {
-  total: 128,
-  listed: 115,
-  divisionMembers: 115,
-  leadershipMembers: 13,
-  divisions: 7,
-} as const
+export const getMemberStats = (records: readonly Member[] = members) => {
+  const uniqueMembers = new Map(records.map(member => [member.id, member])).values()
+  const roster = [...uniqueMembers]
+  const byDivision = Object.fromEntries(memberDivisions.map(division => [
+    division.id,
+    roster.filter(member => member.divisionId === division.id || member.division === division.name).length,
+  ]))
+  const byYear = Object.fromEntries([...new Set(roster.map(member => member.year).filter(Boolean))].map(year => [
+    year!,
+    roster.filter(member => member.year === year).length,
+  ]))
+  const listedProfiles = roster.filter(member => Boolean(member.name?.trim()))
+  const divisionMembers = Object.values(byDivision).reduce((total, count) => total + count, 0)
+  return { total: roster.length, listed: listedProfiles.length, divisionMembers, divisions: memberDivisions.length, byDivision, byYear }
+}
+
+export const memberStats = getMemberStats()
 
 /** Initials remain abstract; no member photos are supplied in the roster. */
 export function getMemberInitials(name: string): string {

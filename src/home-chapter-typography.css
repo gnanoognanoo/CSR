@@ -2,19 +2,20 @@
 .home-page .experience h2 {
   font-family: var(--home-display);
   font-weight: 500;
-  letter-spacing: -.05em;
-  line-height: 1.02;
+  letter-spacing: -.045em;
+  line-height: .95;
   color: var(--home-text);
-  text-shadow: 0 8px 30px rgba(0, 15, 30, .14);
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience :is(.display-heading, .statement, .belief-words) {
-  letter-spacing: -.06em;
-  line-height: 1.02;
+  letter-spacing: -.045em;
+  line-height: .95;
 }
 
 .home-page .experience h2 .accent {
-  color: #9CCCEB;
+  color: var(--home-blue);
+  -webkit-text-fill-color: currentColor;
 }
 
 .home-page .experience :is(.process-item h3, .opportunity-list h3, .digital-panel h3) {
@@ -22,10 +23,11 @@
   font-weight: 500;
   letter-spacing: -.045em;
   color: var(--home-text);
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience .digital-panel h3 {
-  line-height: 1.02;
+  line-height: 1.08;
 }
 
 .home-page .experience :is(.prose p, .body-copy, .chapter-intro, .process-item p, .philosophy-row p, .stat-big p, .division-detail p),
@@ -33,8 +35,9 @@
   font-family: var(--home-body);
   font-weight: 400;
   letter-spacing: -.012em;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--home-body-text);
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience :is(.prose .lead, .chapter-intro, .stat-big p, .division-detail p) {
@@ -43,7 +46,7 @@
 
 .home-page .experience .prose .lead {
   letter-spacing: -.012em;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .home-page .experience .prose em {
@@ -52,7 +55,7 @@
 
 .home-page .experience .prose .domain-intro {
   color: var(--home-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* Technical annotations stay solid and distinct from explanatory paragraphs. */
@@ -64,6 +67,7 @@
   text-transform: uppercase;
   line-height: 1.7;
   color: var(--home-annotation);
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience :is(.story-beat:not(.hero), .community-numbers) .eyebrow .accent,
@@ -84,8 +88,9 @@
   font-family: var(--home-body);
   font-weight: 400;
   letter-spacing: -.012em;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--home-text);
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience .technical-rule i:before,
@@ -101,7 +106,7 @@
   letter-spacing: .14em;
   text-transform: uppercase;
   line-height: 1.7;
-  color: rgba(185, 202, 214, .65);
+  color: var(--home-secondary);
 }
 
 .home-page .experience .process-scale > span.is-active,
@@ -110,28 +115,30 @@
 }
 
 .home-page .experience .process-scale > span.is-active:before {
-  background-color: #2791D2;
+  background-color: var(--home-blue);
 }
 
 /* Deliberate solid progressions give each principle its own emphasis. */
 .home-page .experience .philosophy-row h2 {
-  letter-spacing: -.05em;
-  line-height: 1.02;
+  letter-spacing: -.045em;
+  line-height: .95;
   -webkit-text-fill-color: currentColor;
 }
 
 .home-page .experience .philosophy-row:nth-child(1) h2 { color: #fff; }
-.home-page .experience .philosophy-row:nth-child(2) h2 { color: #EAF5FC; }
-.home-page .experience .philosophy-row:nth-child(3) h2 { color: #C5E3F6; }
-.home-page .experience .philosophy-row:nth-child(4) h2 { color: #81BFE8; }
+.home-page .experience .philosophy-row:nth-child(2) h2 { color: #fff; }
+.home-page .experience .philosophy-row:nth-child(3) h2 { color: var(--home-body-text); }
+.home-page .experience .philosophy-row:nth-child(4) h2 { color: var(--home-blue); }
 
 .home-page .experience :is(.stat-value, .team-line strong, .year-key b) {
   font-family: var(--home-display);
-  font-weight: 500;
-  letter-spacing: -.07em;
-  line-height: .9;
+  font-weight: 600;
+  letter-spacing: -.045em;
+  line-height: .95;
   font-variant-numeric: tabular-nums;
   color: var(--home-text);
+  -webkit-text-fill-color: currentColor;
+  text-shadow: var(--home-shadow);
 }
 
 /* Directory names use the interface role; indices and counts remain technical. */
@@ -145,7 +152,7 @@
   font-family: var(--home-body);
   font-weight: 500;
   letter-spacing: -.025em;
-  color: rgba(185, 202, 214, .65);
+  color: var(--home-body-text);
 }
 
 .home-page .experience .division button:hover .division-name,
@@ -169,20 +176,21 @@
   font-family: var(--home-display);
   font-weight: 500;
   letter-spacing: -.045em;
-  line-height: 1.02;
+  line-height: .95;
+  text-shadow: var(--home-shadow);
 }
 
 .home-page .experience .digital-keywords > span:nth-child(1) { color: #fff; }
-.home-page .experience .digital-keywords > span:nth-child(2) { color: #EDF7FD; }
-.home-page .experience .digital-keywords > span:nth-child(3) { color: #B9DDF3; }
-.home-page .experience .digital-keywords > span:nth-child(4) { color: #72B7E4; }
+.home-page .experience .digital-keywords > span:nth-child(2) { color: #fff; }
+.home-page .experience .digital-keywords > span:nth-child(3) { color: var(--home-body-text); }
+.home-page .experience .digital-keywords > span:nth-child(4) { color: var(--home-blue); }
 
 .home-page .experience .digital-tabs button {
   font-family: var(--home-body);
   font-weight: 500;
   letter-spacing: .02em;
   line-height: 1.55;
-  color: #89B7D4;
+  color: var(--home-body-text);
 }
 
 .home-page .experience .digital-tabs .mono {
@@ -198,7 +206,7 @@
 }
 
 .home-page .experience .digital-tabs button[aria-selected=true] {
-  color: #1685C6;
+  color: #FFFFFF;
 }
 
 .home-page .experience .digital-tabs button[aria-selected=true] .mono {
@@ -206,28 +214,14 @@
 }
 
 .home-page .experience .digital-areas span {
-  color: #89B7D4;
+  color: var(--home-body-text);
+  border-color: var(--line);
 }
 
 .home-page .experience .digital-code {
   font-family: var(--home-display);
   font-weight: 500;
-  letter-spacing: -.06em;
-  color: rgba(159, 196, 221, .085);
-}
-
-/* Gradients are confined to major heading accents and large community numbers. */
-@supports ((background-clip: text) or (-webkit-background-clip: text)) {
-  .home-page .experience h2 .accent,
-  .home-page .experience :is(.stat-value, .team-line strong, .year-key b) {
-    background-image: var(--home-gradient);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-  .home-page .experience .belief-words .accent {
-    background-image: linear-gradient(105deg, #FFFFFF 0%, #E6F4FC 58%, #8BC5E7 100%);
-  }
+  letter-spacing: -.045em;
+  color: rgba(88, 183, 232, .13);
 }
 

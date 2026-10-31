@@ -7,12 +7,11 @@ export interface ProjectDivision {
   /** Display number. Array positions and ring math remain zero based. */
   index: number;
   name: string;
-  members: number;
   lead: string;
 }
 
-export const projectDivisions: ProjectDivision[] = divisions.map(([name, members, lead], index) => ({
-  id: divisionIds[index], index: index + 1, name, members, lead,
+export const projectDivisions: ProjectDivision[] = divisions.map(([name, lead], index) => ({
+  id: divisionIds[index], index: index + 1, name, lead,
 }));
 
 export interface Project {

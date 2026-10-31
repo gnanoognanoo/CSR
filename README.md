@@ -28,7 +28,9 @@ The eight active project previews are the supplied images in `public/projects/up
 
 The supplied RIT wordmark and emblem are preserved in `public/brand/`. Optimized desktop and mobile division GLBs, preparation manifests and attribution metadata are in `public/models/projects/`; the interface also exposes the available model credits. Asset-specific licenses remain applicable.
 
-Projects and Members share a restrained engineering particle background. Their interactions use reduced-motion alternatives and responsive fallbacks. Announcements uses a separate scoped white theme and does not change the other pages' typography or colors.
+All four pages share locally hosted Sora display typography, DM Sans body/UI text, and IBM Plex Mono technical labels. Font faces load before the initial canvas labels are painted.
+
+Home keeps cinematic dark imagery; Projects, Members and Announcements use light surfaces with dark text and RIT-blue accents. Projects pairs a white environment and silver orbit ring with graphite project frames. Projects and Members share the same restrained engineering particle motion with palettes suited to their backgrounds. Their interactions retain reduced-motion alternatives and responsive fallbacks.
 
 ## Sequences
 

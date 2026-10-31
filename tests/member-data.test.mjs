@@ -13,16 +13,19 @@ const code = ts.transpileModule(source, {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
 }).outputText;
 vm.runInNewContext(code, { exports, module: { exports } });
-const { members, memberDivisions, memberStats, getMemberInitials, searchMembers } = exports;
+const { members, memberDivisions, memberStats, getMemberStats, getMemberInitials, searchMembers } = exports;
 
-test('community summary distinguishes 115 named profiles from 13 additional unnamed core-team members', () => {
-  assert.equal(memberStats.total, 128);
+test('member totals count unique records and separate listed profiles from division assignments', () => {
+  assert.equal(memberStats.total, 115);
   assert.equal(memberStats.listed, members.length);
   assert.equal(memberStats.divisionMembers, 115);
-  assert.equal(memberStats.leadershipMembers, 13);
-  assert.equal(memberStats.total, memberStats.divisionMembers + memberStats.leadershipMembers);
   assert.equal(memberStats.divisions, memberDivisions.length);
-  assert.equal(members.length, 115, 'summary-only core-team count cannot manufacture profiles');
+  const changed = [...members, members[0], { ...members[0], id: 'extra-member', name: 'New Record', year: 'IV Year' }];
+  const recalculated = getMemberStats(changed);
+  assert.equal(recalculated.total, members.length + 1);
+  assert.equal(recalculated.listed, members.length + 1);
+  assert.equal(recalculated.byDivision.ai, 18);
+  assert.equal(recalculated.byYear['IV Year'], 1);
 });
 
 test('division counts and year distributions match the seven public roster tables', () => {
@@ -34,7 +37,7 @@ test('division counts and year distributions match the seven public roster table
   for (const [id, count, thirdYear, secondYear] of expected) {
     const division = memberDivisions.find(record => record.id === id);
     const records = members.filter(record => record.divisionId === id);
-    assert.equal(division.count, count);
+    assert.equal(memberStats.byDivision[id], count);
     assert.equal(records.length, count);
     assert.equal(records.filter(record => record.year === 'III Year').length, thirdYear);
     assert.equal(records.filter(record => record.year === 'II Year').length, secondYear);

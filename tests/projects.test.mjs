@@ -25,7 +25,8 @@ function loadTypeScript(filename, imports = {}, globals = {}) {
   return context.module.exports;
 }
 
-const content = loadTypeScript('content.ts');
+const memberData = loadTypeScript('members/data.ts');
+const content = loadTypeScript('content.ts', { './members/data': memberData });
 const data = loadTypeScript('projects/data.ts', { '../content': content });
 const orbit = loadTypeScript('projects/orbit-state.ts', { './data': data, react: {} });
 // Render portal contents in isolation; native-dialog interactions are checked in a browser.
@@ -48,11 +49,9 @@ test('the archive retains seven institutional divisions and exactly eight upload
   assert.equal(new Set(data.projectDivisions.map(division => division.id)).size, 7);
   data.projectDivisions.forEach((division, index) => {
     assert.equal(division.name, content.divisions[index][0]);
-    assert.equal(division.members, content.divisions[index][1]);
-    assert.equal(division.lead, content.divisions[index][2]);
+    assert.equal(division.lead, content.divisions[index][1]);
     assert.equal(division.index, index + 1);
   });
-  assert.equal(data.projectDivisions.reduce((sum, division) => sum + division.members, 0), 115);
   assert.equal(data.projects.length, 8);
   assert.equal(new Set(data.projects.map(project => project.id)).size, 8);
   assert.deepEqual(Array.from(data.projects, project => project.division), ['robotics', 'embedded', 'software', 'software', 'robotics', 'iot', 'robotics', 'robotics']);
@@ -74,7 +73,7 @@ test('every image-based sample has substantive inferred content and uses the unc
   for (const [index, project] of data.projects.entries()) {
     assert.ok(divisionIds.has(project.division), `${project.id} belongs to a known division`);
     assert.equal(project.isDemo, true);
-    assert.match(project.status, /demo|sample/i);
+    assert.match(project.status, /demo|sample|placeholder/i);
     assert.ok(project.title.length > 5);
     assert.ok(project.shortDescription.length > 20);
     assert.ok(project.longDescription.length > 60);
@@ -85,7 +84,7 @@ test('every image-based sample has substantive inferred content and uses the unc
     assert.ok(project.features.length >= 3);
     assert.ok(project.features.every(feature => feature.length > 10));
     assert.ok(project.contributors.length > 0);
-    assert.ok(project.contributors.every(contributor => /demo|sample|not assigned/i.test(contributor)), 'demo contributors must not be presented as a real team');
+    assert.ok(project.contributors.every(contributor => /demo|sample|not assigned|unassigned/i.test(contributor)), 'demo contributors must not be presented as a real team');
     assert.equal(project.githubUrl, undefined, 'no invented GitHub repository');
     assert.equal(project.demoUrl, undefined, 'no invented hosted project');
     assert.equal(project.results, undefined, 'no invented measured outcomes');
@@ -217,7 +216,7 @@ test('a partial dossier omits unpublished sections, visuals, and missing or unsa
   assert.equal(renderToStaticMarkup(React.createElement(dossier.ProjectDossier, { project: null, divisionName: 'AI & Intelligent Systems', onClose() {} })), '');
 });
 
-test('every uploaded-image dossier shows its image, generated sections and inferred technology label', () => {
+test('every uploaded-image dossier labels its image-based concept as a demo and avoids presenting it as an official project', () => {
   for (const project of data.projects) {
     const divisionName = data.projectDivisions.find(division => division.id === project.division).name;
     const html = renderToStaticMarkup(React.createElement(dossier.ProjectDossier, {
@@ -226,7 +225,7 @@ test('every uploaded-image dossier shows its image, generated sections and infer
     assert.match(html, /DEMO PROJECT/);
     assert.match(html, /inferred from the supplied image/);
     assert.match(html, /not an official CSR-RIT project/);
-    assert.match(html, /Demo team — not assigned/);
+    assert.match(html, /CSR Cohort Team — Unassigned/);
     assert.ok(html.includes(`src="${project.images[0].src}"`));
     assert.ok(html.includes(project.title));
     assert.ok(html.includes(divisionName.replaceAll('&', '&amp;')));

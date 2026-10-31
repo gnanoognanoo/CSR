@@ -1,5 +1,5 @@
 import { Component, lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
-import { members, memberDivisions, memberStats, searchMembers, getMemberInitials, type Member } from './data';
+import { memberDivisions, getMemberStats, searchMembers, getMemberInitials, type Member } from './data';
 import { getMembers } from '../services/members';
 import { useOrbitPhysics } from '../projects/useOrbitPhysics';
 import { createHubMotionController } from '../projects/hub-motion';
@@ -32,21 +32,26 @@ export default function MemberOrbitPage() {
   const reducedMotion = useMedia('(prefers-reduced-motion: reduce)');
   const [capacity, setCapacity] = useState(compact ? 6 : 12);
   const [scope, setScope] = useState('all');
-  const [allMembers, setAllMembers] = useState<readonly Member[]>(members);
-  const [orbitMembers, setOrbitMembers] = useState<readonly Member[]>(members);
+  const [allMembers, setAllMembers] = useState<readonly Member[]>([]);
+  const [orbitMembers, setOrbitMembers] = useState<readonly Member[]>([]);
+  const [memberDataLoading, setMemberDataLoading] = useState(true);
+  const [memberDataError, setMemberDataError] = useState('');
 
   useEffect(() => {
+    let active = true;
     getMembers().then(res => {
-      if (res.members && res.members.length > 0) {
-        setAllMembers(res.members);
-        if (scope === 'all') {
-          setOrbitMembers(res.members);
-        } else {
-          setOrbitMembers(res.members.filter(m => m.divisionId === scope));
-        }
-      }
+      if (!active) return;
+      setMemberDataError(res.error ?? '');
+      setAllMembers(res.error ? [] : res.members);
+      setMemberDataLoading(false);
+    }).catch(error => {
+      if (!active) return;
+      setMemberDataError(error instanceof Error ? error.message : 'Member records could not be loaded.');
+      setAllMembers([]);
+      setMemberDataLoading(false);
     });
-  }, [scope]);
+    return () => { active = false; };
+  }, []);
 
   const [focusStep, setFocusStep] = useState(0);
   const [transition, setTransition] = useState(1);
@@ -62,11 +67,15 @@ export default function MemberOrbitPage() {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [hubMotion] = useState(createHubMotionController);
   const count = Math.max(1, Math.min(capacity, orbitMembers.length));
+  const memberStats = useMemo(() => getMemberStats(allMembers), [allMembers]);
   const physics = useOrbitPhysics({ count, reducedMotion, onFocusStep: setFocusStep });
   const slots = useMemo(() => getMemberWindow(orbitMembers, focusStep, capacity), [orbitMembers, focusStep, capacity]);
   const focused = orbitMembers[wrapMemberIndex(focusStep, orbitMembers.length)];
   const focusedPosition = wrapMemberIndex(focusStep, count);
   const division = memberDivisions.find(candidate => candidate.id === scope);
+  useEffect(() => {
+    setOrbitMembers(scope === 'all' ? allMembers : allMembers.filter(member => member.divisionId === scope || member.division === division?.name));
+  }, [allMembers, scope, division?.name]);
   const matches = useMemo(() => query.trim() ? searchMembers(allMembers, query) : [], [query, allMembers]);
   const overlayOpen = directoryOpen || Boolean(profile) || Boolean(launch);
   const stage = useRef<HTMLDivElement>(null);
@@ -264,8 +273,8 @@ export default function MemberOrbitPage() {
   return <main id="main-content" className={`members-page ${sceneReady && !sceneFailed ? 'has-member-scene' : 'member-fallback'} ${dragging ? 'member-dragging' : ''} ${profile || directoryOpen ? 'member-overlay-open' : ''} ${launch ? 'member-profile-opening' : ''}`} aria-label="CSR Member Orbit">
     <EngineeringEnvironment variant="members" motion={physics} compact={compact} reducedMotion={reducedMotion} paused={overlayOpen || transition === 0} />
     <header className="member-topline">
-      <div><p className="member-eyebrow"><span />CSR-RIT / MEMBER PORTFOLIO</p><h1>{memberStats.total} minds<span>.</span> <small>{memberStats.divisions} divisions. One community.</small></h1></div>
-      <div className="member-topline-actions"><span>{members.length} LISTED PROFILES</span><button onClick={openMemberDirectory}>Directory <span aria-hidden="true">↗</span></button></div>
+      <div><p className="member-eyebrow"><span />CSR-RIT / MEMBER PORTFOLIO</p><h1>{memberDataLoading ? 'Loading' : memberDataError ? '—' : memberStats.total} {memberDataLoading ? 'members' : 'minds'}<span>.</span> <small>{memberDataLoading ? 'Loading roster statistics' : memberDataError ? 'Roster statistics unavailable' : `${memberStats.divisions} divisions · ${Object.entries(memberStats.byYear).map(([year, total]) => `${year.toUpperCase()} ${total}`).join(' · ') || 'No academic year records'}`}</small></h1>{memberDataError && <p role="status" className="member-data-status">Live member totals unavailable: {memberDataError}</p>}{!memberDataLoading && !memberDataError && !allMembers.length && <p role="status" className="member-data-status">No member records are currently available.</p>}</div>
+      <div className="member-topline-actions"><span>{memberDataLoading ? 'LOADING PROFILES' : memberDataError ? 'PROFILES UNAVAILABLE' : memberStats.listed + ' LISTED PROFILES'}</span><button onClick={openMemberDirectory}>Directory <span aria-hidden="true">↗</span></button></div>
     </header>
     <div className="member-toolbar">
       <div className="member-filters" role="group" aria-label="Filter member orbit by division"><button aria-pressed={scope === 'all'} onClick={() => selectDivision('all')}>All members</button>{memberDivisions.map(item => <button key={item.id} aria-pressed={scope === item.id} onClick={() => selectDivision(item.id)}>{item.shortName}</button>)}</div>

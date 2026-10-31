@@ -8,7 +8,6 @@ interface DirectoryDivision {
   id: string;
   name: string;
   shortName: string;
-  count: number;
   lead?: string;
 }
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getMemberByUserId, getMembers, updateMember, linkUserToMember } from '../services/members';
 import type { CsrMember } from '../types/database.types';
-import { memberDivisions } from '../members/data';
+import { memberDivisions, getMemberStats } from '../members/data';
 import { Label } from '../components';
 import '../admin/admin.css';
 
@@ -16,6 +16,9 @@ export default function MemberPortalPage() {
 
   // Link selector state
   const [allRoster, setAllRoster] = useState<CsrMember[]>([]);
+  const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
+  const [rosterError, setRosterError] = useState('');
+  const [rosterCountsLoading, setRosterCountsLoading] = useState(true);
   const [selectedRosterId, setSelectedRosterId] = useState('');
   const [linking, setLinking] = useState(false);
 
@@ -45,6 +48,24 @@ export default function MemberPortalPage() {
 
   useEffect(() => {
     loadMemberData();
+    let active = true;
+    getMembers().then(result => {
+      if (!active) return;
+      if (result.error) setRosterError(result.error);
+      if (result.fromSupabase || !result.error) {
+        setRosterCounts(getMemberStats(result.members).byDivision);
+      } else {
+        setRosterCounts({});
+      }
+      setRosterCountsLoading(false);
+    }).catch(error => {
+      if (active) {
+        setRosterError(error instanceof Error ? error.message : 'Division totals could not be loaded.');
+        setRosterCounts({});
+        setRosterCountsLoading(false);
+      }
+    });
+    return () => { active = false; };
   }, [user]);
 
   async function handleSaveProfile(e: FormEvent) {
@@ -165,7 +186,7 @@ export default function MemberPortalPage() {
                     Lead: <strong>{divisionInfo.lead || 'Not assigned'}</strong>
                   </p>
                   <p style={{ margin: 0, fontSize: '13px', color: 'var(--steel)' }}>
-                    Total Division Members: {divisionInfo.count}
+                    Total Division Members: {rosterCountsLoading ? 'Loading' : rosterError ? 'Unavailable' : (rosterCounts[divisionInfo.id] ?? 0)}
                   </p>
                 </div>
               )}

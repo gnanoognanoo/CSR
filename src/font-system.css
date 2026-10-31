@@ -1,0 +1,48 @@
+/* Shared, locally hosted faces. Each page supplies colors for its own surface. */
+:root{
+  --font-display:'Sora',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --sans:var(--font-body);--mono:var(--font-mono);
+  --text-primary:#fff;--text-secondary:#d9e7f1;--text-muted:#9bb2c2;--text-accent:#58b7e8;
+  --nav-surface:rgba(6,26,46,.84);--nav-text:#fff;--nav-secondary:#d9e7f1;
+  --nav-border:rgba(155,178,194,.24);--nav-hover:#58b7e8;
+  font-family:var(--font-body);color:var(--text-primary);
+}
+body{font-family:var(--font-body)}
+h1,h2,h3,h4,.brand,.community-wordmark{font-family:var(--font-display);font-weight:500}
+.brand,.community-wordmark{font-weight:600;letter-spacing:-.045em}
+.mono,.eyebrow{font-family:var(--font-mono)}
+button,input,select,textarea{font-family:var(--font-body)}
+.home-page{--text-primary:#fff;--text-secondary:#d9e7f1;--text-muted:#9bb2c2;--text-accent:#58b7e8;color:var(--text-primary)}
+.projects-page,.members-page,.announcements-shell{
+  --text-primary:#101820;--text-secondary:#46515c;--text-muted:#7c8994;--text-accent:#116ea8;
+  color:var(--text-primary);
+}
+body:has(.projects-page,.members-page,.announcements-page){
+  --nav-surface:rgba(255,255,255,.96);--nav-text:#101820;--nav-secondary:#46515c;
+  --nav-border:rgba(15,35,50,.16);--nav-hover:#116ea8;
+}
+.site-header,.site-header.is-scrolled{
+  background:var(--nav-surface);color:var(--nav-text);border-bottom-color:var(--nav-border);
+  backdrop-filter:blur(14px);box-shadow:0 2px 14px rgba(6,26,46,.04);
+}
+.site-header .brand,.site-header .community-wordmark .brand-divider{color:var(--nav-text)}
+.site-header .community-wordmark{border-left-color:var(--nav-border)}
+.site-header .brand .community-wordmark small,.site-header .header-note{color:var(--nav-secondary);font-family:var(--font-mono)}
+.site-header nav a{color:var(--nav-secondary);font-family:var(--font-mono)}
+.site-header nav a.active{color:var(--nav-text)}
+.site-header nav a.active:after{background:#1677c8}
+.site-header nav a:hover,.site-header nav a:focus-visible{color:var(--nav-hover)}
+.site-header .menu-toggle{color:var(--nav-text);font-family:var(--font-mono)}
+.site-header .menu-toggle span{color:var(--nav-hover)}
+.skip-link{background:#116ea8;color:#fff;font-family:var(--font-body)}
+.coming-soon h1{font-family:var(--font-display);font-weight:500}
+@media(max-width:760px){.site-header nav{background:var(--nav-surface);border-bottom-color:var(--nav-border)}}
+@media(max-width:360px){
+  .site-header{gap:10px;padding:0 4.5%}
+  .site-header .brand{gap:8px;font-size:16px}
+  .site-header .rit-logo{width:100px}
+  .site-header .community-wordmark{padding-left:8px}
+  .site-header .menu-toggle{gap:7px;padding:13px 0;min-width:54px;justify-content:center;font-size:10px}
+}

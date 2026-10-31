@@ -311,7 +311,6 @@ export default function LoginPage() {
 
         <div className="auth-footer">
           <Link to="/">← Back to CSR-RIT</Link>
-          <span className="mono">SECURED BY SUPABASE</span>
         </div>
       </div>
     </main>

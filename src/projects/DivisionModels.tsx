@@ -53,7 +53,7 @@ function ModelRegistration({ failed = false }: { failed?: boolean }) {
   ]), [])
   return <lineSegments>
     <bufferGeometry><bufferAttribute attach="attributes-position" args={[positions, 3]} /></bufferGeometry>
-    <lineBasicMaterial color="#7eb8e8" transparent opacity={failed ? .18 : .42} />
+    <lineBasicMaterial color="#65c7f3" transparent opacity={failed ? .5 : .7} />
   </lineSegments>
 }
 
@@ -117,8 +117,8 @@ function SuppliedModel({ index, compact, modelEmphasis, modelMotion }: { index: 
     const hover = modelEmphasis?.[index]?.hover ?? 0
     const held = modelMotion.get(index).held
     normalized.materials.forEach(({ material, color, environment }) => {
-      material.color.copy(color).multiplyScalar(.86 + active * (index === 0 ? .06 : .2) + hover * .05 + held * .08)
-      material.envMapIntensity = environment * (.8 + active * .4 + held * .45)
+      material.color.copy(color).multiplyScalar(1 + active * (index === 0 ? .025 : .08) + hover * .04 + held * .06)
+      material.envMapIntensity = Math.max(.8, environment) * (1 + active * .22 + held * .3)
     })
   })
   useEffect(() => () => normalized.materials.forEach(({ material }) => material.dispose()), [normalized])
@@ -148,8 +148,8 @@ function DivisionObject({ index, modelMotion, selectedDivision, modelHoverIndex,
     // its own clock and never changes the orbital anchor or project selection.
     body.current.rotation.set(0, spin.current.angle, 0)
     if (rim.current) {
-      const activeLight = (index === 0 ? 2.5 : 5) * emphasis.active
-      rim.current.intensity = activeLight + 2.5 * emphasis.hover * (1 - emphasis.active) + 3 * motion.held
+      const activeLight = (index === 0 ? 1.5 : 3) * emphasis.active
+      rim.current.intensity = 2.2 + activeLight + 1.6 * emphasis.hover * (1 - emphasis.active) + 2 * motion.held
     }
   })
 
@@ -162,7 +162,7 @@ function DivisionObject({ index, modelMotion, selectedDivision, modelHoverIndex,
     </group>
     {/* Light follows the orbit, but stays outside the rotating body so its
         highlights travel across the object's changing surface normals. */}
-    <pointLight ref={rim} position={[1.8, 1.7, 2.4]} intensity={0} distance={6} decay={2} color="#e2f1ff" />
+    <pointLight ref={rim} position={[1.8, 1.7, 2.4]} intensity={2.2} distance={6} decay={2} color="#c3eaff" />
   </group>
 }
 

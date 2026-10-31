@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, type FormEvent } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { memberDivisions } from '../members/data';
+import { memberDivisions, members as backupRoster } from '../members/data';
 import {
   getMembers,
   createMember,
@@ -206,7 +206,7 @@ export default function AdminDashboard() {
   }
 
   async function handleSyncSeed() {
-    if (!confirm('This will restore all 115 official cohort members in your Supabase database from the backup roster. Continue?')) {
+    if (!confirm(`This will restore all ${backupRoster.length} official cohort members in your Supabase database from the backup roster. Continue?`)) {
       return;
     }
     setSyncing(true);
@@ -274,7 +274,7 @@ export default function AdminDashboard() {
               className="btn-admin"
               onClick={handleSyncSeed}
               disabled={syncing}
-              title="Restore all 115 official cohort members from backup"
+              title={`Restore all ${backupRoster.length} official cohort members from backup`}
             >
               {syncing ? 'Restoring Roster…' : 'Restore Default Roster'}
             </button>

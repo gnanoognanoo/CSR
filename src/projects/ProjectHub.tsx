@@ -45,6 +45,9 @@ export default function ProjectHub({ motion, layout: suppliedLayout, viewSize, c
     const canvas = document.createElement('canvas')
     canvas.width = canvas.height = 1024
     const context = canvas.getContext('2d')!
+    const fontTokens = getComputedStyle(document.documentElement)
+    const displayFont = fontTokens.getPropertyValue('--font-display').trim() || '"Sora", sans-serif'
+    const monoFont = fontTokens.getPropertyValue('--font-mono').trim() || '"IBM Plex Mono", monospace'
     const paint = () => {
       context.clearRect(0, 0, 1024, 1024)
       // The official mark is drawn as supplied, with its original colors.
@@ -56,10 +59,10 @@ export default function ProjectHub({ motion, layout: suppliedLayout, viewSize, c
       context.restore()
       context.textAlign = 'center'
       context.fillStyle = '#101820'
-      context.font = '650 140px "Manrope Variable", Arial, sans-serif'
+      context.font = `600 140px ${displayFont}`
       context.fillText('CSR-RIT', 512, 716)
-      context.fillStyle = '#657686'
-      context.font = '54px "IBM Plex Mono", monospace'
+      context.fillStyle = '#46515C'
+      context.font = `500 54px ${monoFont}`
       context.fillText(label, 512, 802)
     }
     paint()
@@ -100,17 +103,17 @@ export default function ProjectHub({ motion, layout: suppliedLayout, viewSize, c
     <group rotation={[layout.pitch, layout.yaw, 0]}>
     <group ref={spin} name="csr-rit-local-y-spin">
       <mesh geometry={body} castShadow receiveShadow dispose={null}>
-        <meshStandardMaterial attach="material-0" color="#FFFEFC" metalness={.1} roughness={.34} />
-        <meshStandardMaterial attach="material-1" color="#8FA3B8" metalness={.6} roughness={.3} />
+        <meshStandardMaterial attach="material-0" color="#F4F7FA" metalness={.15} roughness={.28} />
+        <meshStandardMaterial attach="material-1" color="#0B4F8A" metalness={.74} roughness={.26} />
       </mesh>
       {[0, Math.PI].map((faceRotation, index) => <group key={index} rotation={[0, faceRotation, 0]} name={index === 0 ? 'csr-rit-front-face' : 'csr-rit-reverse-face'}>
         <mesh position={[0, 0, front + .004]}>
           <torusGeometry args={[layout.radius - .035, .026, 10, 128]} />
-          <meshStandardMaterial color="#52758D" metalness={.64} roughness={.29} />
+          <meshStandardMaterial color="#4A99C6" metalness={.7} roughness={.27} />
         </mesh>
         <mesh position={[0, 0, front + .006]}>
           <torusGeometry args={[layout.radius - .11, .012, 8, 128]} />
-          <meshStandardMaterial color="#D0DCE5" metalness={.35} roughness={.4} />
+          <meshStandardMaterial color="#D5E8F2" metalness={.45} roughness={.32} />
         </mesh>
         <mesh position={[0, 0, front + .012]}>
           <circleGeometry args={[layout.radius - .15, 128]} />
@@ -119,7 +122,7 @@ export default function ProjectHub({ motion, layout: suppliedLayout, viewSize, c
       </group>)}
       <mesh>
         <torusGeometry args={[layout.radius + layout.bevel * .6, .021, 8, 128]} />
-        <meshStandardMaterial color="#0B4F8A" metalness={.68} roughness={.25} />
+        <meshStandardMaterial color="#1489C9" emissive="#38A7E0" emissiveIntensity={.1} metalness={.68} roughness={.25} />
       </mesh>
     </group>
     </group>

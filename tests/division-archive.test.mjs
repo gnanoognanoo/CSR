@@ -22,7 +22,8 @@ function load(filename, imports = {}, globals = {}) {
   vm.runInNewContext(source, context, { filename });
   return context.module.exports;
 }
-const content = load('content.ts');
+const memberData = load('members/data.ts');
+const content = load('content.ts', { './members/data': memberData });
 const data = load('projects/data.ts', { '../content': content });
 // Test the real directory content independently of native dialog focus and capture.
 const { AllProjectsOverlay } = load('projects/AllProjectsOverlay.tsx', {

@@ -156,7 +156,18 @@ test('both route backgrounds capture pointer movement over cards without consumi
     assert.ok(app.settle() > 10, 'A new pointer location must ease into its displaced field');
     assert.ok(app.latest().dashes.length > 100);
   }
-  assert.deepEqual(projects.latest(), members.latest());
+  // Page palettes differ, but field positions, dash lengths/opacity, and the
+  // canvas transform must remain identical for the same foreground gesture.
+  const fieldMotion = drawing => ({
+    ...drawing,
+    dashes: drawing.dashes.map(({ color, ...motion }) => motion),
+  });
+  assert.deepEqual(fieldMotion(projects.latest()), fieldMotion(members.latest()));
+  assert.notDeepEqual(
+    projects.latest().dashes.map(dash => dash.color),
+    members.latest().dashes.map(dash => dash.color),
+    'Projects and Members must retain their page-specific blue palettes',
+  );
   projects.unmount();
   members.unmount();
 });

@@ -1,15 +1,11 @@
-/* Local font aliases keep the other routes' existing typography untouched. */
-@font-face{font-family:'CSR News Display';src:url('../../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap}
-@font-face{font-family:'CSR News Body';src:url('../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:'CSR News Body';src:url('../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap}
-@font-face{font-family:'CSR News Mono';src:url('../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap}
+/* Light editorial surfaces use the same loaded type system as the other pages. */
 
 .announcements-shell{
   --news-paper:#f7f8fa;--news-white:#fff;--news-neutral:#eff2f4;
-  --news-ink:#101820;--news-copy:#59636d;--news-blue:#167fc1;
+  --news-ink:#101820;--news-copy:#46515c;--news-blue:#116ea8;
   --news-deep:#0c4f7b;--news-pale:#e7f3fa;--news-line:rgba(16,24,32,.10);
-  --news-display:'CSR News Display',sans-serif;--news-body:'CSR News Body',sans-serif;
-  --news-mono:'CSR News Mono',monospace;
+  --news-display:var(--font-display);--news-body:var(--font-body);
+  --news-mono:var(--font-mono);
   min-height:100svh;background:var(--news-paper);color:var(--news-ink);font-family:var(--news-body);
 }
 .announcements-shell ::selection{background:var(--news-pale);color:var(--news-deep)}
@@ -19,7 +15,7 @@
 .announcements-wrap{width:min(1280px,calc(100% - 8.4%));margin:0 auto}
 .news-label{display:flex;align-items:center;gap:11px;margin:0;font:500 10px/1.6 var(--news-mono);letter-spacing:.10em;color:var(--news-copy)}
 .news-label>span{width:25px;height:2px;background:var(--news-blue)}
-.announcements-intro h1{margin:28px 0 25px;font:500 clamp(58px,7.3vw,108px)/1.03 var(--news-display);letter-spacing:-.05em;color:var(--news-ink)}
+.announcements-intro h1{margin:28px 0 25px;font:500 clamp(58px,7.3vw,108px)/1.03 var(--news-display);letter-spacing:-.045em;color:var(--news-ink)}
 .news-title-prelude{display:block;font-size:.71em;line-height:1.12;margin-bottom:2px;color:var(--news-copy)}
 .news-title-period{color:var(--news-blue)}
 .news-intro-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:45px}
@@ -40,7 +36,7 @@
 .news-empty-copy h3{margin:12px 0 9px;font:500 clamp(27px,2.6vw,36px)/1.16 var(--news-display);letter-spacing:-.035em}
 .news-empty-copy h3>span,.news-community-note h3>span{color:var(--news-blue)}
 .news-empty-copy>p:not(.news-label){margin:0;font-size:16px;line-height:1.7;color:var(--news-copy)}
-.news-text-link{display:inline-flex;align-items:center;gap:23px;min-height:44px;margin-top:18px;font:500 11px/1.5 var(--news-mono);color:var(--news-deep)}
+.news-text-link{display:inline-flex;align-items:center;gap:23px;min-height:44px;margin-top:18px;font:500 12px/1.5 var(--news-display);color:var(--news-deep)}
 .news-text-link>span{font-size:20px;transition:transform .2s}
 .news-text-link:hover{color:var(--news-blue)}
 .news-text-link:hover>span{transform:translate(3px,-3px)}
@@ -54,19 +50,6 @@
 
 /* Same shared navigation and footer, themed only while this route is mounted. */
 body:has(.announcements-page){background:#f7f8fa}
-body:has(.announcements-page) .site-header{background:rgba(255,255,255,.96);border-bottom-color:rgba(16,24,32,.10);color:#101820;box-shadow:0 2px 14px rgba(16,24,32,.02)}
-body:has(.announcements-page) .site-header .brand,
-body:has(.announcements-page) .site-header .brand-divider{color:#101820}
-body:has(.announcements-page) .site-header .community-wordmark{border-left-color:rgba(16,24,32,.13)}
-body:has(.announcements-page) .site-header .community-wordmark small,
-body:has(.announcements-page) .site-header .header-note{color:#59636d}
-body:has(.announcements-page) .site-header nav a{color:#59636d}
-body:has(.announcements-page) .site-header nav a.active{color:#101820}
-body:has(.announcements-page) .site-header nav a.active:after{background:#167fc1}
-body:has(.announcements-page) .site-header nav a:hover,
-body:has(.announcements-page) .site-header nav a:focus-visible{color:#167fc1}
-body:has(.announcements-page) .site-header .menu-toggle{color:#101820}
-body:has(.announcements-page) .site-header .menu-toggle span{color:#167fc1}
 .announcements-shell .footer{background:var(--news-white);border-top-color:var(--news-line);color:var(--news-ink)}
 .announcements-shell .footer .brand,.announcements-shell .footer .brand-divider{color:var(--news-ink)}
 .announcements-shell .footer .community-wordmark{border-left-color:var(--news-line)}
@@ -101,16 +84,10 @@ body:has(.announcements-page) .site-header .menu-toggle span{color:#167fc1}
   .news-community-note h3{grid-column:1;margin:13px 0 10px;font-size:26px}
   .news-community-note>p:not(.news-label){grid-column:1;font-size:14px}
   .news-note-signature{grid-column:2;grid-row:2/4;align-self:center;margin-top:0;font-size:7px}
-  body:has(.announcements-page) .site-header nav{background:rgba(255,255,255,.99);border-bottom-color:rgba(16,24,32,.10)}
 }
 @media(max-width:360px){
   .announcements-intro h1{font-size:clamp(28px,9.8vw,35px)}
   .news-empty-panel{padding:25px 21px}.news-empty-copy h3{font-size:26px}
   .news-community-note{display:block}.news-note-signature{margin-top:22px}
-  body:has(.announcements-page) .site-header{gap:10px;padding:0 4.5%}
-  body:has(.announcements-page) .site-header .brand{gap:8px;font-size:16px}
-  body:has(.announcements-page) .site-header .rit-logo{width:100px}
-  body:has(.announcements-page) .site-header .community-wordmark{padding-left:8px}
-  body:has(.announcements-page) .site-header .menu-toggle{gap:7px;padding:13px 0;min-width:54px;justify-content:center;font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.announcements-shell *{transition:none!important}}

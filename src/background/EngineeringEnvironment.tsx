@@ -19,6 +19,13 @@ const BLUE_RAMP = Array.from({ length: 128 }, (_, index) => {
   const mix = progress < .5 ? progress * 2 : progress * 2 - 1;
   return `rgb(${start.map((channel, axis) => Math.round(channel + (end[axis] - channel) * mix)).join(',')})`;
 });
+const PROJECT_BLUE_RAMP = Array.from({ length: 128 }, (_, index) => {
+  const progress = index / 127;
+  const start = progress < .5 ? [11, 79, 138] : [22, 119, 200];
+  const end = progress < .5 ? [22, 119, 200] : [59, 159, 207];
+  const mix = progress < .5 ? progress * 2 : progress * 2 - 1;
+  return `rgb(${start.map((channel, axis) => Math.round(channel + (end[axis] - channel) * mix)).join(',')})`;
+});
 
 /** Shared Canvas 2D surface. Foreground orbit input and physics remain independent. */
 export default function InteractiveParticleBackground(props: EngineeringEnvironmentProps) {
@@ -51,7 +58,7 @@ export default function InteractiveParticleBackground(props: EngineeringEnvironm
         if (particle.influence < .02) context.rect(particle.x - .85, particle.y - .85, 1.7, 1.7);
       }
       context.globalAlpha = 1;
-      context.fillStyle = 'rgba(100,115,130,.32)';
+      context.fillStyle = settings.current.variant === 'projects' ? 'rgba(70,81,92,.25)' : 'rgba(70,81,92,.32)';
       context.fill();
 
       context.lineWidth = 1.65;
@@ -62,7 +69,7 @@ export default function InteractiveParticleBackground(props: EngineeringEnvironm
         const colorIndex = Math.round((angle + Math.PI) / (Math.PI * 2) * 127);
         const halfLength = (2 + 7 * influence) / 2;
         context.globalAlpha = .35 + .4 * influence;
-        context.strokeStyle = BLUE_RAMP[colorIndex];
+        context.strokeStyle = (settings.current.variant === 'projects' ? PROJECT_BLUE_RAMP : BLUE_RAMP)[colorIndex];
         context.beginPath();
         context.moveTo(particle.x - particle.directionX * halfLength, particle.y - particle.directionY * halfLength);
         context.lineTo(particle.x + particle.directionX * halfLength, particle.y + particle.directionY * halfLength);
