@@ -7,7 +7,7 @@ import { Label, Divisions, DigitalExplorer, Footer } from './components';
 import { memberDivisions, getMemberStats, type Member } from './members/data';
 import { getMembers } from './services/members';
 
-const engineeringDomains = ['Mechanical design', 'Electronics', 'Embedded control', 'Software', 'Artificial intelligence', 'Data', 'Connectivity', 'Testing', 'Research'];
+const engineeringDomains = memberDivisions.map(d => d.name);
 const philosophy = [
   ['Learn.', 'Explore technologies beyond classroom theory.'],
   ['Build.', 'Turn ideas into software, simulations, circuits, prototypes and experiments.'],
@@ -61,7 +61,7 @@ export default function Home() {
                 <p className="lead">Community for<br/><em>Super Intelligence & Robotics.</em></p>
                 <p>CSR-RIT is a student-led, multidisciplinary technical community within Rajalakshmi Institute of Technology, Chennai.</p>
                 <p>A place to learn, experiment, build and collaborate beyond the classroom — connecting students from different technical backgrounds into one engineering community.</p>
-                <p className="domain-intro">Artificial intelligence. Robotics. Embedded systems. Software engineering. IoT. Research. Technology management.</p>
+                <p className="domain-intro">AI & Intelligent Systems. Embedded & Electronics. Robotics & Autonomous Systems. Software Engineering. IoT & Smart Systems. Research & Publications. Operations & Management.</p>
               </div>
             </div>
             <div className="technical-rule" aria-hidden="true"><span>STUDENTS / PROJECTS / RESEARCH</span><i/><span>ONE CAMPUS. SHARED POSSIBILITIES.</span></div>
