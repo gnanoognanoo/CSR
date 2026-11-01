@@ -16,13 +16,17 @@ vm.runInNewContext(code, { exports, module: { exports } });
 const { members, memberDivisions, memberStats, getMemberStats, getMemberInitials, searchMembers } = exports;
 
 test('member totals count unique records and separate listed profiles from division assignments', () => {
-  assert.equal(memberStats.total, 115);
+  assert.equal(memberStats.total, 128);
   assert.equal(memberStats.listed, members.length);
   assert.equal(memberStats.divisionMembers, 115);
+  assert.equal(memberStats.leadershipMembers, 13);
+  assert.equal(memberStats.total, memberStats.divisionMembers + memberStats.leadershipMembers);
   assert.equal(memberStats.divisions, memberDivisions.length);
+  assert.equal(members.length, 115, 'summary-only core-team count cannot manufacture profiles');
   const changed = [...members, members[0], { ...members[0], id: 'extra-member', name: 'New Record', year: 'IV Year' }];
   const recalculated = getMemberStats(changed);
-  assert.equal(recalculated.total, members.length + 1);
+  assert.equal(recalculated.divisionMembers, members.length + 1);
+  assert.equal(recalculated.total, members.length + 1 + 13);
   assert.equal(recalculated.listed, members.length + 1);
   assert.equal(recalculated.byDivision.ai, 18);
   assert.equal(recalculated.byYear['IV Year'], 1);

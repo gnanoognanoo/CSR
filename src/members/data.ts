@@ -1118,7 +1118,9 @@ export const getMemberStats = (records: readonly Member[] = members) => {
   ]))
   const listedProfiles = roster.filter(member => Boolean(member.name?.trim()))
   const divisionMembers = Object.values(byDivision).reduce((total, count) => total + count, 0)
-  return { total: roster.length, listed: listedProfiles.length, divisionMembers, divisions: memberDivisions.length, byDivision, byYear }
+  const leadershipMembers = 13
+  const total = divisionMembers + leadershipMembers
+  return { total, listed: listedProfiles.length, divisionMembers, leadershipMembers, divisions: memberDivisions.length, byDivision, byYear }
 }
 
 export const memberStats = getMemberStats()
