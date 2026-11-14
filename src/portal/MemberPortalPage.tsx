@@ -123,7 +123,7 @@ export default function MemberPortalPage() {
               Account role: <span className={`role-badge ${profile?.role || 'member'}`}>{(profile?.role || 'member').toUpperCase()}</span>
               {isAdmin && (
                 <span style={{ marginLeft: '12px' }}>
-                  <Link to="/admin" className="outline-link" style={{ padding: '4px 10px', fontSize: '11px' }}>
+                  <Link to="/admin" className="outline-link" style={{ padding: '4px 10px', fontSize: '13px' }}>
                     Open Admin Console →
                   </Link>
                 </span>

@@ -8,6 +8,7 @@ import ProjectHub from '../projects/ProjectHub'
 import { getMemberHubLayout, getMemberHubViewSize, getMemberHubUnitsPerPixel } from './hub-geometry'
 import type { Member } from './data'
 import { createMemberBadgeGeometry, type MemberBadgeGeometry } from './badge-geometry'
+import { getDivisionAccent, type DivisionAccent } from './division-accent'
 import {
   getMemberBadgePose, getMemberCameraFov, getMemberOrbitLayout, projectMemberSlots,
   MEMBER_BADGE_DEPTH, MEMBER_CAMERA_Z, type MemberHoverState, type MemberOrbitSlot, type MemberScreenPosition,
@@ -34,24 +35,92 @@ export interface MemberOrbitSceneProps {
 }
 
 /** Surface graphics only: member identity is sharp, accessible live DOM text. */
-function badgeTexture(ordinal = 1, focused = false): CanvasTexture {
+function withAlpha(hex: string, alpha: number) {
+  const value = parseInt(hex.slice(1), 16)
+  return `rgba(${value >> 16 & 255},${value >> 8 & 255},${value & 255},${alpha})`
+}
+
+function hexPath(context: CanvasRenderingContext2D, cx: number, cy: number, radius: number) {
+  context.beginPath()
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI / 3 * i
+    const x = cx + radius * Math.cos(angle), y = cy + radius * Math.sin(angle) * .875
+    if (i === 0) context.moveTo(x, y); else context.lineTo(x, y)
+  }
+  context.closePath()
+}
+
+function badgeTexture(ordinal: number, focused: boolean, accent: DivisionAccent): CanvasTexture {
   const canvas = document.createElement('canvas')
   canvas.width = 904; canvas.height = 800
   const context = canvas.getContext('2d')!
   const printScale = canvas.width / 1024
   context.scale(printScale, printScale)
-  const gradient = context.createLinearGradient(0, 0, 1024, 896)
-  gradient.addColorStop(0, '#FFFFFF'); gradient.addColorStop(.62, '#FFFFFF'); gradient.addColorStop(1, '#FFFFFF')
-  context.fillStyle = gradient; context.fillRect(0, 0, 1024, canvas.height / printScale)
-  context.strokeStyle = '#91AAB9'; context.lineWidth = 3
-  context.beginPath(); context.moveTo(180, 156); context.lineTo(844, 156)
-  context.moveTo(210, 736); context.lineTo(814, 736); context.stroke()
-  context.textAlign = 'center'; context.fillStyle = '#53616C'; context.font = '500 31px "IBM Plex Mono", monospace'
-  context.fillText(`CSR / ${String(ordinal).padStart(3, '0')}`, 512, 105)
-  context.fillStyle = focused ? '#118AC6' : '#116EA8'
-  context.fillRect(450, 421, 124, focused ? 7 : 4)
-  context.fillRect(294, 780, 30, 5); context.fillRect(339, 780, 30, 5)
-  context.fillStyle = '#91AAB9'; context.fillRect(690, 780, 40, 5)
+  const H = canvas.height / printScale, cx = 512, cy = H / 2
+  const mono = (weight: number, size: number) => `${weight} ${size}px "IBM Plex Mono", monospace`
+
+  // Face: bright centre fading into a soft division tint.
+  const face = context.createRadialGradient(cx, cy - 40, 60, cx, cy, 620)
+  face.addColorStop(0, '#FFFFFF'); face.addColorStop(.42, '#FAFCFD'); face.addColorStop(1, withAlpha(accent.accent, focused ? .26 : .2))
+  context.fillStyle = '#F4F8FB'; context.fillRect(0, 0, 1024, H)
+  context.fillStyle = face; context.fillRect(0, 0, 1024, H)
+
+  // Blueprint grid, faded toward the centre so the monogram stays clean.
+  context.save()
+  context.strokeStyle = withAlpha(accent.accent, .12); context.lineWidth = 3
+  context.beginPath()
+  for (let x = 32; x < 1024; x += 64) { context.moveTo(x, 0); context.lineTo(x, H) }
+  for (let y = 21; y < H; y += 64) { context.moveTo(0, y); context.lineTo(1024, y) }
+  context.stroke()
+  const clear = context.createRadialGradient(cx, cy, 80, cx, cy, 330)
+  clear.addColorStop(0, 'rgba(255,255,255,.95)'); clear.addColorStop(1, 'rgba(255,255,255,0)')
+  context.fillStyle = clear; context.fillRect(0, 0, 1024, H)
+  context.restore()
+
+  // Concentric hex rings around the monogram.
+  context.lineWidth = 6; context.strokeStyle = withAlpha(accent.accent, focused ? .42 : .3)
+  hexPath(context, cx, cy, 300); context.stroke()
+  context.setLineDash([16, 16]); context.lineWidth = 4; context.strokeStyle = withAlpha(accent.accent, .32)
+  hexPath(context, cx, cy, 360); context.stroke(); context.setLineDash([])
+
+  // Corner brackets framing the initials.
+  context.strokeStyle = accent.accent; context.lineWidth = focused ? 12 : 10; context.lineCap = 'round'
+  const bx = 250, by = 175
+  for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]] as const) {
+    const x = cx + sx * bx, y = cy + sy * by
+    context.beginPath(); context.moveTo(x, y - sy * 72); context.lineTo(x, y); context.lineTo(x - sx * 72, y); context.stroke()
+  }
+
+  // Header: serial plate.
+  context.textAlign = 'center'; context.textBaseline = 'middle'
+  context.fillStyle = '#46515C'; context.font = mono(600, 46)
+  context.fillText(`CSR · ${String(ordinal).padStart(3, '0')}`, cx, 104)
+  context.fillStyle = accent.accent
+  for (const x of [cx - 190, cx + 190]) { context.save(); context.translate(x, 104); context.rotate(Math.PI / 4); context.fillRect(-11, -11, 22, 22); context.restore() }
+  context.fillRect(cx - 170, 156, 340, focused ? 12 : 10)
+
+  // Monogram underline.
+  const underline = context.createLinearGradient(cx - 90, 0, cx + 90, 0)
+  underline.addColorStop(0, withAlpha(accent.accent, 0)); underline.addColorStop(.5, accent.accent); underline.addColorStop(1, withAlpha(accent.accent, 0))
+  context.fillStyle = underline; context.fillRect(cx - 130, cy + 118, 260, focused ? 10 : 8)
+
+  // Footer: division plate.
+  const label = accent.label.toUpperCase()
+  context.font = mono(700, 54)
+  const textWidth = context.measureText(label).width
+  const plateW = textWidth + 84, plateY = cy + 222
+  context.fillStyle = accent.accent
+  context.beginPath()
+  if (typeof context.roundRect === 'function') context.roundRect(cx - plateW / 2, plateY - 44, plateW, 88, 44)
+  else { context.arc(cx - plateW / 2 + 44, plateY, 44, Math.PI / 2, Math.PI * 1.5); context.arc(cx + plateW / 2 - 44, plateY, 44, -Math.PI / 2, Math.PI / 2); context.closePath() }
+  context.fill()
+  context.fillStyle = '#FFFFFF'; context.fillText(label, cx, plateY + 3)
+  context.strokeStyle = withAlpha(accent.accent, .55); context.lineWidth = 6
+  context.beginPath()
+  context.moveTo(cx - plateW / 2 - 110, plateY); context.lineTo(cx - plateW / 2 - 22, plateY)
+  context.moveTo(cx + plateW / 2 + 22, plateY); context.lineTo(cx + plateW / 2 + 110, plateY)
+  context.stroke()
+
   const texture = new CanvasTexture(canvas)
   texture.colorSpace = SRGBColorSpace; texture.anisotropy = 4
   return texture
@@ -82,14 +151,15 @@ function MemberBadge({ slot, scene, visibility, shadowTexture, geometry }: { slo
   const { size } = useThree()
   const layout = getMemberOrbitLayout(size.width, size.height, scene.compact)
   const focused = slot.position === scene.focusedPosition
-  const texture = useMemo(() => badgeTexture(slot.logicalIndex + 1, focused), [slot.member, slot.logicalIndex, focused])
+  const accent = useMemo(() => getDivisionAccent(slot.member), [slot.member])
+  const texture = useMemo(() => badgeTexture(slot.logicalIndex + 1, focused, accent), [accent, slot.logicalIndex, focused])
   const textureBlend = useRef(1)
   const interaction = useRef(0)
   const materials = useMemo(() => [
     new MeshStandardMaterial({ color: '#D8E1E7', roughness: .29, metalness: .28, transparent: true }),
     new MeshStandardMaterial({ color: '#91AAB9', roughness: .23, metalness: .64, transparent: true }),
   ], [])
-  const edgeColors = useMemo(() => ({ neutral: new Color('#91AAB9'), active: new Color('#118AC6') }), [])
+  const edgeColors = useMemo(() => ({ neutral: new Color('#91AAB9'), active: new Color(accent.accent) }), [accent])
   const bodyColors = useMemo(() => ({ neutral: new Color('#D8E1E7'), active: new Color('#FFFFFF') }), [])
   const backing = useMemo(() => new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, toneMapped: false }), [])
   const armor = useMemo(() => new MeshStandardMaterial({ color: '#D8E1E7', metalness: .5, roughness: .25, transparent: true }), [])
@@ -101,6 +171,11 @@ function MemberBadge({ slot, scene, visibility, shadowTexture, geometry }: { slo
   // Printed labels keep their intended contrast; the bevelled badge remains lit.
   const face = useMemo(() => new MeshBasicMaterial({ transparent: true, depthWrite: false, toneMapped: false }), [])
   const outgoingFace = useMemo(() => new MeshBasicMaterial({ transparent: true, depthWrite: false, toneMapped: false, opacity: 0 }), [])
+  useLayoutEffect(() => {
+    // Circuit traces and nodes carry the member's division colour.
+    outerTrace.color.set(accent.accent); tracks.color.set(accent.accent); nodes.color.set(accent.glow)
+    armor.color.set('#D8E1E7').lerp(new Color(accent.accent), .22)
+  }, [accent, outerTrace, tracks, nodes, armor])
   useLayoutEffect(() => {
     // Replace only the recycled rear badge, crossfading its labels as it revolves.
     // This temporary second texture never creates another card or dataset-wide mesh.

@@ -61,7 +61,7 @@ test('optional fields stay absent and custom source metadata is not replaced wit
   const custom = { id: 'custom', name: '  Mira  K  ', division: 'Interdisciplinary Lab', year: 'IV Year' }
   const label = getMemberBadgeLabel(custom, true)
   assert.equal(label.name, custom.name, 'the exact identity remains available for accessibility')
-  assert.equal(label.initials, 'MK')
+  assert.equal(label.initials, 'MI')
   assert.equal(label.divisionShort, custom.division)
   assert.equal(label.metadata, custom.year)
   assert.equal(label.secondary, 'Interdisciplinary Lab · IV Year')

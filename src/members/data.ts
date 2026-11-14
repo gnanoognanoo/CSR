@@ -1126,10 +1126,21 @@ export const getMemberStats = (records: readonly Member[] = members) => {
 export const memberStats = getMemberStats()
 
 /** Initials remain abstract; no member photos are supplied in the roster. */
+/**
+ * Two-letter badge monogram.
+ * Single-letter initials (e.g. the "R M" in "Manish Kumaar R M") are skipped so the
+ * monogram uses the given names: first letter of the first and last name ("MK").
+ * A single name uses its first two letters ("Krishan" → "KR").
+ */
 export function getMemberInitials(name: string): string {
   const parts = name.trim().split(/[\s.]+/u).filter(Boolean)
   if (!parts.length) return ''
-  return (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toLocaleUpperCase()
+  const names = parts.filter(part => [...part].length > 1)
+  const source = names.length ? names : parts
+  const letters = source.length > 1
+    ? [...source[0]][0] + [...source[source.length - 1]][0]
+    : [...source[0]].slice(0, 2).join('')
+  return letters.toLocaleUpperCase()
 }
 
 function searchText(value: string): string {

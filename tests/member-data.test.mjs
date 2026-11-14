@@ -92,10 +92,13 @@ test('source spelling, public department and year fields survive extraction', ()
 });
 
 test('initials are abstract text badges and support source punctuation or single names', () => {
-  assert.equal(getMemberInitials('GNANESHWAR R'), 'GR');
-  assert.equal(getMemberInitials('M.R.Harish'), 'MH');
+  assert.equal(getMemberInitials('GNANESHWAR R'), 'GN');
+  assert.equal(getMemberInitials('M.R.Harish'), 'HA');
   assert.equal(getMemberInitials('Guru prakash Muthusamy'), 'GM');
-  assert.equal(getMemberInitials('Dilish'), 'D');
+  assert.equal(getMemberInitials('MANISH KUMAAR R M'), 'MK');
+  assert.equal(getMemberInitials('R D Sai Saran'), 'SS');
+  assert.equal(getMemberInitials('Dilish'), 'DI');
+  assert.equal(getMemberInitials('A B'), 'AB');
   assert.equal(getMemberInitials(' '), '');
 });
 

@@ -205,7 +205,7 @@ body:has(.home-page) .skip-link {
 /* Keep the five technical stage labels legible within the existing mobile grid. */
 @media (max-width: 760px) {
   .home-page .experience .process-scale > span {
-    font-size: clamp(8px, 2.3vw, 10px);
+    font-size: clamp(10px, 2.6vw, 11px);
     letter-spacing: .08em;
   }
 }

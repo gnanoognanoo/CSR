@@ -44,5 +44,5 @@ body:has(.projects-page,.members-page,.announcements-page){
   .site-header .brand{gap:8px;font-size:16px}
   .site-header .rit-logo{width:100px}
   .site-header .community-wordmark{padding-left:8px}
-  .site-header .menu-toggle{gap:7px;padding:13px 0;min-width:54px;justify-content:center;font-size:10px}
+  .site-header .menu-toggle{gap:7px;padding:13px 0;min-width:54px;justify-content:center;font-size:12px}
 }

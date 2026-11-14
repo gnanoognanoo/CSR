@@ -397,7 +397,7 @@ export default function AdminDashboard() {
                   ) : (
                     filteredMembers.map(m => (
                       <tr key={m.id}>
-                        <td className="mono" style={{ fontSize: '11px', color: 'var(--steel)' }}>
+                        <td className="mono" style={{ fontSize: '12px', color: 'var(--steel)' }}>
                           {m.id}
                         </td>
                         <td>
@@ -422,9 +422,9 @@ export default function AdminDashboard() {
                           <small style={{ color: 'var(--steel)' }}>{m.department || '—'}</small>
                         </td>
                         <td>
-                          <span style={{ fontSize: '12px' }}>{m.email || '—'}</span>
+                          <span style={{ fontSize: '13px' }}>{m.email || '—'}</span>
                         </td>
-                        <td className="mono" style={{ fontSize: '11px' }}>
+                        <td className="mono" style={{ fontSize: '12px' }}>
                           {m.phone || '—'}
                         </td>
                         <td>
@@ -485,7 +485,7 @@ export default function AdminDashboard() {
                   ) : (
                     profiles.map(p => (
                       <tr key={p.id}>
-                        <td className="mono" style={{ fontSize: '11px', color: 'var(--steel)' }}>
+                        <td className="mono" style={{ fontSize: '12px', color: 'var(--steel)' }}>
                           {p.id.slice(0, 8)}…
                         </td>
                         <td>{p.email}</td>
@@ -493,13 +493,13 @@ export default function AdminDashboard() {
                         <td>
                           <span className={`role-badge ${p.role}`}>{p.role.toUpperCase()}</span>
                         </td>
-                        <td className="mono" style={{ fontSize: '11px' }}>
+                        <td className="mono" style={{ fontSize: '12px' }}>
                           {p.member_id || 'Not linked'}
                         </td>
                         <td>
                           <select
                             className="admin-filter-select"
-                            style={{ padding: '6px 10px', fontSize: '12px' }}
+                            style={{ padding: '6px 10px', fontSize: '13px' }}
                             value={p.role}
                             onChange={e => handleRoleChange(p.id, e.target.value as UserRole)}
                           >
@@ -527,7 +527,7 @@ export default function AdminDashboard() {
                     key={status}
                     type="button"
                     className={`btn-admin ${appStatusFilter === status ? 'primary' : ''}`}
-                    style={{ padding: '6px 12px', fontSize: '11px' }}
+                    style={{ padding: '6px 12px', fontSize: '13px' }}
                     onClick={() => setAppStatusFilter(status)}
                   >
                     {status.toUpperCase()}{' '}
@@ -568,12 +568,12 @@ export default function AdminDashboard() {
                       .filter(a => appStatusFilter === 'all' || a.status === appStatusFilter)
                       .map(app => (
                         <tr key={app.id}>
-                          <td className="mono" style={{ fontSize: '11px', color: 'var(--steel)' }}>
+                          <td className="mono" style={{ fontSize: '12px', color: 'var(--steel)' }}>
                             {app.created_at ? new Date(app.created_at).toLocaleDateString() : '—'}
                           </td>
                           <td>
                             <strong>{app.full_name}</strong>
-                            {app.reg_no && <div className="mono" style={{ fontSize: '10px', color: 'var(--steel)' }}>{app.reg_no}</div>}
+                            {app.reg_no && <div className="mono" style={{ fontSize: '12px', color: 'var(--steel)' }}>{app.reg_no}</div>}
                           </td>
                           <td>
                             <div>{app.year}</div>
@@ -582,11 +582,11 @@ export default function AdminDashboard() {
                           <td>
                             <strong>{app.primary_division}</strong>
                             {app.secondary_division && (
-                              <div style={{ fontSize: '11px', color: 'var(--steel)' }}>Alt: {app.secondary_division}</div>
+                              <div style={{ fontSize: '13px', color: 'var(--steel)' }}>Alt: {app.secondary_division}</div>
                             )}
                           </td>
                           <td>
-                            <div style={{ fontSize: '12px' }}>{app.email}</div>
+                            <div style={{ fontSize: '13px' }}>{app.email}</div>
                             <small className="mono" style={{ color: 'var(--steel)' }}>{app.phone}</small>
                           </td>
                           <td>
@@ -698,7 +698,7 @@ export default function AdminDashboard() {
 
             <div className="admin-modal-footer" style={{ justifyContent: 'space-between' }}>
               <div>
-                <span className="mono" style={{ color: 'var(--steel)', fontSize: '11px' }}>
+                <span className="mono" style={{ color: 'var(--steel)', fontSize: '12px' }}>
                   Current Status: <strong style={{ color: 'var(--white)' }}>{selectedApplication.status.toUpperCase()}</strong>
                 </span>
               </div>

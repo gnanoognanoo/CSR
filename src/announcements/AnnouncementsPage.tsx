@@ -43,6 +43,6 @@ export default function AnnouncementsPage() {
         </section>
       </div>
     </main>
-    <Footer/>
+    <Footer tone="light"/>
   </div>;
 }

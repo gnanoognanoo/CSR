@@ -224,7 +224,7 @@ export default function LoginPage() {
                       <button
                         type="button"
                         className="btn-admin"
-                        style={{ fontSize: '10px', padding: '6px 12px' }}
+                        style={{ fontSize: '13px', padding: '6px 12px' }}
                         disabled={resendCooldown > 0 || resending}
                         onClick={() => handleResendEmail(email)}
                       >

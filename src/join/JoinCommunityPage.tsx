@@ -86,7 +86,7 @@ export default function JoinCommunityPage() {
   }
 
   return (
-    <main id="main-content" className="admin-page" style={{ paddingTop: '120px' }}>
+    <main id="main-content" className="admin-page join-page">
       <div className="section-wrap" style={{ maxWidth: '1000px', margin: '0 auto', padding: 0 }}>
         {/* Top Header */}
         <div className="admin-header">
@@ -98,7 +98,7 @@ export default function JoinCommunityPage() {
             </p>
           </div>
           <div>
-            <span className="mono" style={{ color: 'var(--engineering-blue)', fontSize: '10px' }}>
+            <span className="mono" style={{ color: 'var(--engineering-blue)', fontSize: '12px' }}>
               SELECTION ROUND 01 / OPEN
             </span>
           </div>
@@ -343,7 +343,7 @@ export default function JoinCommunityPage() {
                 type="submit"
                 className="btn-admin primary"
                 disabled={submitting}
-                style={{ padding: '14px 28px', fontSize: '12px' }}
+                style={{ padding: '14px 28px', fontSize: '13px' }}
               >
                 {submitting ? 'Submitting Application…' : 'Submit Application'}
               </button>
