@@ -17,6 +17,15 @@ import type { CsrMember, CsrProfile, CreateMemberInput, UserRole, CsrApplication
 import { Label } from '../components';
 import './admin.css';
 
+function safeExternalUrl(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return null;
+}
+
 export default function AdminDashboard() {
   const { user, profile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<'members' | 'rbac' | 'applications'>('members');
@@ -678,14 +687,20 @@ export default function AdminDashboard() {
             {selectedApplication.portfolio_link && (
               <div style={{ marginBottom: '18px' }}>
                 <span className="mono" style={{ color: 'var(--steel)', display: 'block', marginBottom: '4px' }}>PORTFOLIO / GITHUB LINK</span>
-                <a
-                  href={selectedApplication.portfolio_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--engineering-blue)', fontSize: '13px', textDecoration: 'underline' }}
-                >
-                  {selectedApplication.portfolio_link} ↗
-                </a>
+                {safeExternalUrl(selectedApplication.portfolio_link) ? (
+                  <a
+                    href={safeExternalUrl(selectedApplication.portfolio_link)!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--engineering-blue)', fontSize: '13px', textDecoration: 'underline' }}
+                  >
+                    {selectedApplication.portfolio_link} ↗
+                  </a>
+                ) : (
+                  <span style={{ color: 'var(--steel)', fontSize: '13px' }}>
+                    {selectedApplication.portfolio_link} <span style={{ color: '#eb5757' }}>(Blocked: Non-HTTP protocol)</span>
+                  </span>
+                )}
               </div>
             )}
 

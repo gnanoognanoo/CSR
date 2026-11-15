@@ -96,6 +96,12 @@ export default function LoginPage() {
           return;
         }
 
+        if (isSignUp && password.length < 8) {
+          setErrorMsg('Password must be at least 8 characters long for account security.');
+          setSubmitting(false);
+          return;
+        }
+
         const res = await signUp(email, password, fullName);
         if (res.error) {
           setErrorMsg(res.error);
@@ -289,7 +295,7 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   disabled={submitting}
-                  minLength={6}
+                  minLength={8}
                   autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 />
               </div>

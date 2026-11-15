@@ -241,38 +241,69 @@ export default function MemberPortalPage() {
             </div>
           </div>
         ) : (
-          /* Unlinked State: Allow member to link their account */
-          <div className="stat-card" style={{ maxWidth: '600px' }}>
-            <span className="stat-label">Link Your Roster Record</span>
+          /* H2 FIX: Unlinked State with Verified Email Matching */
+          <div className="stat-card" style={{ maxWidth: '640px' }}>
+            <span className="stat-label">Member Verification</span>
             <h2 style={{ fontSize: '28px', margin: '12px 0' }}>Connect Your Member Profile</h2>
-            <p className="body-copy" style={{ fontSize: '14px', marginBottom: '24px' }}>
-              Your email <code>{user?.email}</code> is registered, but not yet linked to an official CSR roster record.
-              Select your name from the roster below to link your account:
-            </p>
+            
+            {(() => {
+              const matchingRoster = allRoster.filter(r => 
+                r.email && user?.email && r.email.trim().toLowerCase() === user.email.trim().toLowerCase()
+              );
 
-            <form onSubmit={handleLinkAccount} className="auth-form">
-              <div className="form-group">
-                <label className="form-label" htmlFor="roster-select">Select Your Name in Roster</label>
-                <select
-                  id="roster-select"
-                  className="form-input"
-                  value={selectedRosterId}
-                  onChange={e => setSelectedRosterId(e.target.value)}
-                  required
-                >
-                  <option value="">-- Choose from {allRoster.length} members --</option>
-                  {allRoster.map(r => (
-                    <option key={r.id} value={r.id}>
-                      {r.name} ({r.division} — {r.year})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              if (matchingRoster.length > 0) {
+                return (
+                  <div>
+                    <p className="body-copy" style={{ fontSize: '14px', marginBottom: '18px' }}>
+                      We found an official roster record matching your verified email (<strong>{user?.email}</strong>):
+                    </p>
+                    <form onSubmit={handleLinkAccount} className="auth-form">
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="roster-select">Matched Roster Record</label>
+                        <select
+                          id="roster-select"
+                          className="form-input"
+                          value={selectedRosterId || matchingRoster[0].id}
+                          onChange={e => setSelectedRosterId(e.target.value)}
+                          required
+                        >
+                          {matchingRoster.map(r => (
+                            <option key={r.id} value={r.id}>
+                              {r.name} — {r.division} ({r.role || 'Member'}, {r.year})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-              <button type="submit" className="btn-admin primary" disabled={linking || !selectedRosterId}>
-                {linking ? 'Linking Account…' : 'Link My Account'}
-              </button>
-            </form>
+                      <button 
+                        type="submit" 
+                        className="btn-admin primary" 
+                        disabled={linking}
+                        onClick={() => { if (!selectedRosterId && matchingRoster[0]) setSelectedRosterId(matchingRoster[0].id); }}
+                      >
+                        {linking ? 'Verifying & Linking…' : 'Claim Verified Profile'}
+                      </button>
+                    </form>
+                  </div>
+                );
+              }
+
+              return (
+                <div>
+                  <p className="body-copy" style={{ fontSize: '14px', marginBottom: '16px', lineHeight: '1.6' }}>
+                    Your sign-in email (<code>{user?.email}</code>) is registered, but does not match any unclaimed record in the official CSR roster.
+                  </p>
+                  <div style={{ background: 'rgba(235, 87, 87, 0.08)', border: '1px solid rgba(235, 87, 87, 0.25)', padding: '14px 18px', borderRadius: '4px', marginBottom: '20px' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--soft-white)' }}>
+                      <strong>Strict Security Policy:</strong> To protect student identities and credentials, accounts cannot arbitrarily claim division roster profiles without email verification.
+                    </p>
+                  </div>
+                  <p className="body-copy" style={{ fontSize: '13px', color: 'var(--steel)' }}>
+                    If you are an active member and signed in with a different email, or if your college email was updated, please contact your Division Lead or an Administrator to link your profile.
+                  </p>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>

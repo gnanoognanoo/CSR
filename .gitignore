@@ -7,3 +7,5 @@ artifacts/
 tmp/
 *.log
 *.tar.gz
+scripts/parse-full-roster.js
+*.local.sql

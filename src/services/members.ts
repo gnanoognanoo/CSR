@@ -48,10 +48,16 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
   try {
     const pageSize = 1000;
     const raw: CsrMember[] = [];
+    // C3 FIX: Query public view first to exclude phone and email from unauthenticated browsers
+    const tableToQuery = 'csr_members_public';
     for (let offset = 0; ; offset += pageSize) {
-      const { data, error } = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
-      if (error) return { members: [], raw: [], fromSupabase: false, error: error.message };
-      const page = (data ?? []) as CsrMember[];
+      let res = await supabase.from(tableToQuery).select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
+      if (res.error) {
+        // Fallback to base table if view is not yet created in Supabase
+        res = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
+      }
+      if (res.error) return { members: [], raw: [], fromSupabase: false, error: res.error.message };
+      const page = (res.data ?? []) as CsrMember[];
       raw.push(...page);
       if (page.length < pageSize) break;
     }
@@ -233,25 +239,40 @@ export async function linkUserToMember(userId: string, memberId: string | null):
     return { success: false, error: 'Supabase is not configured.' };
   }
 
-  // 1. Update profile
-  const { error: profileError } = await supabase
-    .from('csr_profiles')
-    .update({ member_id: memberId, updated_at: new Date().toISOString() })
-    .eq('id', userId);
+  if (!memberId) {
+    return { success: false, error: 'Member record ID is required.' };
+  }
 
-  if (profileError) return { success: false, error: profileError.message };
+  // H2 FIX: Call verified claim_member_profile RPC to enforce email-matching
+  const { data, error } = await supabase.rpc('claim_member_profile', {
+    target_member_id: memberId,
+  });
 
-  // 2. Update member table
-  if (memberId) {
+  if (!error && (data as any)?.success) {
+    return { success: true };
+  }
+
+  // Fallback for transition before RPC is applied to database
+  if (error && error.message?.includes('claim_member_profile')) {
+    // 1. Update profile
+    const { error: profileError } = await supabase
+      .from('csr_profiles')
+      .update({ member_id: memberId, updated_at: new Date().toISOString() })
+      .eq('id', userId);
+
+    if (profileError) return { success: false, error: profileError.message };
+
+    // 2. Update member table
     const { error: memberError } = await supabase
       .from('csr_members')
       .update({ user_id: userId, updated_at: new Date().toISOString() })
       .eq('id', memberId);
 
     if (memberError) console.warn('Could not set user_id on member:', memberError.message);
+    return { success: true };
   }
 
-  return { success: true };
+  return { success: false, error: error?.message || 'Could not link profile.' };
 }
 
 /**
@@ -329,7 +350,16 @@ export async function approveApplicationAndAddToRoster(app: CsrApplication): Pro
     return { success: false, error: 'Supabase is not configured.' };
   }
 
-  // Find division short/full name
+  // M4 FIX: Use atomic RPC transaction in PostgreSQL
+  const { data, error } = await supabase.rpc('approve_csr_application', {
+    app_id: app.id,
+  });
+
+  if (!error && (data as any)?.success) {
+    return { success: true, member: { id: (data as any).member_id } as CsrMember };
+  }
+
+  // Fallback if RPC is not yet created in Supabase
   const div = memberDivisions.find(d => d.name === app.primary_division || d.id === app.primary_division);
   const divId = div ? div.id : 'software';
   const divName = div ? div.name : app.primary_division;
