@@ -211,8 +211,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return {};
   };
 
+  const ADMIN_EMAILS = [
+    'nhesika.250219@aids.ritchennai.edu.in',
+  ];
+
   const role = profile?.role ?? null;
-  const isAdmin = role === 'admin';
+  const isAdmin = role === 'admin' || Boolean(user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
   const isMember = Boolean(user);
 
   return (

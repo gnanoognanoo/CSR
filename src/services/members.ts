@@ -71,22 +71,25 @@ export async function createMember(input: CreateMemberInput): Promise<{ data: Cs
     return { data: null, error: 'Supabase is not configured yet. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.' };
   }
 
+  const row: Record<string, any> = {
+    name: input.name,
+    division_id: input.division_id,
+    division: input.division,
+    year: input.year,
+    department: input.department,
+    sec: input.sec || null,
+    role: input.role || 'Member',
+    email: input.email || null,
+    phone: input.phone || null,
+    bio: input.bio || null,
+    github_url: input.github_url || null,
+    linkedin_url: input.linkedin_url || null,
+  };
+  if (input.id) row.id = input.id.trim().toLowerCase();
+
   const { data, error } = await supabase
     .from('csr_members')
-    .insert([{
-      name: input.name,
-      division_id: input.division_id,
-      division: input.division,
-      year: input.year,
-      department: input.department,
-      sec: input.sec || null,
-      role: input.role || 'Member',
-      email: input.email || null,
-      phone: input.phone || null,
-      bio: input.bio || null,
-      github_url: input.github_url || null,
-      linkedin_url: input.linkedin_url || null,
-    }])
+    .insert([row])
     .select()
     .single();
 
@@ -106,6 +109,7 @@ export async function updateMember(id: string, input: UpdateMemberInput): Promis
     updated_at: new Date().toISOString(),
   };
 
+  if (input.id !== undefined && input.id.trim()) updates.id = input.id.trim().toLowerCase();
   if (input.name !== undefined) updates.name = input.name;
   if (input.division_id !== undefined) updates.division_id = input.division_id;
   if (input.division !== undefined) updates.division = input.division;

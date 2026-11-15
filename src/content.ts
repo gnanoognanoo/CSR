@@ -1,4 +1,4 @@
-export const navigation = [['/', 'Home'], ['/announcements', 'Announcements'], ['/projects', 'Projects'], ['/members', 'Member portfolio'], ['/join', 'Join Community']];
+export const navigation = [['/', 'Home'], ['/announcements', 'Announcements'], ['/committee', 'Core Committee'], ['/projects', 'Projects'], ['/members', 'Member portfolio'], ['/join', 'Join Community']];
 import { memberDivisions } from './members/data';
 export const divisions = memberDivisions.map(division => [division.name, division.lead ?? ''] as const);
 export const digital = [

@@ -31,6 +31,7 @@ export interface CsrMember {
 }
 
 export interface CreateMemberInput {
+  id?: string;
   name: string;
   division_id: string;
   division: string;
@@ -50,6 +51,18 @@ export interface UpdateMemberInput extends Partial<CreateMemberInput> {
 }
 
 export type ApplicationStatus = 'pending' | 'approved' | 'rejected';
+
+export interface CsrBillboardMember {
+  id: number;
+  position: number; // 1 to 6
+  name: string;
+  title: string;
+  division: string;
+  year?: string;
+  department?: string;
+  avatar_url?: string | null;
+  member_id?: string | null;
+}
 
 export interface CsrApplication {
   id: string;

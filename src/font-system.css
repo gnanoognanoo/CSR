@@ -19,9 +19,9 @@ button,input,select,textarea{font-family:var(--font-body)}
   --text-primary:#101820;--text-secondary:#46515c;--text-muted:#7c8994;--text-accent:#116ea8;
   color:var(--text-primary);
 }
-body:has(.projects-page,.members-page,.announcements-page){
-  --nav-surface:rgba(255,255,255,.96);--nav-text:#101820;--nav-secondary:#46515c;
-  --nav-border:rgba(15,35,50,.16);--nav-hover:#116ea8;
+body:has(.projects-page,.members-page,.announcements-page,.committee-page){
+  --nav-surface:rgba(255,255,255,.92);--nav-text:#101820;--nav-secondary:#46515c;
+  --nav-border:rgba(15,35,50,.14);--nav-hover:#116ea8;
 }
 .site-header,.site-header.is-scrolled{
   background:var(--nav-surface);color:var(--nav-text);border-bottom-color:var(--nav-border);

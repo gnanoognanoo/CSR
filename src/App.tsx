@@ -7,6 +7,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import Home from './Home';
 import Announcements from './announcements/AnnouncementsPage';
 
+const CommitteePage = lazy(() => import('./committee/CommitteePage'));
 const Projects = lazy(() => import('./projects/ProjectOrbitPage'));
 const Members = lazy(() => import('./members/MemberOrbitPage'));
 const LoginPage = lazy(() => import('./auth/LoginPage'));
@@ -58,6 +59,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/announcements" element={<Announcements />} />
+        <Route
+          path="/committee"
+          element={
+            <Suspense fallback={<PageSuspenseFallback label="CSR-RIT / LEADERSHIP" message="Loading core committee…" />}>
+              <CommitteePage />
+            </Suspense>
+          }
+        />
         <Route
           path="/projects"
           element={

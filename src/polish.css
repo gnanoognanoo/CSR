@@ -32,6 +32,20 @@
   margin-top: 6px;
   white-space: nowrap;
 }
+.site-header.is-light {
+  background: var(--nav-surface, rgba(255, 255, 255, .88)) !important;
+  color: var(--nav-text, #101820);
+  border-bottom-color: var(--nav-border, rgba(15, 35, 50, .14));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 2px 14px rgba(6, 26, 46, .04);
+}
+.site-header.is-light.is-scrolled {
+  background: rgba(255, 255, 255, .94) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(15, 35, 50, .06);
+}
 .site-header.is-light .community-wordmark { border-left-color: rgba(15, 35, 50, .16); }
 
 /* Nav links */
