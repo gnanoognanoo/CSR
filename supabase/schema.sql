@@ -59,6 +59,7 @@ END;
 $$;
 
 -- 4. Trigger to automatically provision profile when an auth user signs up
+-- C1 FIX: Always assign 'member'. Never trust client metadata role.
 CREATE OR REPLACE FUNCTION public.handle_new_csr_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -67,13 +68,7 @@ SET search_path = public, pg_temp
 AS $$
 DECLARE
   matched_member_id TEXT;
-  default_role TEXT := 'member';
 BEGIN
-  -- If user provided a role in user metadata (e.g. during initial setup), use it
-  IF NEW.raw_user_meta_data->>'role' IS NOT NULL AND NEW.raw_user_meta_data->>'role' IN ('admin', 'member', 'lead') THEN
-    default_role := NEW.raw_user_meta_data->>'role';
-  END IF;
-
   -- Attempt to auto-link with roster if verified email matches
   SELECT id INTO matched_member_id
   FROM csr_members
@@ -85,7 +80,7 @@ BEGIN
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
-    default_role,
+    'member', -- C1 FIX: Always 'member'. Admin must be promoted from SQL Editor or by existing admin
     matched_member_id
   )
   ON CONFLICT (id) DO UPDATE
@@ -105,7 +100,7 @@ $$;
 DROP TRIGGER IF EXISTS on_auth_user_created_csr ON auth.users;
 CREATE TRIGGER on_auth_user_created_csr
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_csr_user();
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_csr_user();
 
 -- 5. Enable Row Level Security (RLS)
 ALTER TABLE csr_members ENABLE ROW LEVEL SECURITY;
