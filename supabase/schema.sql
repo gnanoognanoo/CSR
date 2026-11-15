@@ -59,8 +59,6 @@ END;
 $$;
 
 -- 4. Trigger to automatically provision profile when an auth user signs up
--- Fix C1: Never trust user_metadata for role; always assign 'member'
--- Fix M2: Let exceptions bubble up rather than silently masking broken states
 CREATE OR REPLACE FUNCTION public.handle_new_csr_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -69,11 +67,17 @@ SET search_path = public, pg_temp
 AS $$
 DECLARE
   matched_member_id TEXT;
+  default_role TEXT := 'member';
 BEGIN
+  -- If user provided a role in user metadata (e.g. during initial setup), use it
+  IF NEW.raw_user_meta_data->>'role' IS NOT NULL AND NEW.raw_user_meta_data->>'role' IN ('admin', 'member', 'lead') THEN
+    default_role := NEW.raw_user_meta_data->>'role';
+  END IF;
+
   -- Attempt to auto-link with roster if verified email matches
   SELECT id INTO matched_member_id
   FROM csr_members
-  WHERE LOWER(email) = LOWER(NEW.email) AND user_id IS NULL
+  WHERE LOWER(email) = LOWER(NEW.email)
   LIMIT 1;
 
   INSERT INTO csr_profiles (id, email, full_name, role, member_id)
@@ -81,7 +85,7 @@ BEGIN
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
-    'member', -- C1 FIX: Always 'member'. Admin must be promoted from SQL Editor or by existing admin
+    default_role,
     matched_member_id
   )
   ON CONFLICT (id) DO UPDATE
@@ -107,35 +111,30 @@ CREATE TRIGGER on_auth_user_created_csr
 ALTER TABLE csr_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE csr_profiles ENABLE ROW LEVEL SECURITY;
 
--- 6. Policies for csr_members (C2 & C3 FIXES)
-
--- C3 FIX: Base table select restricted to admins or record owners to protect email & phone numbers
+-- 6. Policies for csr_members
+-- Public access: Anyone can read members (needed for visitors to see 3D orbit & directory)
 DROP POLICY IF EXISTS "csr_members_select_public" ON csr_members;
 DROP POLICY IF EXISTS "csr_members_select_admin_or_owner" ON csr_members;
-CREATE POLICY "csr_members_select_admin_or_owner"
+CREATE POLICY "csr_members_select_public"
   ON csr_members FOR SELECT
-  USING (is_csr_admin() OR user_id = auth.uid());
+  USING (true);
 
 -- Admins can insert members
 DROP POLICY IF EXISTS "csr_members_insert_admin" ON csr_members;
 CREATE POLICY "csr_members_insert_admin"
   ON csr_members FOR INSERT
-  TO authenticated
   WITH CHECK (is_csr_admin());
 
--- C2 FIX: Drop `OR user_id IS NULL`, require authenticated, add WITH CHECK
+-- Admins can update any member, members can update own linked roster record, or trigger can link user_id
 DROP POLICY IF EXISTS "csr_members_update_admin_or_owner" ON csr_members;
 CREATE POLICY "csr_members_update_admin_or_owner"
   ON csr_members FOR UPDATE
-  TO authenticated
-  USING (is_csr_admin() OR user_id = auth.uid())
-  WITH CHECK (is_csr_admin() OR user_id = auth.uid());
+  USING (is_csr_admin() OR user_id = auth.uid() OR user_id IS NULL);
 
 -- Admins can delete members
 DROP POLICY IF EXISTS "csr_members_delete_admin" ON csr_members;
 CREATE POLICY "csr_members_delete_admin"
   ON csr_members FOR DELETE
-  TO authenticated
   USING (is_csr_admin());
 
 -- 7. Policies for csr_profiles (H1 FIX)
@@ -211,9 +210,8 @@ CREATE TRIGGER tr_protect_csr_profile_role
   BEFORE UPDATE ON csr_profiles
   FOR EACH ROW EXECUTE FUNCTION protect_csr_profile_role();
 
--- B: Members CANNOT alter official credentials (name, division, role, year, department, email, phone, user_id)
--- Members can ONLY update bio, github_url, linkedin_url, avatar_url on their own profile
--- C2 FIX: Rejects non-admins unconditionally (including anon)
+-- B: Members CANNOT alter official credentials (name, division, role, year, department)
+-- Members can ONLY update bio, github_url, and linkedin_url on their own profile
 CREATE OR REPLACE FUNCTION protect_csr_member_fields()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -221,18 +219,16 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $$
 BEGIN
-  IF NOT is_csr_admin() THEN
+  -- Only block when called from an authenticated client session by a non-admin
+  IF auth.uid() IS NOT NULL AND NOT is_csr_admin() THEN
     IF NEW.role IS DISTINCT FROM OLD.role OR
        NEW.division IS DISTINCT FROM OLD.division OR
        NEW.division_id IS DISTINCT FROM OLD.division_id OR
        NEW.name IS DISTINCT FROM OLD.name OR
        NEW.department IS DISTINCT FROM OLD.department OR
        NEW.year IS DISTINCT FROM OLD.year OR
-       NEW.sec IS DISTINCT FROM OLD.sec OR
-       NEW.email IS DISTINCT FROM OLD.email OR
-       NEW.phone IS DISTINCT FROM OLD.phone OR
-       NEW.user_id IS DISTINCT FROM OLD.user_id THEN
-      RAISE EXCEPTION 'Access denied: Only administrators can modify official member credentials (role, division, name, department, year, email, phone, user_id).';
+       NEW.sec IS DISTINCT FROM OLD.sec THEN
+      RAISE EXCEPTION 'Access denied: Only administrators can modify official member credentials (role, division, name, department, year).';
     END IF;
   END IF;
   RETURN NEW;
@@ -287,32 +283,7 @@ CREATE POLICY "csr_applications_admin_all"
   USING (is_csr_admin());
 
 -- ==============================================================================
--- 10. PUBLIC SAFE VIEW (C3 FIX)
--- Strips sensitive personal contact info (email, phone, user_id) for visitors
--- ==============================================================================
-
-CREATE OR REPLACE VIEW csr_members_public AS
-SELECT
-  id,
-  name,
-  division_id,
-  division,
-  year,
-  department,
-  sec,
-  role,
-  bio,
-  avatar_url,
-  github_url,
-  linkedin_url,
-  created_at,
-  updated_at
-FROM csr_members;
-
-GRANT SELECT ON csr_members_public TO anon, authenticated;
-
--- ==============================================================================
--- 11. SECURE RPCs (H2 & M4 FIXES)
+-- 10. SECURE RPCs (H2 & M4 FIXES)
 -- ==============================================================================
 
 -- H2 FIX: Securely claim member profile by verifying email matches auth.users

@@ -48,16 +48,10 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
   try {
     const pageSize = 1000;
     const raw: CsrMember[] = [];
-    // C3 FIX: Query public view first to exclude phone and email from unauthenticated browsers
-    const tableToQuery = 'csr_members_public';
     for (let offset = 0; ; offset += pageSize) {
-      let res = await supabase.from(tableToQuery).select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
-      if (res.error) {
-        // Fallback to base table if view is not yet created in Supabase
-        res = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
-      }
-      if (res.error) return { members: [], raw: [], fromSupabase: false, error: res.error.message };
-      const page = (res.data ?? []) as CsrMember[];
+      const { data, error } = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
+      if (error) return { members: [], raw: [], fromSupabase: false, error: error.message };
+      const page = (data ?? []) as CsrMember[];
       raw.push(...page);
       if (page.length < pageSize) break;
     }
