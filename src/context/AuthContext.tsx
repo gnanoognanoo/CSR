@@ -45,11 +45,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // If user exists in auth.users but no profile in csr_profiles, create one
+      // C1 FIX: Never trust client-supplied user_metadata for role; always assign 'member'
       const newProfile: Partial<CsrProfile> = {
         id: currentUser.id,
         email: currentUser.email || '',
         full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Member',
-        role: (currentUser.user_metadata?.role as UserRole) || 'member',
+        role: 'member',
       };
 
       const { data: inserted, error: insertError } = await supabase
