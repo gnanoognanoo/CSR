@@ -43,9 +43,26 @@ export default function JoinCommunityPage() {
     e.preventDefault();
     setErrorMsg(null);
 
+    // Anti-spam rate limiting check (H3)
+    const lastSubmitTime = localStorage.getItem('csr_last_app_submit');
+    if (lastSubmitTime && Date.now() - parseInt(lastSubmitTime, 10) < 60000) {
+      const waitSec = Math.ceil((60000 - (Date.now() - parseInt(lastSubmitTime, 10))) / 1000);
+      setErrorMsg(`Please wait ${waitSec} seconds before submitting another application.`);
+      return;
+    }
+
     if (!formData.criteria_accepted) {
       setErrorMsg('Please confirm you accept the cohort criteria before submitting.');
       return;
+    }
+
+    // URL validation (M3 / H3)
+    if (formData.portfolio_link && formData.portfolio_link.trim() !== '') {
+      const trimmedUrl = formData.portfolio_link.trim();
+      if (!/^https?:\/\//i.test(trimmedUrl)) {
+        setErrorMsg('Portfolio or project link must start with https:// or http://');
+        return;
+      }
     }
 
     setSubmitting(true);
@@ -55,6 +72,7 @@ export default function JoinCommunityPage() {
     if (res.error) {
       setErrorMsg(`Submission failed: ${res.error}`);
     } else {
+      localStorage.setItem('csr_last_app_submit', Date.now().toString());
       setSubmitted(true);
     }
   }
@@ -157,6 +175,7 @@ export default function JoinCommunityPage() {
                   className="form-input"
                   type="text"
                   required
+                  maxLength={100}
                   placeholder="e.g. Anto Jenishia A"
                   value={formData.full_name}
                   onChange={e => setFormData({ ...formData, full_name: e.target.value })}
@@ -170,6 +189,7 @@ export default function JoinCommunityPage() {
                   id="app-regno"
                   className="form-input"
                   type="text"
+                  maxLength={30}
                   placeholder="e.g. 2117240101001"
                   value={formData.reg_no}
                   onChange={e => setFormData({ ...formData, reg_no: e.target.value })}
@@ -184,6 +204,7 @@ export default function JoinCommunityPage() {
                   className="form-input"
                   type="email"
                   required
+                  maxLength={150}
                   placeholder="name.250000@dept.ritchennai.edu.in"
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -198,6 +219,7 @@ export default function JoinCommunityPage() {
                   className="form-input"
                   type="tel"
                   required
+                  maxLength={30}
                   placeholder="10-digit mobile number"
                   value={formData.phone}
                   onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -242,6 +264,7 @@ export default function JoinCommunityPage() {
                   id="app-sec"
                   className="form-input"
                   type="text"
+                  maxLength={10}
                   placeholder="e.g. A, B, C"
                   value={formData.sec}
                   onChange={e => setFormData({ ...formData, sec: e.target.value })}
@@ -286,6 +309,7 @@ export default function JoinCommunityPage() {
                   id="app-skills"
                   className="form-input"
                   type="text"
+                  maxLength={1000}
                   placeholder="e.g. Python, ROS, Arduino, C++, React, Figma, PCB Design, OpenCV…"
                   value={formData.technical_skills}
                   onChange={e => setFormData({ ...formData, technical_skills: e.target.value })}
@@ -299,6 +323,7 @@ export default function JoinCommunityPage() {
                   id="app-portfolio"
                   className="form-input"
                   type="url"
+                  maxLength={500}
                   placeholder="https://github.com/username or project drive link"
                   value={formData.portfolio_link}
                   onChange={e => setFormData({ ...formData, portfolio_link: e.target.value })}
@@ -315,6 +340,7 @@ export default function JoinCommunityPage() {
                   className="form-input"
                   rows={4}
                   required
+                  maxLength={5000}
                   placeholder="Describe your technical interests, past projects you've explored, or ideas you wish to develop with the CSR community…"
                   value={formData.statement_of_purpose}
                   onChange={e => setFormData({ ...formData, statement_of_purpose: e.target.value })}
