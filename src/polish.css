@@ -3,21 +3,12 @@
    Header, brand lockup, nav buttons, footer and global control sizing.
    ============================================================================== */
 
-:root { --header-h: 88px; --gutter: clamp(16px, 4vw, 56px); }
-@media (max-width: 760px) { :root { --header-h: 72px; } }
+:root { --header-h: 76px; --gutter: clamp(16px, 4vw, 56px); }
+@media (max-width: 760px) { :root { --header-h: 64px; } }
 
-/* ---------- Header ---------- */
-.site-header {
-  height: var(--header-h);
-  padding: 0 var(--gutter);
-  gap: 28px;
-}
-.site-header .header-note { display: none; }
-
-/* Brand lockup: transparent RIT logo + CSR—RIT wordmark */
+/* ---------- Brand lockup (header styles live in nav.css) ---------- */
 .brand { gap: 18px; }
 .rit-logo { width: auto; max-width: none; object-fit: contain; }
-.site-header .rit-logo { height: 38px; width: auto; }
 .community-wordmark {
   font-size: 22px;
   line-height: 1;
@@ -31,168 +22,6 @@
   text-transform: uppercase;
   margin-top: 6px;
   white-space: nowrap;
-}
-.site-header.is-light {
-  background: var(--nav-surface, rgba(255, 255, 255, .88)) !important;
-  color: var(--nav-text, #101820);
-  border-bottom-color: var(--nav-border, rgba(15, 35, 50, .14));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 2px 14px rgba(6, 26, 46, .04);
-}
-.site-header.is-light.is-scrolled {
-  background: rgba(255, 255, 255, .94) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 20px rgba(15, 35, 50, .06);
-}
-.site-header.is-light .community-wordmark { border-left-color: rgba(15, 35, 50, .16); }
-
-/* Nav links */
-.site-header nav { gap: 30px; align-items: center; }
-.site-header nav a {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  padding: 12px 0;
-}
-.site-header nav a.active:after { bottom: 4px; width: 18px; }
-.site-header.is-light nav a { color: #46515c; }
-.site-header.is-light nav a.active { color: #101820; }
-.site-header.is-light nav a:hover,
-.site-header.is-light nav a:focus-visible { color: #116ea8; }
-
-/* Action buttons (Join / Sign In) — specificity beats the route-scoped nav rules */
-.site-header nav .nav-actions { display: flex; align-items: center; gap: 10px; margin-left: 6px; }
-.site-header nav .nav-actions a.nav-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-height: 42px;
-  padding: 0 20px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s;
-}
-.site-header nav .nav-actions a.nav-pill:after { content: none; }
-.nav-pill-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #39d353; box-shadow: 0 0 0 3px rgba(57, 211, 83, .22);
-  flex-shrink: 0;
-}
-
-/* Primary (Join) — same on every surface */
-.site-header nav .nav-actions a.nav-pill--primary,
-.site-header nav .nav-actions a.nav-pill--primary.active {
-  background: #1677c8; border-color: #1677c8; color: #fff;
-}
-.site-header nav .nav-actions a.nav-pill--primary:hover,
-.site-header nav .nav-actions a.nav-pill--primary:focus-visible {
-  background: #1b85df; border-color: #1b85df; color: #fff;
-  box-shadow: 0 6px 18px rgba(22, 119, 200, .35);
-}
-
-/* Outline (Sign In) — dark surfaces */
-.site-header nav .nav-actions a.nav-pill--outline {
-  background: rgba(255, 255, 255, .04);
-  border-color: rgba(255, 255, 255, .45);
-  color: #fff;
-}
-.site-header nav .nav-actions a.nav-pill--outline:hover,
-.site-header nav .nav-actions a.nav-pill--outline:focus-visible,
-.site-header nav .nav-actions a.nav-pill--outline.active {
-  background: rgba(255, 255, 255, .12);
-  border-color: #fff;
-  color: #fff;
-}
-/* Outline (Sign In) — light surfaces */
-.site-header.is-light nav .nav-actions a.nav-pill--outline {
-  background: #fff;
-  border-color: rgba(15, 35, 50, .28);
-  color: #101820;
-}
-.site-header.is-light nav .nav-actions a.nav-pill--outline:hover,
-.site-header.is-light nav .nav-actions a.nav-pill--outline:focus-visible {
-  background: #edf6fc;
-  border-color: #116ea8;
-  color: #116ea8;
-}
-
-/* Menu toggle */
-.site-header .menu-toggle {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  min-height: 44px;
-  padding: 0 4px 0 12px;
-}
-
-/* ---------- Medium screens: tighten ---------- */
-@media (max-width: 1360px) {
-  .site-header { gap: 22px; }
-  .site-header nav { gap: 22px; }
-  .site-header .rit-logo { height: 34px; }
-  .community-wordmark { font-size: 20px; padding-left: 14px; }
-  .brand { gap: 14px; }
-  .site-header .community-wordmark small { display: none; }
-}
-
-/* ---------- Collapsed navigation (tablet + phone) ---------- */
-@media (max-width: 1100px) {
-  .site-header .menu-toggle {
-    display: flex; gap: 12px; margin-left: auto; align-items: center;
-    background: transparent; border: 0; cursor: pointer;
-    font-family: var(--font-mono); text-transform: uppercase;
-  }
-  .site-header .menu-toggle span { font-size: 22px; line-height: 1; }
-  .site-header nav {
-    display: none;
-    position: absolute; left: 0; right: 0; top: var(--header-h);
-    margin: 0;
-    padding: 8px var(--gutter) 24px;
-    background: var(--nav-surface);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--nav-border);
-    box-shadow: 0 18px 40px rgba(3, 15, 28, .25);
-  }
-  .site-header.is-dark nav { background: rgba(6, 22, 40, .98); }
-  .site-header.is-light nav { background: rgba(255, 255, 255, .99); }
-  .site-header nav.is-open { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
-  .site-header nav a,
-  .site-header nav a:not(:first-child) {
-    display: block; width: auto;
-    font-size: 15px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--nav-border);
-  }
-  .site-header nav a.active:after { bottom: 10px; }
-  .site-header nav .nav-actions { margin: 20px 0 0; gap: 12px; }
-  .site-header nav .nav-actions a.nav-pill { flex: 1; min-height: 48px; font-size: 14px; border-bottom-width: 1px; }
-}
-@media (max-width: 760px) {
-  .site-header { padding: 0 20px; }
-  .site-header .rit-logo { height: 30px; }
-  .community-wordmark { font-size: 18px; padding-left: 12px; }
-  .brand { gap: 12px; }
-}
-@media (max-width: 370px) {
-  .site-header { gap: 12px; padding: 0 16px; }
-  .site-header .rit-logo { height: 26px; }
-  .community-wordmark { font-size: 16px; padding-left: 10px; }
-  .brand { gap: 10px; }
-  .site-header nav .nav-actions { flex-direction: column; align-items: stretch; }
-}
-@media (max-width: 340px) {
-  .site-header .community-wordmark { display: none; }
 }
 
 /* ---------- Footer ---------- */
