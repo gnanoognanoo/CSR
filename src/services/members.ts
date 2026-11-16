@@ -49,7 +49,8 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
     const pageSize = 1000;
     const raw: CsrMember[] = [];
     for (let offset = 0; ; offset += pageSize) {
-      const { data, error } = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
+      // C3 FIX: Public query strictly uses csr_members_public (no email, phone, or user_id)
+      const { data, error } = await supabase.from('csr_members_public').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
       if (error) return { members: [], raw: [], fromSupabase: false, error: error.message };
       const page = (data ?? []) as CsrMember[];
       raw.push(...page);
@@ -60,6 +61,69 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
   } catch (err: any) {
     console.error('Unexpected error fetching members:', err);
     return { members: [], raw: [], fromSupabase: false, error: err.message };
+  }
+}
+
+/**
+ * Fetch all members including private contact info (Admin Console only).
+ * Queries the protected base table csr_members (restricted via RLS).
+ */
+export async function getAdminMembers(): Promise<{ members: CsrMember[]; error?: string }> {
+  if (!isSupabaseConfigured) {
+    return { members: [], error: 'Supabase is not configured yet.' };
+  }
+
+  try {
+    const pageSize = 1000;
+    const raw: CsrMember[] = [];
+    for (let offset = 0; ; offset += pageSize) {
+      const { data, error } = await supabase
+        .from('csr_members')
+        .select('*')
+        .order('id', { ascending: true })
+        .range(offset, offset + pageSize - 1);
+      if (error) return { members: [], error: error.message };
+      const page = (data ?? []) as CsrMember[];
+      raw.push(...page);
+      if (page.length < pageSize) break;
+    }
+    return { members: raw };
+  } catch (err: any) {
+    console.error('Unexpected error fetching admin members:', err);
+    return { members: [], error: err.message };
+  }
+}
+
+export interface ClaimCandidate {
+  id: string;
+  name: string;
+  division: string;
+  role?: string;
+  year?: string;
+  sec?: string;
+}
+
+/**
+ * Fetch targeted candidate roster record matching the authenticated user's email.
+ * Selects only necessary display fields, never select('*').
+ */
+export async function getClaimCandidateForEmail(email: string): Promise<{ candidate: ClaimCandidate | null; error?: string }> {
+  if (!isSupabaseConfigured || !email) {
+    return { candidate: null };
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('csr_members')
+      .select('id, name, division, role, year, sec')
+      .ilike('email', email.trim())
+      .is('user_id', null)
+      .maybeSingle();
+
+    if (error) return { candidate: null, error: error.message };
+    return { candidate: data as ClaimCandidate | null };
+  } catch (err: any) {
+    return { candidate: null, error: err.message };
   }
 }
 

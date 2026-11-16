@@ -107,12 +107,41 @@ ALTER TABLE csr_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE csr_profiles ENABLE ROW LEVEL SECURITY;
 
 -- 6. Policies for csr_members
--- Public access: Anyone can read members (needed for visitors to see 3D orbit & directory)
+-- C3 FIX: Public-safe view exposing only approved directory metadata (no email, phone, or user_id)
+CREATE OR REPLACE VIEW public.csr_members_public AS
+SELECT
+  id,
+  name,
+  division_id,
+  division,
+  year,
+  department,
+  sec,
+  role,
+  bio,
+  avatar_url,
+  github_url,
+  linkedin_url,
+  created_at,
+  updated_at
+FROM public.csr_members;
+
+GRANT SELECT ON public.csr_members_public TO anon, authenticated;
+
+-- C3 FIX: Restrict base-table SELECT to authenticated admins, owners, and matching claim candidates
 DROP POLICY IF EXISTS "csr_members_select_public" ON csr_members;
 DROP POLICY IF EXISTS "csr_members_select_admin_or_owner" ON csr_members;
-CREATE POLICY "csr_members_select_public"
+CREATE POLICY "csr_members_select_admin_or_owner"
   ON csr_members FOR SELECT
-  USING (true);
+  TO authenticated
+  USING (
+    is_csr_admin()
+    OR user_id = auth.uid()
+    OR (email IS NOT NULL AND LOWER(email) = LOWER(auth.jwt()->>'email'))
+  );
+
+GRANT SELECT ON public.csr_members TO authenticated;
+REVOKE SELECT ON public.csr_members FROM anon;
 
 -- Admins can insert members
 DROP POLICY IF EXISTS "csr_members_insert_admin" ON csr_members;
@@ -120,11 +149,13 @@ CREATE POLICY "csr_members_insert_admin"
   ON csr_members FOR INSERT
   WITH CHECK (is_csr_admin());
 
--- Admins can update any member, members can update own linked roster record, or trigger can link user_id
+-- Admins can update any member, members can update own linked roster record (C2 FIX)
 DROP POLICY IF EXISTS "csr_members_update_admin_or_owner" ON csr_members;
 CREATE POLICY "csr_members_update_admin_or_owner"
   ON csr_members FOR UPDATE
-  USING (is_csr_admin() OR user_id = auth.uid() OR user_id IS NULL);
+  TO authenticated
+  USING (is_csr_admin() OR (auth.uid() IS NOT NULL AND user_id = auth.uid()))
+  WITH CHECK (is_csr_admin() OR (auth.uid() IS NOT NULL AND user_id = auth.uid()));
 
 -- Admins can delete members
 DROP POLICY IF EXISTS "csr_members_delete_admin" ON csr_members;
