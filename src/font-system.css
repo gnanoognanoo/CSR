@@ -19,7 +19,7 @@ button,input,select,textarea{font-family:var(--font-body)}
   --text-primary:#101820;--text-secondary:#46515c;--text-muted:#7c8994;--text-accent:#116ea8;
   color:var(--text-primary);
 }
-body:has(.projects-page,.members-page,.announcements-page,.committee-page){
+body:has(.projects-page,.members-page,.announcements-page,.committee-page,.join-page,.auth-page,.portal-page){
   --nav-surface:rgba(255,255,255,.92);--nav-text:#101820;--nav-secondary:#46515c;
   --nav-border:rgba(15,35,50,.14);--nav-hover:#116ea8;
 }

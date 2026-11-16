@@ -10,21 +10,27 @@
 .site-header {
   height: var(--header-h);
   padding: 0 var(--gutter);
-  gap: 28px;
+  gap: clamp(16px, 2vw, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .site-header .header-note { display: none; }
 
 /* Brand lockup: transparent RIT logo + CSR—RIT wordmark */
-.brand { gap: 18px; }
+.brand { gap: 16px; align-items: center; }
 .rit-logo { width: auto; max-width: none; object-fit: contain; }
-.site-header .rit-logo { height: 38px; width: auto; }
+.site-header .rit-logo { height: 36px; width: auto; }
 .community-wordmark {
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1;
-  padding-left: 18px;
+  padding-left: 16px;
   border-left: 1px solid var(--line);
 }
-.brand .community-wordmark small {
+.site-header .community-wordmark small {
+  display: none;
+}
+.footer .brand .community-wordmark small {
   font-size: 10px;
   line-height: 1.4;
   letter-spacing: .14em;
@@ -48,39 +54,63 @@
 }
 .site-header.is-light .community-wordmark { border-left-color: rgba(15, 35, 50, .16); }
 
-/* Nav links */
-.site-header nav { gap: 30px; align-items: center; }
+/* Nav links — single-line, clean rhythm without multi-line wrapping */
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.8vw, 26px);
+  margin-left: auto;
+}
 .site-header nav a {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 13px;
-  letter-spacing: .06em;
+  font-size: 12.5px;
+  letter-spacing: .05em;
   text-transform: uppercase;
-  padding: 12px 0;
+  padding: 8px 0;
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
 }
-.site-header nav a.active:after { bottom: 4px; width: 18px; }
+.site-header nav a.active:after { bottom: 0; width: 16px; }
 .site-header.is-light nav a { color: #46515c; }
 .site-header.is-light nav a.active { color: #101820; }
 .site-header.is-light nav a:hover,
 .site-header.is-light nav a:focus-visible { color: #116ea8; }
 
-/* Action buttons (Join / Sign In) — specificity beats the route-scoped nav rules */
-.site-header nav .nav-actions { display: flex; align-items: center; gap: 10px; margin-left: 6px; }
+@media (max-width: 1360px) and (min-width: 1141px) {
+  .site-header nav { gap: clamp(10px, 1.2vw, 16px); }
+  .site-header nav a { font-size: 11.5px; }
+  .site-header nav .nav-actions { gap: 6px; margin-left: 2px; }
+  .site-header nav .nav-actions a.nav-pill { padding: 0 12px; font-size: 11.5px; }
+}
+
+/* Action buttons (Join / Sign In) — sleek & proportional */
+.site-header nav .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
 .site-header nav .nav-actions a.nav-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-height: 42px;
-  padding: 0 20px;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
   border: 1px solid transparent;
   border-radius: 6px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: .06em;
+  letter-spacing: .05em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: nowrap !important;
+  flex-shrink: 0;
   transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s;
 }
 .site-header nav .nav-actions a.nav-pill:after { content: none; }
@@ -138,16 +168,14 @@
 
 /* ---------- Medium screens: tighten ---------- */
 @media (max-width: 1360px) {
-  .site-header { gap: 22px; }
-  .site-header nav { gap: 22px; }
+  .site-header { gap: 18px; }
   .site-header .rit-logo { height: 34px; }
   .community-wordmark { font-size: 20px; padding-left: 14px; }
   .brand { gap: 14px; }
-  .site-header .community-wordmark small { display: none; }
 }
 
 /* ---------- Collapsed navigation (tablet + phone) ---------- */
-@media (max-width: 1100px) {
+@media (max-width: 1140px) {
   .site-header .menu-toggle {
     display: flex; gap: 12px; margin-left: auto; align-items: center;
     background: transparent; border: 0; cursor: pointer;

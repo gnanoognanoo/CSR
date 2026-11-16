@@ -4,7 +4,7 @@ import { navigation, digital } from './content';
 import { memberDivisions } from './members/data';
 import { useAuth } from './context/AuthContext';
 /** Routes that render on a light surface; the header and logo switch to their dark-ink variants there. */
-const LIGHT_ROUTES = ['/projects', '/members', '/announcements', '/committee'];
+const LIGHT_ROUTES = ['/projects', '/members', '/announcements', '/committee', '/join', '/login', '/portal'];
 export const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 
 type Tone = 'dark' | 'light';
@@ -35,11 +35,19 @@ export function Header(){
     <header className={headerClass}>
       <Brand tone={light ? 'light' : 'dark'} />
       <nav id="main-nav" className={open ? 'is-open' : ''} aria-label="Main navigation">
-        {navigation.filter(([path]) => path !== '/join').map(([path, label]) => <NavLink key={path} to={path} end={path === '/'}>{label}</NavLink>)}
+        {navigation.filter(([path]) => path !== '/join').map(([path, label]) => (
+          <NavLink key={path} to={path} end={path === '/'}>
+            {label}
+          </NavLink>
+        ))}
         {user && <NavLink to="/portal">Portal</NavLink>}
-        {isAdmin && <NavLink to="/admin">Admin</NavLink>}
         <div className="nav-actions">
-          {navigation.filter(([path]) => path === '/join').map(([path, label]) => <NavLink key={path} to={path} className="nav-pill nav-pill--primary"><span className="nav-pill-dot" aria-hidden="true" />{label}</NavLink>)}
+          {navigation.filter(([path]) => path === '/join').map(([path, label]) => (
+            <NavLink key={path} to={path} className="nav-pill nav-pill--primary">
+              <span className="nav-pill-dot" aria-hidden="true" />
+              {label}
+            </NavLink>
+          ))}
           {!user
             ? <NavLink to="/login" className="nav-pill nav-pill--outline">Sign In</NavLink>
             : <NavLink to={isAdmin ? '/admin' : '/portal'} className="nav-pill nav-pill--outline">{profile?.role || 'Account'}</NavLink>}

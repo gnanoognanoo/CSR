@@ -48,6 +48,8 @@ export default function App() {
     if (pathname === '/login') title = 'Sign In — CSR-RIT';
     else if (pathname === '/admin') title = 'Admin Portal — CSR-RIT';
     else if (pathname === '/portal') title = 'Member Portal — CSR-RIT';
+    else if (pathname === '/members') title = 'Member Portfolio — CSR-RIT';
+    else if (pathname === '/committee') title = 'Core Committee — CSR-RIT';
     else if (match) title = `${match[1]} — CSR-RIT`;
     document.title = title;
   }, [pathname]);

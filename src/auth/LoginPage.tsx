@@ -2,7 +2,19 @@ import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Label } from '../components';
+import EngineeringEnvironment from '../background/EngineeringEnvironment';
 import './auth.css';
+
+function useMedia(query: string) {
+  const [matches, setMatches] = useState(() => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false));
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -19,6 +31,8 @@ export default function LoginPage() {
   const { user, signIn, signUp, resendVerification, isConfigured } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const compact = useMedia('(max-width: 760px)');
+  const reducedMotion = useMedia('(prefers-reduced-motion: reduce)');
 
   const from = (location.state as any)?.from?.pathname || '/portal';
 
@@ -122,25 +136,41 @@ export default function LoginPage() {
   }
 
   return (
-    <main id="main-content" className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <Label>CSR-RIT / ACCESS GATEWAY</Label>
-          <h1>
-            {verificationSentEmail
-              ? 'Verify Email'
-              : isSignUp
-              ? 'Create Account'
-              : 'Portal Sign In'}
-          </h1>
-          <p>
-            {verificationSentEmail
-              ? 'Complete your registration to activate your CSR student engineer profile.'
-              : isSignUp
-              ? 'Join the CSR engineering community to manage your portfolio and division access.'
-              : 'Sign in to access your member dashboard, division assets, and admin controls.'}
-          </p>
+    <main id="main-content" className="auth-page" aria-label="CSR-RIT Portal Authentication">
+      <EngineeringEnvironment
+        variant="members"
+        motion={{ rotation: 0 }}
+        compact={compact}
+        reducedMotion={reducedMotion}
+        paused={false}
+      />
+      <div className="auth-card-wrap">
+        <div className="auth-medallion" aria-hidden="true">
+          <img src="/brand/rit-emblem.png" alt="" />
+          <strong>CSR-RIT</strong>
+          <small>PORTAL</small>
         </div>
+
+        <div className="auth-card">
+          <div className="auth-header">
+            <Label>CSR-RIT / ACCESS GATEWAY</Label>
+            <h1>
+              {verificationSentEmail ? (
+                'Verify Email'
+              ) : isSignUp ? (
+                <>Create Account<span>.</span></>
+              ) : (
+                <>Portal Sign In<span>.</span></>
+              )}
+            </h1>
+            <p>
+              {verificationSentEmail
+                ? 'Complete your registration to activate your CSR student engineer profile.'
+                : isSignUp
+                ? 'Join the CSR engineering community to manage your portfolio and division access.'
+                : 'Sign in to access your member dashboard, division assets, and admin controls.'}
+            </p>
+          </div>
 
         {!isConfigured && (
           <div className="auth-alert error" style={{ marginBottom: '20px' }}>
@@ -312,6 +342,7 @@ export default function LoginPage() {
         <div className="auth-footer">
           <Link to="/">← Back to CSR-RIT</Link>
         </div>
+      </div>
       </div>
     </main>
   );
