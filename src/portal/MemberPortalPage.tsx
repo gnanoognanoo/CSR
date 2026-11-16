@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getMemberByUserId, getMembers, updateMember, linkUserToMember } from '../services/members';
+import { getMemberByUserId, getMembers, updateMember, linkUserToMember, getClaimCandidateForEmail, type ClaimCandidate } from '../services/members';
 import type { CsrMember } from '../types/database.types';
 import { memberDivisions, getMemberStats } from '../members/data';
 import { Label } from '../components';
@@ -14,8 +14,8 @@ export default function MemberPortalPage() {
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Link selector state
-  const [allRoster, setAllRoster] = useState<CsrMember[]>([]);
+  // Link selector state (C3 FIX: Targeted candidate instead of bulk roster download)
+  const [claimCandidate, setClaimCandidate] = useState<ClaimCandidate | null>(null);
   const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
   const [rosterError, setRosterError] = useState('');
   const [rosterCountsLoading, setRosterCountsLoading] = useState(true);
@@ -37,10 +37,13 @@ export default function MemberPortalPage() {
       setBio(m.bio || '');
       setGithubUrl(m.github_url || '');
       setLinkedinUrl(m.linkedin_url || '');
-    } else {
-      // Load roster list so user can self-claim/link their record
-      const res = await getMembers();
-      setAllRoster(res.raw);
+    } else if (user?.email) {
+      // C3 FIX: Targeted candidate search by verified user email (no bulk roster download)
+      const { candidate } = await getClaimCandidateForEmail(user.email);
+      setClaimCandidate(candidate);
+      if (candidate) {
+        setSelectedRosterId(candidate.id);
+      }
     }
 
     setLoading(false);
@@ -246,64 +249,52 @@ export default function MemberPortalPage() {
             <span className="stat-label">Member Verification</span>
             <h2 style={{ fontSize: '28px', margin: '12px 0' }}>Connect Your Member Profile</h2>
             
-            {(() => {
-              const matchingRoster = allRoster.filter(r => 
-                r.email && user?.email && r.email.trim().toLowerCase() === user.email.trim().toLowerCase()
-              );
-
-              if (matchingRoster.length > 0) {
-                return (
-                  <div>
-                    <p className="body-copy" style={{ fontSize: '14px', marginBottom: '18px' }}>
-                      We found an official roster record matching your verified email (<strong>{user?.email}</strong>):
-                    </p>
-                    <form onSubmit={handleLinkAccount} className="auth-form">
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="roster-select">Matched Roster Record</label>
-                        <select
-                          id="roster-select"
-                          className="form-input"
-                          value={selectedRosterId || matchingRoster[0].id}
-                          onChange={e => setSelectedRosterId(e.target.value)}
-                          required
-                        >
-                          {matchingRoster.map(r => (
-                            <option key={r.id} value={r.id}>
-                              {r.name} — {r.division} ({r.role || 'Member'}, {r.year})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <button 
-                        type="submit" 
-                        className="btn-admin primary" 
-                        disabled={linking}
-                        onClick={() => { if (!selectedRosterId && matchingRoster[0]) setSelectedRosterId(matchingRoster[0].id); }}
-                      >
-                        {linking ? 'Verifying & Linking…' : 'Claim Verified Profile'}
-                      </button>
-                    </form>
+            {claimCandidate ? (
+              <div>
+                <p className="body-copy" style={{ fontSize: '14px', marginBottom: '18px' }}>
+                  We found an official roster record matching your verified email (<strong>{user?.email}</strong>):
+                </p>
+                <form onSubmit={handleLinkAccount} className="auth-form">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="roster-select">Matched Roster Record</label>
+                    <select
+                      id="roster-select"
+                      className="form-input"
+                      value={selectedRosterId || claimCandidate.id}
+                      onChange={e => setSelectedRosterId(e.target.value)}
+                      required
+                    >
+                      <option value={claimCandidate.id}>
+                        {claimCandidate.name} — {claimCandidate.division} ({claimCandidate.role || 'Member'}{claimCandidate.year ? `, ${claimCandidate.year}` : ''})
+                      </option>
+                    </select>
                   </div>
-                );
-              }
 
-              return (
-                <div>
-                  <p className="body-copy" style={{ fontSize: '14px', marginBottom: '16px', lineHeight: '1.6' }}>
-                    Your sign-in email (<code>{user?.email}</code>) is registered, but does not match any unclaimed record in the official CSR roster.
-                  </p>
-                  <div style={{ background: 'rgba(235, 87, 87, 0.08)', border: '1px solid rgba(235, 87, 87, 0.25)', padding: '14px 18px', borderRadius: '4px', marginBottom: '20px' }}>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--soft-white)' }}>
-                      <strong>Strict Security Policy:</strong> To protect student identities and credentials, accounts cannot arbitrarily claim division roster profiles without email verification.
-                    </p>
-                  </div>
-                  <p className="body-copy" style={{ fontSize: '13px', color: 'var(--steel)' }}>
-                    If you are an active member and signed in with a different email, or if your college email was updated, please contact your Division Lead or an Administrator to link your profile.
+                  <button
+                    type="submit"
+                    className="btn-admin primary"
+                    disabled={linking}
+                    onClick={() => { if (!selectedRosterId) setSelectedRosterId(claimCandidate.id); }}
+                  >
+                    {linking ? 'Verifying & Linking…' : 'Claim Verified Profile'}
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div>
+                <p className="body-copy" style={{ fontSize: '14px', marginBottom: '16px', lineHeight: '1.6' }}>
+                  Your sign-in email (<code>{user?.email}</code>) is registered, but does not match any unclaimed record in the official CSR roster.
+                </p>
+                <div style={{ background: 'rgba(235, 87, 87, 0.08)', border: '1px solid rgba(235, 87, 87, 0.25)', padding: '14px 18px', borderRadius: '4px', marginBottom: '20px' }}>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--soft-white)' }}>
+                    <strong>Strict Security Policy:</strong> To protect student identities and credentials, accounts cannot arbitrarily claim division roster profiles without email verification.
                   </p>
                 </div>
-              );
-            })()}
+                <p className="body-copy" style={{ fontSize: '13px', color: 'var(--steel)' }}>
+                  If you are an active member and signed in with a different email, or if your college email was updated, please contact your Division Lead or an Administrator to link your profile.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>

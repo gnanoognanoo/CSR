@@ -101,7 +101,9 @@ export async function getBillboardMembers(): Promise<{ items: CsrBillboardMember
       const mapped = data as CsrBillboardMember[];
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mapped));
-      } catch {}
+      } catch {
+        // ignore localStorage access/quota issues in sandbox or restricted environments
+      }
       return { items: mapped, fromSupabase: true };
     }
 
@@ -118,7 +120,9 @@ export async function saveBillboardMembers(items: CsrBillboardMember[]): Promise
   // Always update localStorage so changes are immediately visible
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
-  } catch {}
+  } catch {
+    // ignore localStorage access/quota issues in sandbox or restricted environments
+  }
 
   if (!isSupabaseConfigured) {
     return { success: true };
