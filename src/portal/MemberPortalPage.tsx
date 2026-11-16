@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { getMemberByUserId, getMembers, updateMember, linkUserToMember, getClaimCandidateForEmail, type ClaimCandidate } from '../services/members';
 import type { CsrMember } from '../types/database.types';
 import { memberDivisions, getMemberStats } from '../members/data';

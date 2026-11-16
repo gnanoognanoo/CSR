@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { memberDivisions, members as backupRoster } from '../members/data';
 import {
   getMembers,

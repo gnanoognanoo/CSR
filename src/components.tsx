@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent } from 
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { navigation, digital } from './content';
 import { memberDivisions } from './members/data';
-import { useAuth } from './context/AuthContext';
+import { useAuth } from './context/useAuth';
 /** Routes that render on a light surface; the header and logo switch to their dark-ink variants there. */
 const LIGHT_ROUTES = ['/projects', '/members', '/announcements', '/committee'];
 const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));

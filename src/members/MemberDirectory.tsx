@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { getMemberInitials, searchMembers, type Member } from './data';
-import { acquireMemberScrollLock } from './MemberProfile';
+import { getMemberInitials, type Member } from './data';
+import { acquireMemberScrollLock } from './memberScrollLock';
+import { filterMemberDirectory, type MemberDirectoryFilters } from './memberDirectoryFilters';
 import './overlays.css';
 
 interface DirectoryDivision {
@@ -19,21 +20,7 @@ interface MemberDirectoryProps {
   onSelect: (member: Member) => void;
 }
 
-export interface MemberDirectoryFilters {
-  query: string;
-  division: string;
-  year: string;
-  department: string;
-}
-
-export function filterMemberDirectory(members: readonly Member[], filters: MemberDirectoryFilters): Member[] {
-  return searchMembers(members, filters.query).filter(member => {
-    if (filters.division !== 'all' && member.divisionId !== filters.division) return false;
-    if (filters.year !== 'all' && member.year !== filters.year) return false;
-    if (filters.department !== 'all' && member.department !== filters.department) return false;
-    return true;
-  });
-}
+export type { MemberDirectoryFilters };
 
 export function MemberDirectory({ open, members, divisions, onClose, onSelect }: MemberDirectoryProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Label } from '../components';
 import { validateSignUpPassword, validateSignInPassword, formatAuthPasswordError } from './password';
 import './auth.css';

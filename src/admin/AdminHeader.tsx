@@ -1,5 +1,5 @@
 // Styles loaded by AdminDashboard.tsx via admin.css
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Label } from '../components';
 
 interface AdminHeaderProps {
