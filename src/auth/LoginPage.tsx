@@ -1,7 +1,8 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Label } from '../components';
+import { validateSignUpPassword, validateSignInPassword, formatAuthPasswordError } from './password';
 import './auth.css';
 
 export default function LoginPage() {
@@ -20,7 +21,8 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as any)?.from?.pathname || '/portal';
+  const locationState = location.state as { from?: { pathname?: string } } | null;
+  const from = locationState?.from?.pathname || '/portal';
 
   // Handle URL hash fragments from Supabase confirmation callbacks
   useEffect(() => {
@@ -96,9 +98,16 @@ export default function LoginPage() {
           return;
         }
 
+        const passwordValidation = validateSignUpPassword(password);
+        if (!passwordValidation.isValid) {
+          setErrorMsg(passwordValidation.error || 'Password does not meet requirements.');
+          setSubmitting(false);
+          return;
+        }
+
         const res = await signUp(email, password, fullName);
         if (res.error) {
-          setErrorMsg(res.error);
+          setErrorMsg(formatAuthPasswordError(res.error));
         } else if (res.requiresVerification) {
           setVerificationSentEmail(res.email || email);
           setResendCooldown(60);
@@ -107,15 +116,23 @@ export default function LoginPage() {
           navigate(from, { replace: true });
         }
       } else {
+        const passwordValidation = validateSignInPassword(password);
+        if (!passwordValidation.isValid) {
+          setErrorMsg(passwordValidation.error || 'Please enter your password.');
+          setSubmitting(false);
+          return;
+        }
+
         const res = await signIn(email, password);
         if (res.error) {
-          setErrorMsg(res.error);
+          setErrorMsg(formatAuthPasswordError(res.error));
         } else {
           navigate(from, { replace: true });
         }
       }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setErrorMsg(formatAuthPasswordError(message || 'An unexpected error occurred.'));
     } finally {
       setSubmitting(false);
     }
@@ -278,7 +295,12 @@ export default function LoginPage() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="auth-password">
-                  Password
+                  <span>Password</span>
+                  {isSignUp && (
+                    <span style={{ fontSize: '11px', color: 'var(--steel)', textTransform: 'none' }}>
+                      (min. 8 characters)
+                    </span>
+                  )}
                 </label>
                 <input
                   id="auth-password"
@@ -289,9 +311,14 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   disabled={submitting}
-                  minLength={6}
+                  minLength={isSignUp ? 8 : undefined}
                   autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 />
+                {isSignUp && (
+                  <p style={{ fontSize: '12px', color: 'var(--steel)', margin: '4px 0 0', lineHeight: 1.4 }}>
+                    Must be at least 8 characters. Avoid common or easily guessed passwords.
+                  </p>
+                )}
               </div>
 
               <button

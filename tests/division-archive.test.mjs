@@ -30,7 +30,7 @@ const { AllProjectsOverlay } = load('projects/AllProjectsOverlay.tsx', {
   './projects': data, react: React, 'react/jsx-runtime': jsxRuntime,
   'react-dom': { createPortal: node => node },
   './ModelCredits': { ModelCredits: () => null },
-  './ProjectDossier': { acquireDossierScrollLock: () => () => {} },
+  './projectDossierScrollLock': { acquireDossierScrollLock: () => () => {} },
   './overlays.css': {},
 }, { document: { body: {} } });
 const render = division => renderToStaticMarkup(React.createElement(AllProjectsOverlay, {

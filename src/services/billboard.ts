@@ -101,13 +101,16 @@ export async function getBillboardMembers(): Promise<{ items: CsrBillboardMember
       const mapped = data as CsrBillboardMember[];
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mapped));
-      } catch {}
+      } catch {
+        // ignore localStorage access/quota issues in sandbox or restricted environments
+      }
       return { items: mapped, fromSupabase: true };
     }
 
     return { items: localData || DEFAULT_BILLBOARD, fromSupabase: true };
-  } catch (err: any) {
-    return { items: localData || DEFAULT_BILLBOARD, fromSupabase: false, error: err.message };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { items: localData || DEFAULT_BILLBOARD, fromSupabase: false, error: message };
   }
 }
 
@@ -118,7 +121,9 @@ export async function saveBillboardMembers(items: CsrBillboardMember[]): Promise
   // Always update localStorage so changes are immediately visible
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
-  } catch {}
+  } catch {
+    // ignore localStorage access/quota issues in sandbox or restricted environments
+  }
 
   if (!isSupabaseConfigured) {
     return { success: true };
@@ -147,7 +152,8 @@ export async function saveBillboardMembers(items: CsrBillboardMember[]): Promise
     }
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { success: false, error: message };
   }
 }

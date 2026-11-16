@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent } from 
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { navigation, digital } from './content';
 import { memberDivisions } from './members/data';
-import { useAuth } from './context/AuthContext';
+import { useAuth } from './context/useAuth';
 /** Routes that render on a light surface; the header and logo switch to their dark-ink variants there. */
 const LIGHT_ROUTES = ['/projects', '/members', '/announcements', '/committee'];
-export const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
+const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 
 type Tone = 'dark' | 'light';
 const LOGOS: Record<Tone, { src: string; width: number; height: number }> = {
@@ -135,7 +135,7 @@ export function Divisions({ counts = {} }: { counts?: Readonly<Record<string, nu
 }
 export function DigitalExplorer(){
   const [active,setActive]=useState(0); const current=digital[active];
-  function onKey(event:KeyboardEvent<HTMLButtonElement>,i:number){let next=i;if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(i+1)%digital.length;else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(i+digital.length-1)%digital.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=digital.length-1;else return;event.preventDefault();setActive(next);document.getElementById(`digital-tab-${next}`)?.focus();}
+  function onKey(event:KeyboardEvent<HTMLButtonElement>,i:number){let next:number;if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(i+1)%digital.length;else if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(i+digital.length-1)%digital.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=digital.length-1;else return;event.preventDefault();setActive(next);document.getElementById(`digital-tab-${next}`)?.focus();}
   return <div className="digital-explorer"><div className="digital-tabs" role="tablist" aria-label="Explore the digital side of CSR" aria-orientation="vertical">{digital.map((item,i)=><button role="tab" id={`digital-tab-${i}`} aria-controls="digital-panel" aria-selected={active===i} tabIndex={active===i?0:-1} key={item.code} onClick={()=>setActive(i)} onKeyDown={e=>onKey(e,i)}><span className="mono">0{i+1}</span>{item.name}<span className="tab-marker" aria-hidden="true"/></button>)}</div><div id="digital-panel" role="tabpanel" aria-labelledby={`digital-tab-${active}`} tabIndex={0} className="digital-panel"><span className="digital-code" aria-hidden="true">{current.code}</span><p className="mono accent">THE DIGITAL SIDE OF CSR</p><h3>{current.headline}</h3><p className="body-copy">{current.description}</p><div className="digital-areas">{current.areas.map(area=><span key={area}>{area}</span>)}</div></div></div>;
 }
 export function Footer({ tone = 'dark' }: { tone?: Tone }) {

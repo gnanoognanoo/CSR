@@ -2,7 +2,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 're
 import { createPortal } from 'react-dom';
 import { projectDivisions, type Project } from './projects';
 import { ModelCredits } from './ModelCredits';
-import { acquireDossierScrollLock } from './ProjectDossier';
+import { acquireDossierScrollLock } from './projectDossierScrollLock';
 import './overlays.css';
 
 interface AllProjectsOverlayProps {

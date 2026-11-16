@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { getMemberInitials, type Member } from './data';
+import { acquireMemberScrollLock } from './memberScrollLock';
 import './overlays.css';
 
 interface MemberProfileProps {
@@ -14,14 +15,6 @@ export interface MemberProfileOrigin {
   y: number;
   width: number;
   height: number;
-}
-
-export function acquireMemberScrollLock(body: Pick<HTMLElement, 'style'> = document.body): () => void {
-  const previousOverflow = body.style.overflow;
-  // The orbit already locks page scrolling. Its lifecycle remains authoritative.
-  if (previousOverflow === 'hidden') return () => {};
-  body.style.overflow = 'hidden';
-  return () => { body.style.overflow = previousOverflow; };
 }
 
 export function MemberProfile({ member, onClose, origin }: MemberProfileProps) {
@@ -57,7 +50,7 @@ export function MemberProfile({ member, onClose, origin }: MemberProfileProps) {
       releaseScrollLock();
       if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     };
-  }, [member?.id, origin]);
+  }, [member, origin]);
 
   if (!member) return null;
   const fields = [
