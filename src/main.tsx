@@ -13,7 +13,6 @@ import './foreground.css';
 import './home-typography.css';
 import './font-system.css';
 import './polish.css';
-import './nav.css';
 import App from './App';
 
 // Canvas labels must be drawn with the same loaded faces as the HTML interface.

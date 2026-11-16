@@ -7,10 +7,3 @@ artifacts/
 tmp/
 *.log
 *.tar.gz
-
-# Private roster source files containing student PII
-*.roster.json
-roster*.csv
-roster*.pdf
-private-roster.*
-*.seed.sql.bak

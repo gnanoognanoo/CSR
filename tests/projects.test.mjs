@@ -29,12 +29,10 @@ const memberData = loadTypeScript('members/data.ts');
 const content = loadTypeScript('content.ts', { './members/data': memberData });
 const data = loadTypeScript('projects/data.ts', { '../content': content });
 const orbit = loadTypeScript('projects/orbit-state.ts', { './data': data, react: {} });
-const scrollLock = loadTypeScript('projects/projectDossierScrollLock.ts');
 // Render portal contents in isolation; native-dialog interactions are checked in a browser.
 const dossier = loadTypeScript('projects/ProjectDossier.tsx', {
   './data': data, react: React, 'react/jsx-runtime': jsxRuntime,
   'react-dom': { createPortal: children => children },
-  './projectDossierScrollLock': scrollLock,
 }, { document: { body: {} } });
 const close = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-7, `${actual} should equal ${expected}`);
 
@@ -196,12 +194,12 @@ test('project links allow only valid absolute HTTP and HTTPS URLs', () => {
 
 test('a dossier inside an engaged orbit does not re-lock the next route during cleanup', () => {
   const body = { style: { overflow: 'hidden' } };
-  const releaseDossier = scrollLock.acquireDossierScrollLock(body);
+  const releaseDossier = dossier.acquireDossierScrollLock(body);
   body.style.overflow = ''; // Orbit route releases its own lock before child cleanup.
   releaseDossier();
   assert.equal(body.style.overflow, '');
   body.style.overflow = 'auto';
-  const releaseStandalone = scrollLock.acquireDossierScrollLock(body);
+  const releaseStandalone = dossier.acquireDossierScrollLock(body);
   assert.equal(body.style.overflow, 'hidden');
   releaseStandalone();
   assert.equal(body.style.overflow, 'auto', 'Directory dossiers restore their own previous overflow');

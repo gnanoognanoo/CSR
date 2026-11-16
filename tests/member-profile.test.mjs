@@ -24,10 +24,8 @@ function loadTypeScript(filename, imports = {}, globals = {}) {
 }
 const data = loadTypeScript('members/data.ts');
 const common = { react: React, 'react/jsx-runtime': jsxRuntime, 'react-dom': { createPortal: children => children }, './overlays.css': {} };
-const scrollLock = loadTypeScript('members/memberScrollLock.ts');
-const filtersModule = loadTypeScript('members/memberDirectoryFilters.ts', { './data': data });
-const profile = loadTypeScript('members/MemberProfile.tsx', { ...common, './data': data, './memberScrollLock': scrollLock }, { document: { body: {} } });
-const directory = loadTypeScript('members/MemberDirectory.tsx', { ...common, './data': data, './memberScrollLock': scrollLock, './memberDirectoryFilters': filtersModule }, { document: { body: {} } });
+const profile = loadTypeScript('members/MemberProfile.tsx', { ...common, './data': data }, { document: { body: {} } });
+const directory = loadTypeScript('members/MemberDirectory.tsx', { ...common, './data': data, './MemberProfile': profile }, { document: { body: {} } });
 const renderProfile = member => renderToStaticMarkup(React.createElement(profile.MemberProfile, { member, onClose: () => {} }));
 
 test('member profile displays the actual roster name and every supplied public metadata field', () => {
@@ -64,32 +62,32 @@ test('profile uses a public field allowlist even if a record contains extra priv
 
 test('directory combines public-name search and division, year and department filters without altering the roster', () => {
   const filters = { query: '', division: 'all', year: 'all', department: 'all' };
-  assert.equal(filtersModule.filterMemberDirectory(data.members, filters).length, 115);
+  assert.equal(directory.filterMemberDirectory(data.members, filters).length, 115);
   const member = data.members.find(candidate => candidate.divisionId === 'software');
-  const results = filtersModule.filterMemberDirectory(data.members, {
+  const results = directory.filterMemberDirectory(data.members, {
     query: member.name.toLocaleLowerCase(), division: member.divisionId,
     year: member.year, department: member.department,
   });
   assert.deepEqual(Array.from(results, candidate => candidate.id), [member.id]);
   assert.equal(results[0], member, 'Directory preserves the authoritative shared record');
-  assert.equal(filtersModule.filterMemberDirectory(data.members, { ...filters, query: member.name, division: 'ai' }).length, 0);
-  assert.equal(filtersModule.filterMemberDirectory(data.members, { ...filters, query: 'nonexistent member' }).length, 0);
+  assert.equal(directory.filterMemberDirectory(data.members, { ...filters, query: member.name, division: 'ai' }).length, 0);
+  assert.equal(directory.filterMemberDirectory(data.members, { ...filters, query: 'nonexistent member' }).length, 0);
 });
 
 test('directory never searches extra contact fields outside the public record allowlist', () => {
   const member = { ...data.members[0], email: 'privateonly@example.test', phone: '9876543210' };
   const filters = { query: 'privateonly', division: 'all', year: 'all', department: 'all' };
-  assert.equal(filtersModule.filterMemberDirectory([member], filters).length, 0);
+  assert.equal(directory.filterMemberDirectory([member], filters).length, 0);
 });
 
 test('member modal scroll lock restores its previous state and respects an existing orbit lock', () => {
   const body = { style: { overflow: 'auto' } };
-  const release = scrollLock.acquireMemberScrollLock(body);
+  const release = profile.acquireMemberScrollLock(body);
   assert.equal(body.style.overflow, 'hidden');
   release();
   assert.equal(body.style.overflow, 'auto');
   body.style.overflow = 'hidden';
-  const releaseOrbit = scrollLock.acquireMemberScrollLock(body);
+  const releaseOrbit = profile.acquireMemberScrollLock(body);
   body.style.overflow = 'clip';
   releaseOrbit();
   assert.equal(body.style.overflow, 'clip', 'An existing orbit lock remains owned by its original lifecycle');

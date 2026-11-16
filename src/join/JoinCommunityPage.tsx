@@ -1,10 +1,22 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { memberDivisions } from '../members/data';
+import { getDivisionAccent } from '../members/division-accent';
 import { submitApplication } from '../services/members';
 import type { CreateApplicationInput } from '../types/database.types';
-import { Label } from '../components';
-import '../admin/admin.css';
+import EngineeringEnvironment from '../background/EngineeringEnvironment';
+import './join.css';
+
+function useMedia(query: string) {
+  const [matches, setMatches] = useState(() => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false));
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
 
 export default function JoinCommunityPage() {
   const [formData, setFormData] = useState<CreateApplicationInput>({
@@ -26,6 +38,9 @@ export default function JoinCommunityPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const compact = useMedia('(max-width: 760px)');
+  const reducedMotion = useMedia('(prefers-reduced-motion: reduce)');
 
   const departments = [
     'Artificial Intelligence and Data Science',
@@ -74,29 +89,58 @@ export default function JoinCommunityPage() {
     } else {
       localStorage.setItem('csr_last_app_submit', Date.now().toString());
       setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   if (submitted) {
     return (
-      <main id="main-content" className="coming-soon">
-        <div className="section-wrap" style={{ maxWidth: '680px' }}>
-          <Label>CSR-RIT / RECRUITMENT SPRINT</Label>
-          <h1>Application <br /><span className="accent">Submitted.</span></h1>
-          <p className="body-copy">
-            Thank you, <strong>{formData.full_name}</strong>. Your application for the <strong>{formData.primary_division}</strong> division has been transmitted to the CSR Division Leads and Executive Committee.
+      <main id="main-content" className="join-page">
+        <EngineeringEnvironment
+          variant="members"
+          motion={{ rotation: 0 }}
+          compact={compact}
+          reducedMotion={reducedMotion}
+          paused={false}
+        />
+
+        <div className="join-success-card">
+          <div className="join-success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+
+          <div>
+            <span className="join-badge-pill" style={{ marginBottom: '12px' }}>
+              <span className="join-badge-dot" />
+              TRANSMITTED TO CSR EXECUTIVE COMMITTEE
+            </span>
+            <h1 className="join-success-title">
+              Application <span className="accent">Submitted.</span>
+            </h1>
+          </div>
+
+          <p className="join-success-desc">
+            Thank you, <strong>{formData.full_name}</strong>. Your candidate dossier for the <strong>{formData.primary_division}</strong> division has been securely registered in the CSR selection ledger.
           </p>
-          <div className="stat-card" style={{ marginTop: '24px', textAlign: 'left' }}>
-            <span className="stat-label">Next Steps in Selection</span>
-            <ul style={{ margin: '12px 0 0', paddingLeft: '20px', lineHeight: '1.8', color: 'var(--soft-white)', fontSize: '14px' }}>
-              <li>Applications are screened on a rolling basis by division leads.</li>
+
+          <div className="join-next-steps">
+            <span className="join-next-title">Next Steps in Selection</span>
+            <ul>
+              <li>Applications are reviewed on a rolling basis by technical division leads.</li>
               <li>Shortlisted candidates will be invited for a brief technical discussion or problem challenge.</li>
-              <li>Look out for updates on your phone (<code>{formData.phone}</code>) and email (<code>{formData.email}</code>).</li>
+              <li>Watch for updates on your phone (<code>{formData.phone}</code>) and email (<code>{formData.email}</code>).</li>
             </ul>
           </div>
-          <div style={{ marginTop: '30px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link className="outline-link" to="/members">Explore Current Member Orbit</Link>
-            <Link className="outline-link" to="/">Return to Home</Link>
+
+          <div className="join-success-actions">
+            <Link className="join-btn-orbit" to="/members">
+              Explore Member Orbit →
+            </Link>
+            <Link className="join-btn-home" to="/">
+              Return to Home
+            </Link>
           </div>
         </div>
       </main>
@@ -104,278 +148,388 @@ export default function JoinCommunityPage() {
   }
 
   return (
-    <main id="main-content" className="admin-page join-page">
-      <div className="section-wrap" style={{ maxWidth: '1000px', margin: '0 auto', padding: 0 }}>
-        {/* Top Header */}
-        <div className="admin-header">
-          <div>
-            <Label>CSR-RIT / 2026—2027 COHORT ADMISSIONS</Label>
-            <h1>Join the Community</h1>
-            <p className="body-copy" style={{ margin: '10px 0 0', fontSize: '16px', maxWidth: '620px' }}>
-              CSR is a student engineering community at Rajalakshmi Institute of Technology dedicated to building autonomous systems, intelligence models, and embedded hardware.
-            </p>
+    <main id="main-content" className="join-page">
+      {/* 3D Dynamic Particle Environment */}
+      <EngineeringEnvironment
+        variant="members"
+        motion={{ rotation: 0 }}
+        compact={compact}
+        reducedMotion={reducedMotion}
+        paused={false}
+      />
+
+      <div className="join-container">
+        {/* Top 3D Header */}
+        <div className="join-hero-wrap">
+          <div className="join-medallion" aria-hidden="true">
+            <img src="/brand/rit-emblem.png" alt="" />
+            <strong>RIT</strong>
           </div>
-          <div>
-            <span className="mono" style={{ color: 'var(--engineering-blue)', fontSize: '12px' }}>
-              SELECTION ROUND 01 / OPEN
-            </span>
+
+          <div className="join-badge-pill">
+            <span className="join-badge-dot" />
+            ROUND 01 ADMISSIONS · 7 DIVISIONS OPEN
+          </div>
+
+          <h1 className="join-title">
+            Join the <span className="accent">Community.</span>
+          </h1>
+
+          <p className="join-subtitle">
+            CSR is an autonomous student engineering collective at Rajalakshmi Institute of Technology dedicated to advancing robotics, intelligent systems, hardware architecture, and software engineering.
+          </p>
+        </div>
+
+        {/* Eligibility Criteria Cards */}
+        <div className="join-criteria-panel">
+          <div className="join-panel-head">
+            <span className="join-panel-label">Cohort Admissions Criteria</span>
+            <span className="join-panel-meta">ACADEMIC YEAR 2026—2027</span>
+          </div>
+          <div className="join-criteria-grid">
+            <div className="join-criteria-card">
+              <span className="join-criteria-num">01 / ENROLLED UNDERGRADUATE</span>
+              <div className="join-criteria-title">RIT Student</div>
+              <p className="join-criteria-desc">
+                Must be an actively enrolled undergraduate student at Rajalakshmi Institute of Technology across any department or year.
+              </p>
+            </div>
+            <div className="join-criteria-card">
+              <span className="join-criteria-num">02 / ACTIVE COMMITMENT</span>
+              <div className="join-criteria-title">4–6 Hours Weekly</div>
+              <p className="join-criteria-desc">
+                Able to commit 4–6 hours weekly for laboratory sprint builds, research publications, hackathons, and community reviews.
+              </p>
+            </div>
+            <div className="join-criteria-card">
+              <span className="join-criteria-num">03 / BUILDER MINDSET</span>
+              <div className="join-criteria-title">Relentless Curiosity</div>
+              <p className="join-criteria-desc">
+                Obsession with building tangible engineering prototypes, eagerness to learn first-principles, and drive to collaborate cross-divisionally.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Criteria & Eligibility Card */}
-        <div className="stat-card" style={{ marginBottom: '36px' }}>
-          <span className="stat-label">Cohort Eligibility Criteria</span>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', marginTop: '16px' }}>
-            <div style={{ borderLeft: '2px solid var(--technical-blue)', paddingLeft: '14px' }}>
-              <strong style={{ display: 'block', fontSize: '15px', color: 'var(--white)', marginBottom: '4px' }}>
-                01 / RIT Student
-              </strong>
-              <span style={{ fontSize: '13px', color: 'var(--steel)', lineHeight: '1.6' }}>
-                Must be an actively enrolled undergraduate student of Rajalakshmi Institute of Technology across any department.
-              </span>
-            </div>
-            <div style={{ borderLeft: '2px solid var(--technical-blue)', paddingLeft: '14px' }}>
-              <strong style={{ display: 'block', fontSize: '15px', color: 'var(--white)', marginBottom: '4px' }}>
-                02 / Active Commitment
-              </strong>
-              <span style={{ fontSize: '13px', color: 'var(--steel)', lineHeight: '1.6' }}>
-                Able to commit 4–6 hours weekly for division laboratory builds, hackathons, and technical documentation.
-              </span>
-            </div>
-            <div style={{ borderLeft: '2px solid var(--technical-blue)', paddingLeft: '14px' }}>
-              <strong style={{ display: 'block', fontSize: '15px', color: 'var(--white)', marginBottom: '4px' }}>
-                03 / Builder Mindset
-              </strong>
-              <span style={{ fontSize: '13px', color: 'var(--steel)', lineHeight: '1.6' }}>
-                Passion for problem-solving, willingness to learn new technologies, and enthusiasm for cross-disciplinary collaboration.
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Global Feedback */}
+        {/* Global Feedback Alert */}
         {errorMsg && (
-          <div className="auth-alert error" style={{ marginBottom: '24px' }}>
+          <div className="join-alert error">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
             <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* Application Form */}
-        <div className="stat-card">
-          <span className="stat-label">Application Form</span>
-          <h2 style={{ fontSize: '26px', margin: '8px 0 24px' }}>Candidate Profile & Division Preferences</h2>
+        {/* Main Application Form Card */}
+        <div className="join-form-card">
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Section 1: Candidate Identity */}
+            <div className="join-form-section">
+              <h2 className="join-section-title">
+                <span className="join-section-num">1</span>
+                Candidate Identification
+              </h2>
+              <p className="join-section-desc">
+                Your contact details for correspondence regarding interview schedules and cohort results.
+              </p>
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="modal-form-grid">
-              {/* Full Name */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-fullname">Full Name *</label>
-                <input
-                  id="app-fullname"
-                  className="form-input"
-                  type="text"
-                  required
-                  maxLength={100}
-                  placeholder="e.g. Anto Jenishia A"
-                  value={formData.full_name}
-                  onChange={e => setFormData({ ...formData, full_name: e.target.value })}
-                />
+              <div className="join-grid-2">
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-fullname">
+                    Full Name <span className="req">*</span>
+                  </label>
+                  <input
+                    id="app-fullname"
+                    className="join-input"
+                    type="text"
+                    required
+                    maxLength={100}
+                    placeholder="e.g. Anto Jenishia A"
+                    value={formData.full_name}
+                    onChange={e => setFormData({ ...formData, full_name: e.target.value })}
+                  />
+                </div>
+
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-regno">
+                    College Register / Roll Number
+                  </label>
+                  <input
+                    id="app-regno"
+                    className="join-input"
+                    type="text"
+                    maxLength={30}
+                    placeholder="e.g. 2117240101001"
+                    value={formData.reg_no}
+                    onChange={e => setFormData({ ...formData, reg_no: e.target.value })}
+                  />
+                </div>
+
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-email">
+                    Institutional Email Address <span className="req">*</span>
+                  </label>
+                  <input
+                    id="app-email"
+                    className="join-input"
+                    type="email"
+                    required
+                    maxLength={150}
+                    placeholder="name.dept@ritchennai.edu.in"
+                    value={formData.email}
+                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-phone">
+                    Phone / WhatsApp Number <span className="req">*</span>
+                  </label>
+                  <input
+                    id="app-phone"
+                    className="join-input"
+                    type="tel"
+                    required
+                    maxLength={30}
+                    placeholder="10-digit mobile number"
+                    value={formData.phone}
+                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Academic Program */}
+            <div className="join-form-section">
+              <h2 className="join-section-title">
+                <span className="join-section-num">2</span>
+                Academic Enrollment
+              </h2>
+              <p className="join-section-desc">
+                Current academic year and engineering discipline at Rajalakshmi Institute of Technology.
+              </p>
+
+              <div className="join-grid-3">
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-year">
+                    Academic Year <span className="req">*</span>
+                  </label>
+                  <select
+                    id="app-year"
+                    className="join-select"
+                    value={formData.year}
+                    onChange={e => setFormData({ ...formData, year: e.target.value })}
+                  >
+                    <option value="I Year">I Year</option>
+                    <option value="II Year">II Year</option>
+                    <option value="III Year">III Year</option>
+                    <option value="IV Year">IV Year</option>
+                  </select>
+                </div>
+
+                <div className="join-field" style={{ gridColumn: 'span 1' }}>
+                  <label className="join-field-label" htmlFor="app-department">
+                    Department <span className="req">*</span>
+                  </label>
+                  <select
+                    id="app-department"
+                    className="join-select"
+                    value={formData.department}
+                    onChange={e => setFormData({ ...formData, department: e.target.value })}
+                  >
+                    {departments.map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="join-field">
+                  <label className="join-field-label" htmlFor="app-sec">
+                    Section
+                  </label>
+                  <input
+                    id="app-sec"
+                    className="join-input"
+                    type="text"
+                    maxLength={10}
+                    placeholder="e.g. A, B, C"
+                    value={formData.sec}
+                    onChange={e => setFormData({ ...formData, sec: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Technical Division Focus */}
+            <div className="join-form-section">
+              <h2 className="join-section-title">
+                <span className="join-section-num">3</span>
+                Technical Division Choice
+              </h2>
+              <p className="join-section-desc">
+                Select your primary technical division. You can also specify an optional secondary track.
+              </p>
+
+              {/* 3D Interactive Division Selector */}
+              <div className="join-field col-span-full">
+                <label className="join-field-label">
+                  Primary Division Specialization <span className="req">*</span>
+                </label>
+                <div className="join-division-selector">
+                  {memberDivisions.map(div => {
+                    const accent = getDivisionAccent({ divisionId: div.id, division: div.name });
+                    const isSelected = formData.primary_division === div.name;
+
+                    return (
+                      <div
+                        key={div.id}
+                        className={`join-division-chip ${isSelected ? 'is-active' : ''}`}
+                        style={{
+                          '--div-bg': accent.accent,
+                          '--active-accent': accent.accent,
+                        } as any}
+                        onClick={() => setFormData({ ...formData, primary_division: div.name })}
+                        role="radio"
+                        aria-checked={isSelected}
+                        tabIndex={0}
+                        onKeyDown={e => {
+                          if (e.key === ' ' || e.key === 'Enter') {
+                            e.preventDefault();
+                            setFormData({ ...formData, primary_division: div.name });
+                          }
+                        }}
+                      >
+                        <div className="join-div-badge">
+                          {div.shortName}
+                        </div>
+                        <div className="join-div-info">
+                          <span className="join-div-name">{div.name}</span>
+                          <span className="join-div-lead">Lead: {div.lead || 'Executive'}</span>
+                        </div>
+                        <div className="join-div-check">
+                          <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* College Reg No */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-regno">College Roll / Reg No.</label>
-                <input
-                  id="app-regno"
-                  className="form-input"
-                  type="text"
-                  maxLength={30}
-                  placeholder="e.g. 2117240101001"
-                  value={formData.reg_no}
-                  onChange={e => setFormData({ ...formData, reg_no: e.target.value })}
-                />
-              </div>
-
-              {/* Email Address */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-email">Official / College Email *</label>
-                <input
-                  id="app-email"
-                  className="form-input"
-                  type="email"
-                  required
-                  maxLength={150}
-                  placeholder="name.250000@dept.ritchennai.edu.in"
-                  value={formData.email}
-                  onChange={e => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
-
-              {/* Phone Number */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-phone">Phone / WhatsApp Number *</label>
-                <input
-                  id="app-phone"
-                  className="form-input"
-                  type="tel"
-                  required
-                  maxLength={30}
-                  placeholder="10-digit mobile number"
-                  value={formData.phone}
-                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </div>
-
-              {/* Academic Year */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-year">Current Academic Year *</label>
-                <select
-                  id="app-year"
-                  className="form-input"
-                  value={formData.year}
-                  onChange={e => setFormData({ ...formData, year: e.target.value })}
-                >
-                  <option value="I Year">I Year</option>
-                  <option value="II Year">II Year</option>
-                  <option value="III Year">III Year</option>
-                  <option value="IV Year">IV Year</option>
-                </select>
-              </div>
-
-              {/* Department */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-department">Department *</label>
-                <select
-                  id="app-department"
-                  className="form-input"
-                  value={formData.department}
-                  onChange={e => setFormData({ ...formData, department: e.target.value })}
-                >
-                  {departments.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Section */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-sec">Section</label>
-                <input
-                  id="app-sec"
-                  className="form-input"
-                  type="text"
-                  maxLength={10}
-                  placeholder="e.g. A, B, C"
-                  value={formData.sec}
-                  onChange={e => setFormData({ ...formData, sec: e.target.value })}
-                />
-              </div>
-
-              {/* Primary Division Choice */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="app-primary-div">Primary Division Choice *</label>
-                <select
-                  id="app-primary-div"
-                  className="form-input"
-                  value={formData.primary_division}
-                  onChange={e => setFormData({ ...formData, primary_division: e.target.value })}
-                >
-                  {memberDivisions.map(d => (
-                    <option key={d.id} value={d.name}>{d.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Secondary Division Choice */}
-              <div className="form-group modal-form-full">
-                <label className="form-label" htmlFor="app-secondary-div">Secondary Division Choice (Optional Backup)</label>
+              {/* Secondary Alternate Division */}
+              <div className="join-field col-span-full" style={{ marginTop: '14px' }}>
+                <label className="join-field-label" htmlFor="app-secondary-div">
+                  Secondary Division Preference (Optional Backup Track)
+                </label>
                 <select
                   id="app-secondary-div"
-                  className="form-input"
+                  className="join-select"
                   value={formData.secondary_division}
                   onChange={e => setFormData({ ...formData, secondary_division: e.target.value })}
                 >
-                  <option value="">-- Select Alternate Division --</option>
+                  <option value="">-- No secondary choice --</option>
                   {memberDivisions.map(d => (
                     <option key={d.id} value={d.name}>{d.name}</option>
                   ))}
                 </select>
               </div>
+            </div>
 
-              {/* Technical Skills */}
-              <div className="form-group modal-form-full">
-                <label className="form-label" htmlFor="app-skills">Technical Skills, Tools & Languages</label>
+            {/* Section 4: Skills & Statement of Purpose */}
+            <div className="join-form-section">
+              <h2 className="join-section-title">
+                <span className="join-section-num">4</span>
+                Engineering Profile & Motivation
+              </h2>
+              <p className="join-section-desc">
+                Detail your practical experience, languages, frameworks, hardware stacks, and what drives you.
+              </p>
+
+              <div className="join-field col-span-full">
+                <label className="join-field-label" htmlFor="app-skills">
+                  Technical Skills, Languages & Frameworks
+                </label>
                 <input
                   id="app-skills"
-                  className="form-input"
+                  className="join-input"
                   type="text"
                   maxLength={1000}
-                  placeholder="e.g. Python, ROS, Arduino, C++, React, Figma, PCB Design, OpenCV…"
+                  placeholder="e.g. Python, ROS2, PyTorch, C++, SolidWorks, STM32, React, Verilog, OpenCV, Docker…"
                   value={formData.technical_skills}
                   onChange={e => setFormData({ ...formData, technical_skills: e.target.value })}
                 />
               </div>
 
-              {/* Portfolio / Project Link */}
-              <div className="form-group modal-form-full">
-                <label className="form-label" htmlFor="app-portfolio">GitHub, Portfolio, or Drive Link (Optional)</label>
+              <div className="join-field col-span-full">
+                <label className="join-field-label" htmlFor="app-portfolio">
+                  Portfolio, GitHub, or Drive Link (Optional)
+                </label>
                 <input
                   id="app-portfolio"
-                  className="form-input"
+                  className="join-input"
                   type="url"
                   maxLength={500}
-                  placeholder="https://github.com/username or project drive link"
+                  placeholder="https://github.com/username or link to project portfolio"
                   value={formData.portfolio_link}
                   onChange={e => setFormData({ ...formData, portfolio_link: e.target.value })}
                 />
               </div>
 
-              {/* Statement of Purpose */}
-              <div className="form-group modal-form-full">
-                <label className="form-label" htmlFor="app-sop">
-                  Why do you want to join CSR? What would you like to build? *
+              <div className="join-field col-span-full">
+                <label className="join-field-label" htmlFor="app-sop">
+                  Why do you want to join CSR? What would you like to build? <span className="req">*</span>
                 </label>
                 <textarea
                   id="app-sop"
-                  className="form-input"
+                  className="join-textarea"
                   rows={4}
                   required
                   maxLength={5000}
-                  placeholder="Describe your technical interests, past projects you've explored, or ideas you wish to develop with the CSR community…"
+                  placeholder="Describe your technical interests, past experiments or problems you've tackled, and the engineering challenges you want to build alongside the CSR collective…"
                   value={formData.statement_of_purpose}
                   onChange={e => setFormData({ ...formData, statement_of_purpose: e.target.value })}
                 />
               </div>
-
-              {/* Criteria Checkbox */}
-              <div className="modal-form-full" style={{ marginTop: '8px' }}>
-                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer', fontSize: '13px', color: 'var(--soft-white)', lineHeight: '1.6' }}>
-                  <input
-                    type="checkbox"
-                    style={{ marginTop: '4px', accentColor: 'var(--technical-blue)', width: '18px', height: '18px' }}
-                    checked={formData.criteria_accepted}
-                    onChange={e => setFormData({ ...formData, criteria_accepted: e.target.checked })}
-                    required
-                  />
-                  <span>
-                    I confirm that I am an actively enrolled RIT student, and I agree to meet the minimum weekly commitment and uphold community collaboration standards.
-                  </span>
-                </label>
-              </div>
             </div>
 
-            <div style={{ marginTop: '28px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <button
-                type="submit"
-                className="btn-admin primary"
-                disabled={submitting}
-                style={{ padding: '14px 28px', fontSize: '13px' }}
-              >
-                {submitting ? 'Submitting Application…' : 'Submit Application'}
-              </button>
-              <Link to="/" style={{ color: 'var(--steel)', fontSize: '13px' }}>
-                Cancel
-              </Link>
+            {/* Section 5: Cohort Terms & Submission */}
+            <div className="join-form-section" style={{ marginBottom: 0 }}>
+              <label className="join-agreement-box">
+                <input
+                  type="checkbox"
+                  checked={formData.criteria_accepted}
+                  onChange={e => setFormData({ ...formData, criteria_accepted: e.target.checked })}
+                  required
+                />
+                <span className="join-agreement-text">
+                  <strong>I confirm that I am an actively enrolled RIT student</strong>, and I commit to upholding CSR's minimum weekly laboratory hours, open collaboration culture, and technical integrity standards.
+                </span>
+              </label>
+
+              <div className="join-actions">
+                <button
+                  type="submit"
+                  className="join-submit-btn"
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <span className="join-badge-dot" />
+                      Submitting Dossier…
+                    </>
+                  ) : (
+                    <>
+                      Transmit Application →
+                    </>
+                  )}
+                </button>
+
+                <Link to="/" className="join-cancel-link">
+                  Return to Home
+                </Link>
+              </div>
             </div>
           </form>
         </div>
