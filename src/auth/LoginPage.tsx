@@ -1,9 +1,20 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../context/useAuth';
+import { useAuth } from '../context/AuthContext';
 import { Label } from '../components';
-import { validateSignUpPassword, validateSignInPassword, formatAuthPasswordError } from './password';
+import EngineeringEnvironment from '../background/EngineeringEnvironment';
 import './auth.css';
+
+function useMedia(query: string) {
+  const [matches, setMatches] = useState(() => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false));
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -20,9 +31,10 @@ export default function LoginPage() {
   const { user, signIn, signUp, resendVerification, isConfigured } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const compact = useMedia('(max-width: 760px)');
+  const reducedMotion = useMedia('(prefers-reduced-motion: reduce)');
 
-  const locationState = location.state as { from?: { pathname?: string } } | null;
-  const from = locationState?.from?.pathname || '/portal';
+  const from = (location.state as any)?.from?.pathname || '/portal';
 
   // Handle URL hash fragments from Supabase confirmation callbacks
   useEffect(() => {
@@ -98,16 +110,9 @@ export default function LoginPage() {
           return;
         }
 
-        const passwordValidation = validateSignUpPassword(password);
-        if (!passwordValidation.isValid) {
-          setErrorMsg(passwordValidation.error || 'Password does not meet requirements.');
-          setSubmitting(false);
-          return;
-        }
-
         const res = await signUp(email, password, fullName);
         if (res.error) {
-          setErrorMsg(formatAuthPasswordError(res.error));
+          setErrorMsg(res.error);
         } else if (res.requiresVerification) {
           setVerificationSentEmail(res.email || email);
           setResendCooldown(60);
@@ -116,48 +121,56 @@ export default function LoginPage() {
           navigate(from, { replace: true });
         }
       } else {
-        const passwordValidation = validateSignInPassword(password);
-        if (!passwordValidation.isValid) {
-          setErrorMsg(passwordValidation.error || 'Please enter your password.');
-          setSubmitting(false);
-          return;
-        }
-
         const res = await signIn(email, password);
         if (res.error) {
-          setErrorMsg(formatAuthPasswordError(res.error));
+          setErrorMsg(res.error);
         } else {
           navigate(from, { replace: true });
         }
       }
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      setErrorMsg(formatAuthPasswordError(message || 'An unexpected error occurred.'));
+    } catch (err: any) {
+      setErrorMsg(err.message || 'An unexpected error occurred.');
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <main id="main-content" className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <Label>CSR-RIT / ACCESS GATEWAY</Label>
-          <h1>
-            {verificationSentEmail
-              ? 'Verify Email'
-              : isSignUp
-              ? 'Create Account'
-              : 'Portal Sign In'}
-          </h1>
-          <p>
-            {verificationSentEmail
-              ? 'Complete your registration to activate your CSR student engineer profile.'
-              : isSignUp
-              ? 'Join the CSR engineering community to manage your portfolio and division access.'
-              : 'Sign in to access your member dashboard, division assets, and admin controls.'}
-          </p>
+    <main id="main-content" className="auth-page" aria-label="CSR-RIT Portal Authentication">
+      <EngineeringEnvironment
+        variant="members"
+        motion={{ rotation: 0 }}
+        compact={compact}
+        reducedMotion={reducedMotion}
+        paused={false}
+      />
+      <div className="auth-card-wrap">
+        <div className="auth-medallion" aria-hidden="true">
+          <img src="/brand/rit-emblem.png" alt="" />
+          <strong>CSR-RIT</strong>
+          <small>PORTAL</small>
         </div>
+
+        <div className="auth-card">
+          <div className="auth-header">
+            <Label>CSR-RIT / ACCESS GATEWAY</Label>
+            <h1>
+              {verificationSentEmail ? (
+                'Verify Email'
+              ) : isSignUp ? (
+                <>Create Account<span>.</span></>
+              ) : (
+                <>Portal Sign In<span>.</span></>
+              )}
+            </h1>
+            <p>
+              {verificationSentEmail
+                ? 'Complete your registration to activate your CSR student engineer profile.'
+                : isSignUp
+                ? 'Join the CSR engineering community to manage your portfolio and division access.'
+                : 'Sign in to access your member dashboard, division assets, and admin controls.'}
+            </p>
+          </div>
 
         {!isConfigured && (
           <div className="auth-alert error" style={{ marginBottom: '20px' }}>
@@ -295,12 +308,7 @@ export default function LoginPage() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="auth-password">
-                  <span>Password</span>
-                  {isSignUp && (
-                    <span style={{ fontSize: '11px', color: 'var(--steel)', textTransform: 'none' }}>
-                      (min. 8 characters)
-                    </span>
-                  )}
+                  Password
                 </label>
                 <input
                   id="auth-password"
@@ -311,14 +319,9 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   disabled={submitting}
-                  minLength={isSignUp ? 8 : undefined}
+                  minLength={6}
                   autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 />
-                {isSignUp && (
-                  <p style={{ fontSize: '12px', color: 'var(--steel)', margin: '4px 0 0', lineHeight: 1.4 }}>
-                    Must be at least 8 characters. Avoid common or easily guessed passwords.
-                  </p>
-                )}
               </div>
 
               <button
@@ -339,6 +342,7 @@ export default function LoginPage() {
         <div className="auth-footer">
           <Link to="/">← Back to CSR-RIT</Link>
         </div>
+      </div>
       </div>
     </main>
   );

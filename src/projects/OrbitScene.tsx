@@ -119,9 +119,8 @@ function PreviewTexture({ src, width, height, reducedMotion, selected }: { src: 
   const previousMaterial = useRef<MeshBasicMaterial>(null), currentMaterial = useRef<MeshBasicMaterial>(null)
   useLayoutEffect(() => {
     const previous = previousMaterial.current, current = currentMaterial.current
-    const currentGeometries = geometries.current
     return () => {
-      currentGeometries.forEach(item => item.dispose())
+      geometries.current.forEach(item => item.dispose())
       previous?.dispose()
       current?.dispose()
     }

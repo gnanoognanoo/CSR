@@ -1,8 +1,24 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import type { CsrProfile } from '../types/database.types';
-import { AuthContext } from './authContextDef';
+import type { CsrProfile, UserRole } from '../types/database.types';
+
+interface AuthContextType {
+  user: User | null;
+  profile: CsrProfile | null;
+  role: UserRole | null;
+  isAdmin: boolean;
+  isMember: boolean;
+  loading: boolean;
+  isConfigured: boolean;
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error?: string; requiresVerification?: boolean; email?: string }>;
+  resendVerification: (email: string) => Promise<{ error?: string }>;
+  signOut: () => Promise<{ error?: string }>;
+  refreshProfile: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -29,12 +45,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // If user exists in auth.users but no profile in csr_profiles, create one
-      // C1 FIX: Never trust client-supplied user_metadata for role; always assign 'member'
       const newProfile: Partial<CsrProfile> = {
         id: currentUser.id,
         email: currentUser.email || '',
         full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Member',
-        role: 'member',
+        role: (currentUser.user_metadata?.role as UserRole) || 'member',
       };
 
       const { data: inserted, error: insertError } = await supabase
@@ -224,4 +239,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth(): AuthContextType {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 }

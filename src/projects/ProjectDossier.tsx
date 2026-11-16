@@ -1,7 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getDivisionProjects, safeProjectUrl, type Project } from './data';
-import { acquireDossierScrollLock } from './projectDossierScrollLock';
 
 interface ProjectDossierProps {
   project: Project | null;
@@ -9,6 +8,14 @@ interface ProjectDossierProps {
   projectNumber?: number;
   backLabel?: string;
   onClose: () => void;
+}
+
+export function acquireDossierScrollLock(body: Pick<HTMLElement, 'style'> = document.body): () => void {
+  const previousOverflow = body.style.overflow;
+  // An engaged orbit already owns this lock. Its cleanup must remain authoritative.
+  if (previousOverflow === 'hidden') return () => {};
+  body.style.overflow = 'hidden';
+  return () => { body.style.overflow = previousOverflow; };
 }
 
 export function ProjectDossier({ project, divisionName, projectNumber: suppliedNumber, backLabel = 'Back to orbit', onClose }: ProjectDossierProps) {
@@ -54,7 +61,7 @@ export function ProjectDossier({ project, divisionName, projectNumber: suppliedN
       releaseScrollLock();
       if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     };
-  }, [project, suppliedNumber]);
+  }, [project?.id, suppliedNumber]);
 
   function requestClose() {
     if (closeTimer.current) return;
