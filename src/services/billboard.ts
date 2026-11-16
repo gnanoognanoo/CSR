@@ -108,8 +108,9 @@ export async function getBillboardMembers(): Promise<{ items: CsrBillboardMember
     }
 
     return { items: localData || DEFAULT_BILLBOARD, fromSupabase: true };
-  } catch (err: any) {
-    return { items: localData || DEFAULT_BILLBOARD, fromSupabase: false, error: err.message };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { items: localData || DEFAULT_BILLBOARD, fromSupabase: false, error: message };
   }
 }
 
@@ -151,7 +152,8 @@ export async function saveBillboardMembers(items: CsrBillboardMember[]): Promise
     }
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { success: false, error: message };
   }
 }

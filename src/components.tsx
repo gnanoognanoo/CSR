@@ -5,7 +5,7 @@ import { memberDivisions } from './members/data';
 import { useAuth } from './context/AuthContext';
 /** Routes that render on a light surface; the header and logo switch to their dark-ink variants there. */
 const LIGHT_ROUTES = ['/projects', '/members', '/announcements', '/committee'];
-export const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
+const isLightRoute = (pathname: string) => LIGHT_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 
 type Tone = 'dark' | 'light';
 const LOGOS: Record<Tone, { src: string; width: number; height: number }> = {

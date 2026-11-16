@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, useCallback, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getMemberByUserId, getMembers, updateMember, linkUserToMember, getClaimCandidateForEmail, type ClaimCandidate } from '../services/members';
@@ -27,7 +27,7 @@ export default function MemberPortalPage() {
   const [githubUrl, setGithubUrl] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
 
-  async function loadMemberData() {
+  const loadMemberData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
 
@@ -47,7 +47,7 @@ export default function MemberPortalPage() {
     }
 
     setLoading(false);
-  }
+  }, [user]);
 
   useEffect(() => {
     loadMemberData();
@@ -69,7 +69,7 @@ export default function MemberPortalPage() {
       }
     });
     return () => { active = false; };
-  }, [user]);
+  }, [user, loadMemberData]);
 
   async function handleSaveProfile(e: FormEvent) {
     e.preventDefault();

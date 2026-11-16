@@ -186,7 +186,7 @@ function MemberBadge({ slot, scene, visibility, shadowTexture, geometry }: { slo
     face.map = texture
     face.needsUpdate = true
     outgoingFace.needsUpdate = true
-  }, [texture, face, outgoingFace])
+  }, [texture, face, outgoingFace, scene.reducedMotion])
   useEffect(() => () => { face.map?.dispose(); outgoingFace.map?.dispose(); face.dispose(); outgoingFace.dispose() }, [face, outgoingFace])
   useEffect(() => () => { materials.forEach(material => material.dispose()) }, [materials])
   useEffect(() => () => { [backing, armor, outerTrace, innerTrace, tracks, nodes].forEach(material => material.dispose()) }, [backing, armor, outerTrace, innerTrace, tracks, nodes])
@@ -253,13 +253,14 @@ function MemberMotion({ scene, visibility }: { scene: MemberOrbitSceneProps; vis
     perspective.aspect = size.width / Math.max(1, size.height)
     perspective.updateProjectionMatrix()
   }, [camera, size.width, size.height, scene.compact])
+  const { onReady, onFailure } = scene
   useEffect(() => {
-    scene.onReady?.()
+    onReady?.()
     const canvas = gl.domElement
-    const lost = (event: Event) => { event.preventDefault(); scene.onFailure?.() }
+    const lost = (event: Event) => { event.preventDefault(); onFailure?.() }
     canvas.addEventListener('webglcontextlost', lost)
     return () => canvas.removeEventListener('webglcontextlost', lost)
-  }, [gl, scene.onReady, scene.onFailure])
+  }, [gl, onReady, onFailure])
   useFrame((state, delta) => {
     const blend = scene.reducedMotion ? 1 : 1 - Math.exp(-Math.min(delta, .1) * 13)
     visibility.current += (scene.transition - visibility.current) * blend

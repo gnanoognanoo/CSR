@@ -61,7 +61,7 @@ export function ProjectDossier({ project, divisionName, projectNumber: suppliedN
       releaseScrollLock();
       if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     };
-  }, [project?.id, suppliedNumber]);
+  }, [project, suppliedNumber]);
 
   function requestClose() {
     if (closeTimer.current) return;

@@ -10,6 +10,9 @@ interface MembersTabProps {
   loading: boolean;
   onSaveMember: (editingMember: CsrMember | null, formData: CreateMemberInput, onDone: () => void) => Promise<void>;
   onDeleteMember: (id: string, onDone: () => void) => Promise<void>;
+  isAddOpen?: boolean;
+  onOpenAdd?: () => void;
+  onCloseAdd?: () => void;
 }
 
 export default function MembersTab({
@@ -17,12 +20,17 @@ export default function MembersTab({
   loading,
   onSaveMember,
   onDeleteMember,
+  isAddOpen: isAddOpenProp,
+  onOpenAdd,
+  onCloseAdd,
 }: MembersTabProps) {
   const [memberSearch, setMemberSearch] = useState('');
   const [divisionFilter, setDivisionFilter] = useState('all');
   const [editingMember, setEditingMember] = useState<CsrMember | null>(null);
-  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [internalAddOpen, setInternalAddOpen] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
+  const isAddOpen = isAddOpenProp !== undefined ? isAddOpenProp : internalAddOpen;
 
   const filteredMembers = useMemo(() => {
     return members.filter(m => {
@@ -45,11 +53,19 @@ export default function MembersTab({
 
   function openAddModal() {
     setEditingMember(null);
-    setIsAddOpen(true);
+    if (onOpenAdd) {
+      onOpenAdd();
+    } else {
+      setInternalAddOpen(true);
+    }
   }
 
   function closeFormModal() {
-    setIsAddOpen(false);
+    if (onCloseAdd) {
+      onCloseAdd();
+    } else {
+      setInternalAddOpen(false);
+    }
     setEditingMember(null);
   }
 

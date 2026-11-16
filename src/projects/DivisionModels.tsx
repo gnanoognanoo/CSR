@@ -111,7 +111,7 @@ function SuppliedModel({ index, compact, modelEmphasis, modelMotion }: { index: 
     })
     result.scale.setScalar(fullSpinNormalization(envelope, ORBIT_MODEL_SIZE, ORBIT_ACTIVE_SCALE, closestDistance))
     return { object: result, materials }
-  }, [scene, orientation, compact])
+  }, [id, scene, orientation, compact])
   useFrame(() => {
     const active = modelEmphasis?.[index]?.active ?? 0
     const hover = modelEmphasis?.[index]?.hover ?? 0

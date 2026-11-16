@@ -57,7 +57,7 @@ export function MemberProfile({ member, onClose, origin }: MemberProfileProps) {
       releaseScrollLock();
       if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     };
-  }, [member?.id, origin]);
+  }, [member, origin]);
 
   if (!member) return null;
   const fields = [

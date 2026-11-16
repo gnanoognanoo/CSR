@@ -58,9 +58,10 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
     }
     const mapped = raw.map(mapDbMemberToMember);
     return { members: mapped, raw, fromSupabase: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Unexpected error fetching members:', err);
-    return { members: [], raw: [], fromSupabase: false, error: err.message };
+    const message = err instanceof Error ? err.message : String(err);
+    return { members: [], raw: [], fromSupabase: false, error: message };
   }
 }
 
@@ -88,9 +89,10 @@ export async function getAdminMembers(): Promise<{ members: CsrMember[]; error?:
       if (page.length < pageSize) break;
     }
     return { members: raw };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Unexpected error fetching admin members:', err);
-    return { members: [], error: err.message };
+    const message = err instanceof Error ? err.message : String(err);
+    return { members: [], error: message };
   }
 }
 
@@ -122,8 +124,9 @@ export async function getClaimCandidateForEmail(email: string): Promise<{ candid
 
     if (error) return { candidate: null, error: error.message };
     return { candidate: data as ClaimCandidate | null };
-  } catch (err: any) {
-    return { candidate: null, error: err.message };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return { candidate: null, error: message };
   }
 }
 
@@ -135,7 +138,7 @@ export async function createMember(input: CreateMemberInput): Promise<{ data: Cs
     return { data: null, error: 'Supabase is not configured yet. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.' };
   }
 
-  const row: Record<string, any> = {
+  const row: Record<string, unknown> = {
     name: input.name,
     division_id: input.division_id,
     division: input.division,
@@ -169,7 +172,7 @@ export async function updateMember(id: string, input: UpdateMemberInput): Promis
     return { data: null, error: 'Supabase is not configured yet.' };
   }
 
-  const updates: Record<string, any> = {
+  const updates: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 
@@ -310,7 +313,8 @@ export async function linkUserToMember(userId: string, memberId: string | null):
     target_member_id: memberId,
   });
 
-  if (!error && (data as any)?.success) {
+  const rpcResult = data as { success?: boolean; member_id?: string } | null;
+  if (!error && rpcResult?.success) {
     return { success: true };
   }
 
@@ -417,8 +421,9 @@ export async function approveApplicationAndAddToRoster(app: CsrApplication): Pro
     app_id: app.id,
   });
 
-  if (!error && (data as any)?.success) {
-    return { success: true, member: { id: (data as any).member_id } as CsrMember };
+  const rpcResult = data as { success?: boolean; member_id?: string } | null;
+  if (!error && rpcResult?.success) {
+    return { success: true, member: { id: rpcResult.member_id } as CsrMember };
   }
 
   // Fallback if RPC is not yet created in Supabase

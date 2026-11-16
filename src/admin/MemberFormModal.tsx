@@ -178,6 +178,17 @@ export default function MemberFormModal({ editingMember, onSave, onClose }: Memb
               />
             </div>
 
+            <div className="form-group">
+              <label className="form-label">LinkedIn URL</label>
+              <input
+                className="form-input"
+                type="url"
+                placeholder="https://linkedin.com/in/username"
+                value={formData.linkedin_url}
+                onChange={e => setFormData({ ...formData, linkedin_url: e.target.value })}
+              />
+            </div>
+
             <div className="form-group modal-form-full">
               <label className="form-label">Biography / Portfolio Notes</label>
               <textarea

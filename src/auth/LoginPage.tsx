@@ -21,7 +21,8 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as any)?.from?.pathname || '/portal';
+  const locationState = location.state as { from?: { pathname?: string } } | null;
+  const from = locationState?.from?.pathname || '/portal';
 
   // Handle URL hash fragments from Supabase confirmation callbacks
   useEffect(() => {
@@ -129,8 +130,9 @@ export default function LoginPage() {
           navigate(from, { replace: true });
         }
       }
-    } catch (err: any) {
-      setErrorMsg(formatAuthPasswordError(err?.message || 'An unexpected error occurred.'));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setErrorMsg(formatAuthPasswordError(message || 'An unexpected error occurred.'));
     } finally {
       setSubmitting(false);
     }

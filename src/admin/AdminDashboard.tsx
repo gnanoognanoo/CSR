@@ -54,6 +54,7 @@ export default function AdminDashboard() {
 
   // Global feedback banner
   const [alert, setAlert] = useState<AlertState>(null);
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
 
   async function loadData() {
     setLoadingMembers(true);
@@ -235,7 +236,10 @@ export default function AdminDashboard() {
         <AdminHeader
           syncing={syncing}
           backupRosterLength={backupRoster.length}
-          onAddMember={() => setActiveTab('members')}
+          onAddMember={() => {
+            setActiveTab('members');
+            setIsAddMemberOpen(true);
+          }}
           onSyncSeed={handleSyncSeed}
           onSignOut={() => signOut()}
         />
@@ -274,6 +278,9 @@ export default function AdminDashboard() {
             loading={loadingMembers}
             onSaveMember={handleSaveMember}
             onDeleteMember={handleDelete}
+            isAddOpen={isAddMemberOpen}
+            onOpenAdd={() => setIsAddMemberOpen(true)}
+            onCloseAdd={() => setIsAddMemberOpen(false)}
           />
         )}
 
