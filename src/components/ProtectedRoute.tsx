@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requiredRole = 'member' }: ProtectedRouteProps) {
-  const { user, profile, loading, isConfigured } = useAuth();
+  const { user, profile, isAdmin, loading, isConfigured } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -44,7 +44,7 @@ export function ProtectedRoute({ children, requiredRole = 'member' }: ProtectedR
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole === 'admin' && profile?.role !== 'admin') {
+  if (requiredRole === 'admin' && !isAdmin) {
     return (
       <main id="main-content" className="coming-soon">
         <div className="section-wrap" style={{ maxWidth: '640px' }}>
