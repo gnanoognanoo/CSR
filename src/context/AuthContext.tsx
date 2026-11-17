@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: currentUser.id,
         email: currentUser.email || '',
         full_name: currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Member',
-        role: (currentUser.user_metadata?.role as UserRole) || 'member',
+        role: 'member',
       };
 
       const { data: inserted, error: insertError } = await supabase

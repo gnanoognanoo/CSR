@@ -2,6 +2,7 @@ node_modules/
 dist/
 .sites-runtime/
 .env*
+!.env.example
 *.tsbuildinfo
 artifacts/
 tmp/
