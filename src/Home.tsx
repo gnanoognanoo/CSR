@@ -154,7 +154,7 @@ export default function Home() {
       </section>
     </div>
 
-    <section className="closing-section"><div className="section-wrap"><Label>TECHNICAL COMMUNITY / RIT CHENNAI</Label><h2 className="closing-title"><span className="closing-title-ink">CSR<span className="accent">—</span>RIT</span></h2><p className="closing-fullname">Community for<br/>Super Intelligence & Robotics</p><p className="closing-institution mono">RAJALAKSHMI INSTITUTE OF TECHNOLOGY</p><div className="closing-bottom"><p className="closing-invitation">Explore what the<br/>community is building.</p><div className="closing-links"><Link to="/announcements">Announcements<span>01 ↗</span></Link><Link to="/projects">Projects<span>02 ↗</span></Link><Link to="/members">Member portfolio<span>03 ↗</span></Link></div></div></div></section>
+    <section className="closing-section"><div className="section-wrap"><Label>TECHNICAL COMMUNITY / RIT CHENNAI</Label><h2 className="closing-title"><span className="closing-title-ink">CSR<span className="accent">—</span>RIT</span></h2><p className="closing-fullname">Community for<br/>Super Intelligence & Robotics</p><p className="closing-institution mono">RAJALAKSHMI INSTITUTE OF TECHNOLOGY</p><div className="closing-bottom"><p className="closing-invitation">Explore what the<br/>community is building.</p><div className="closing-links"><Link to="/announcements">Announcements<span>01 ↗</span></Link><Link to="/committee">Core Committee<span>02 ↗</span></Link><Link to="/projects">Projects<span>03 ↗</span></Link><Link to="/members">Member portfolio<span>04 ↗</span></Link></div></div></div></section>
     <Footer/>
   </main>;
 }
