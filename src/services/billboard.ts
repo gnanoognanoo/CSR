@@ -55,12 +55,12 @@ export const DEFAULT_BILLBOARD: CsrBillboardMember[] = [
   {
     id: 6,
     position: 6,
-    name: 'Council Member 6',
-    title: 'Council Representative',
-    division: 'Research & Advanced Systems',
-    year: 'III Year',
-    department: 'Electronics and Communication Engineering',
-    member_id: null,
+    name: 'Pon Vijayalakshmi T',
+    title: 'Executive Council Member',
+    division: 'Software Engineering',
+    year: 'II Year',
+    department: 'Computer Science and Engineering',
+    member_id: 'member-069',
   },
 ];
 
