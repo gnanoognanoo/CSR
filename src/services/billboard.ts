@@ -54,7 +54,7 @@ export const DEFAULT_BILLBOARD: CsrBillboardMember[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'csr_billboard_members_v1';
+const LOCAL_STORAGE_KEY = 'csr_billboard_members_v2';
 
 /**
  * Fetch the 6 Billboard members from Supabase `csr_billboard`,

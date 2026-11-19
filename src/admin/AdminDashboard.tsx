@@ -402,7 +402,7 @@ export default function AdminDashboard() {
               if (!billboardSlots.length) loadBillboardData();
             }}
           >
-            Council Billboard (6)
+            Council Billboard ({billboardSlots.length || 5})
           </button>
         </div>
 
@@ -695,7 +695,7 @@ export default function AdminDashboard() {
               <div>
                 <h3 style={{ margin: 0, fontSize: '18px' }}>Executive Council Billboard Management</h3>
                 <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--steel)' }}>
-                  Configure the 6 featured representatives shown on the Member Portfolio billboard. Pick from existing members or enter custom names for external leaders.
+                  Configure the {billboardSlots.length || 5} featured representatives shown on the Member Portfolio billboard. Pick from existing members or enter custom names for external leaders.
                 </p>
               </div>
               <button
@@ -710,7 +710,7 @@ export default function AdminDashboard() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginTop: '16px' }}>
-              {billboardSlots.slice(0, 6).map((slot, idx) => {
+              {billboardSlots.map((slot, idx) => {
                 const isAssigned = Boolean(slot.name && slot.name.trim());
                 return (
                 <div
