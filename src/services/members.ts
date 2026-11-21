@@ -50,16 +50,22 @@ export async function getMembers(): Promise<{ members: Member[]; raw: CsrMember[
     const raw: CsrMember[] = [];
     for (let offset = 0; ; offset += pageSize) {
       const { data, error } = await supabase.from('csr_members').select('*').order('id', { ascending: true }).range(offset, offset + pageSize - 1);
-      if (error) return { members: [], raw: [], fromSupabase: false, error: error.message };
+      if (error) {
+        console.warn('Supabase csr_members query error, falling back to static roster:', error.message);
+        return { members: [...staticMembers], raw: [], fromSupabase: false, error: error.message };
+      }
       const page = (data ?? []) as CsrMember[];
       raw.push(...page);
       if (page.length < pageSize) break;
+    }
+    if (raw.length === 0) {
+      return { members: [...staticMembers], raw: [], fromSupabase: false, error: 'Database table csr_members is currently empty. Showing local roster.' };
     }
     const mapped = raw.map(mapDbMemberToMember);
     return { members: mapped, raw, fromSupabase: true };
   } catch (err: any) {
     console.error('Unexpected error fetching members:', err);
-    return { members: [], raw: [], fromSupabase: false, error: err.message };
+    return { members: [...staticMembers], raw: [], fromSupabase: false, error: err.message };
   }
 }
 

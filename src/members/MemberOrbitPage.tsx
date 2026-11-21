@@ -42,8 +42,8 @@ export default function MemberOrbitPage() {
     let active = true;
     getMembers().then(res => {
       if (!active) return;
-      setMemberDataError(res.error ?? '');
-      setAllMembers(res.error ? [] : res.members);
+      setMemberDataError(res.fromSupabase || res.members.length > 0 ? '' : (res.error ?? ''));
+      setAllMembers(res.members.length > 0 ? res.members : []);
       setMemberDataLoading(false);
     }).catch(error => {
       if (!active) return;

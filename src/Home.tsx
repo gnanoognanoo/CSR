@@ -23,8 +23,12 @@ export default function Home() {
     let active = true;
     getMembers().then(result => {
       if (!active) return;
-      if (result.fromSupabase || !result.error) setMembers(result.members);
-      setMemberStatsAvailable(!result.error);
+      if (result.members.length > 0) {
+        setMembers(result.members);
+        setMemberStatsAvailable(true);
+      } else {
+        setMemberStatsAvailable(!result.error);
+      }
     }).catch(() => { if (active) setMemberStatsAvailable(false); });
     return () => { active = false; };
   }, []);

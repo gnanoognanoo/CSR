@@ -68,7 +68,7 @@ export default function MemberPortalPage() {
     getMembers().then(result => {
       if (!active) return;
       if (result.error) setRosterError(result.error);
-      if (result.fromSupabase || !result.error) {
+      if (result.members.length > 0) {
         setRosterCounts(getMemberStats(result.members).byDivision);
       } else {
         setRosterCounts({});
