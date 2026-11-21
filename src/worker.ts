@@ -1,5 +1,11 @@
+interface Env {
+  ASSETS: {
+    fetch: (request: Request | string, init?: RequestInit) => Promise<Response>;
+  };
+}
+
 export default {
-  async fetch(_request: Request): Promise<Response> {
-    return new Response("Not Found", { status: 404 });
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return env.ASSETS.fetch(request);
   },
 };
